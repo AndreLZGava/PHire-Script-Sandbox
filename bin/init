@@ -1,0 +1,142 @@
+<?php
+
+$currencies = [
+  'USD' => 'US Dollar (USD)',
+  'BRL' => 'Brazilian Real (BRL)',
+  'EUR' => 'Euro (EUR)',
+  'JPY' => 'Japanese Yen (JPY)',
+  'GBP' => 'British Pound (GBP)',
+  'CHF' => 'Swiss Franc (CHF)',
+  'CNY' => 'Chinese Yuan (CNY)'
+];
+
+$diAdapters = [
+  'custom'   => 'PHireScript Native Container (default)',
+  'laravel'  => 'Laravel Service Container',
+  'symfony'  => 'Symfony DependencyInjection',
+  'psr-11'   => 'PSR-11 Compatible Container'
+];
+
+
+if (function_exists('pcntl_signal')) {
+  pcntl_async_signals(true);
+  pcntl_signal(SIGINT, function () {
+    echo "\n\n[CANCELLED] PHireScript initialization aborted.\n";
+    exit;
+  });
+}
+
+function clearScreen() {
+  echo "\033[2J\033[H";
+}
+
+function ask($question, $step, $total, $default = '') {
+  clearScreen();
+  echo "\n--- PHireScript Initializer ---\n";
+  echo "($step/$total answered)\n\n";
+
+  $prompt = $default ? "{$question} [{$default}]: " : "{$question}: ";
+  echo $prompt;
+
+  $input = \trim(fgets(STDIN));
+
+  if (empty($input) && empty($default)) {
+    return ask($question, $step, $total, $default);
+  }
+
+  return $input ?: $default;
+}
+
+function askConfirm($question, $step, $total) {
+  clearScreen();
+  echo "\n--- PHireScript Initializer ---\n";
+  echo "($step/$total answered)\n\n";
+
+  echo "{$question} (y/n): ";
+  $input = \strtolower(\trim(fgets(STDIN)));
+
+  return $input === 'y' || $input === 'yes';
+}
+
+function askSelect($question, array $options, $step, $total, $defaultKey = null) {
+  clearScreen();
+  echo "\n--- PHireScript Initializer ---\n";
+  echo "($step/$total answered)\n\n";
+
+  echo $question . "\n\n";
+
+  foreach ($options as $key => $label) {
+    $defaultMark = ($key === $defaultKey) ? ' (default)' : '';
+    echo "  [$key] $label$defaultMark\n";
+  }
+
+  echo "\nSelect an option";
+  if ($defaultKey !== null) {
+    echo " [$defaultKey]";
+  }
+  echo ": ";
+
+  $input = \trim(fgets(STDIN));
+
+  if ($input === '' && $defaultKey !== null) {
+    return $defaultKey;
+  }
+
+  if (!\array_key_exists($input, $options)) {
+    return askSelect($question, $options, $step, $total, $defaultKey);
+  }
+
+  return $input;
+}
+
+
+$total = 6;
+
+$isDev = askConfirm("Are you developing locally?", 1, $total);
+
+$appName = ask("What is the application's name or pattern? (Namespace)", 2, $total);
+
+$sourcePath = ask("What is the full path where the .ps files are located?", 3, $total, "src");
+
+$distPath = ask("Where should PHireScript send the compiled files?", 4, $total, "dist");
+
+$currency = askSelect(
+  "What is the default currency for this project?",
+  $currencies,
+  5,
+  $total,
+  'USD'
+);
+
+$diAdapter = askSelect(
+  "Which dependency injection adapter should be used?",
+  $diAdapters,
+  6,
+  $total,
+  'custom'
+);
+
+$config = [
+  "dev" => $isDev,
+  "namespace" => ucfirst($appName),
+  "currency" => $currency,
+  "resolver" => $diAdapter,
+  "paths" => [
+    "source" => \rtrim($sourcePath, '/'),
+    "dist" => \rtrim($distPath, '/')
+  ],
+  "generated_at" => date('Y-m-d H:i:s')
+];
+
+clearScreen();
+echo "\n--- PHireScript Initializer ---\n";
+echo "(Done!)\n\n";
+
+$jsonContent = json_encode($config, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+
+if (file_put_contents('PHireScript.json', $jsonContent)) {
+  echo "[SUCCESS] PHireScript.json file created successfully in the project root! You can modify it anytime.\n";
+  echo "----------------------------------------------------------------------\n";
+} else {
+  echo "[ERROR] Could not create the PHireScript.json file.\n";
+}

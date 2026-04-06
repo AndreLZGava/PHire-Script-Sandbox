@@ -1,0 +1,10 @@
+var data = ["apple", "banana"] // Global: ARRAY
+
+resetData() {
+    var data = "cleared"       // Local: STRING (Shadowing)
+    echo data.toUpperCase()    // must become strtoupper($data)
+}
+
+data.push("orange")            // must become array_push($data, "orange")
+resetData()
+echo data.join(" - ")          // must become \implode(" - ", $data)

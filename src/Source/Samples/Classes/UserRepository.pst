@@ -1,0 +1,44 @@
+pkg PHireScript.Database
+
+use PHireScript.Database.Repository
+use PHireScript.Samples.User
+
+validate UserRepository{
+
+    test("test table value", () => {
+      this.assertEquals('user', UserRepository.table)
+    })
+
+    test.skip("Validate get User from database", () => {
+      expected = {id: Uuid(1), name: 'Test', birth: '10/10/2001'}
+
+      UserRepository.database.mock('get').args('user').resolve([expected])
+      UserRepository.database.mock('first').resolve(expected)
+
+      result = User.getUser(Uuid(1))
+      this.assertEquals(expected, result)
+    })
+
+    test.skip("Validate get User from api", () => {
+      original = "{id: Uuid(1), name: 'Test', birth: '10/10/2001'}"
+      expected = Json(original) as User
+
+      UserRepository.api.mock('getUser').args(Uuid(1)).resolve(original)
+
+      result = User.getUserFromApi(Uuid(1))
+      this.assertEquals(expected, result)
+    })
+
+    test("validate with data provider", (user, name) => {
+      uuid = Uuid(user)
+      original = "{id: ${uuid}, name: ${name}, birth: '10/10/2001'}"
+      expected = Json(original) as User
+
+      UserRepository.api.mock('getUser').args(uuid).resolve(original)
+
+      result = User.getUserFromApi(uuid)
+      this.assertEquals(expected, result)
+    }, [
+      "first scenario": {user: 1, name: 'something'}
+    ])
+}

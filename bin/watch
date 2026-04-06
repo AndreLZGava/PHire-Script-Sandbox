@@ -1,0 +1,23 @@
+<?php
+
+require __DIR__ . '/../vendor/autoload.php';
+
+use PHireScript\Compiler;
+use PHireScript\Core\CompileMode;
+use PHireScript\Core\CompilerContext;
+use PHireScript\Runtime\RuntimeClass;
+
+$targetDir = __DIR__ . '/src';
+$extension = RuntimeClass::DEFAULT_FILE_EXTENSION;
+$filesHash = [];
+
+if ($argc > 3) {
+    $sourceDir = \rtrim($argv[1], '/');
+    $distDir = \rtrim($argv[2], '/');
+}
+
+
+$context = new CompilerContext(CompileMode::WATCH, targetWatch: $targetDir);
+
+$compiler = new Compiler($context);
+$compiler->compile($sourceDir, $distDir);
