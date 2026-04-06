@@ -11,10 +11,9 @@ $currencies = [
 ];
 
 $diAdapters = [
-  'custom'   => 'PHireScript Native Container (default)',
+  'custom'   => 'PHireScript Native Container',
   'laravel'  => 'Laravel Service Container',
   'symfony'  => 'Symfony DependencyInjection',
-  'psr-11'   => 'PSR-11 Compatible Container'
 ];
 
 
@@ -76,7 +75,7 @@ function askSelect($question, array $options, $step, $total, $defaultKey = null)
   }
   echo ": ";
 
-  $input = \trim(fgets(STDIN));
+  $input = \trim(\fgets(STDIN));
 
   if ($input === '' && $defaultKey !== null) {
     return $defaultKey;
@@ -125,16 +124,16 @@ $config = [
     "source" => \rtrim($sourcePath, '/'),
     "dist" => \rtrim($distPath, '/')
   ],
-  "generated_at" => date('Y-m-d H:i:s')
+  "generated_at" => \date('Y-m-d H:i:s')
 ];
 
 clearScreen();
 echo "\n--- PHireScript Initializer ---\n";
 echo "(Done!)\n\n";
 
-$jsonContent = json_encode($config, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+$jsonContent = \json_encode($config, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
 
-if (file_put_contents('PHireScript.json', $jsonContent)) {
+if (\file_put_contents('PHireScript.json', $jsonContent)) {
   echo "[SUCCESS] PHireScript.json file created successfully in the project root! You can modify it anytime.\n";
   echo "----------------------------------------------------------------------\n";
 } else {

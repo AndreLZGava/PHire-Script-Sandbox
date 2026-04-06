@@ -1,5 +1,5 @@
 {
-    "name": "phire-scrip/phire-scrip",
+    "name": "phire-script/phire-script",
     "description": "This is a custom PHP transpiler",
     "type": "project",
     "scripts": {
@@ -15,6 +15,7 @@
             "@analyse"
         ]
     },
+    "minimum-stability": "dev",
     "require": {
         "php": ">=8.1",
         "nikic/php-parser": "^5.0"

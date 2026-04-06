@@ -1,8 +1,7 @@
 <?php
 
 declare(strict_types=1);
-
-require 'vendor/autoload.php';
+require 'phirescript/vendor/autoload.php';
 
 use PHireScript\Compiler;
 use PHireScript\Core\CompileMode;
@@ -32,9 +31,6 @@ if ($requestFile !== null) {
         $compiler = new Compiler($context);
         $compiler->compile();
         exit;
-        //echo '<pre style="background:#111;color:#0f0;padding:20px;border-radius:8px;">';
-        //echo htmlspecialchars(file_get_contents($file));
-        //echo '</pre>';
     }
 
     http_response_code(404);

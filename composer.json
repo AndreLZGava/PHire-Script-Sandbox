@@ -1,0 +1,20 @@
+{
+  "name": "phire-script/sandbox",
+  "description": "This is a sandbox for PHire Script",
+  "type": "project",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "PhireScript\\Sandbox\\": "src/"
+    }
+  },
+  "scripts": {
+    "init": "docker exec -it phirescript_app php phirescript/phirescript/bin/init",
+    "build": "docker exec -it phirescript_app php phirescript/phirescript/bin/build",
+    "debug": "docker exec -it phirescript_app php phirescript/phirescript/bin/debug",
+    "snapshot": "docker exec -it phirescript_app php phirescript/phirescript/bin/snapshot",
+    "watch": "docker exec -it phirescript_app php phirescript/phirescript/bin/watch"
+  },
+  "minimum-stability": "dev",
+  "require": {}
+}

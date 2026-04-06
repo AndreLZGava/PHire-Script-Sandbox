@@ -1,5 +1,6 @@
 services:
   app:
+    container_name: phirescript_app
     build: .
     volumes:
       - .:/var/www/html/phirescript
