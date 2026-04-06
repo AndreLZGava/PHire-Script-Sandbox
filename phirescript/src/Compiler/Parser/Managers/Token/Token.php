@@ -14,6 +14,42 @@ class Token {
     ) {
     }
 
+    public const MATH_OPERATORS = [
+        '*', // multiply
+        '/', // divide
+        '-', // sub
+        '+', // sum
+        '^', // exponent
+        '%' // module
+    ];
+
+    public const BOOLEAN_OPERATORS = [
+        '&&', // AND
+        '||', // OR
+        '==', // equal
+        '===', // identical
+        '!=', // not equal
+        '!==', // not identical
+        '^^' // XOR
+    ];
+
+    public const CLEAN_TERNARY = [
+        '??', // AND
+        '?:', // OR
+    ];
+
+    public function isCleanTernary(): bool {
+        return \in_array($this->type, self::CLEAN_TERNARY);
+    }
+
+    public function isMathOperator(): bool {
+        return \in_array($this->type, self::MATH_OPERATORS);
+    }
+
+    public function isBooleanOperator(): bool {
+        return \in_array($this->type, self::BOOLEAN_OPERATORS);
+    }
+
     public function isDependencyScope(): bool {
         return $this->type === 'T_DEPENDENCY_SCOPE';
     }
@@ -46,6 +82,9 @@ class Token {
     }
     public function isWhiteSpace(): bool {
         return $this->type === 'T_WHITESPACE';
+    }
+    public function isArrow(): bool {
+        return $this->value === '=>';
     }
     public function isAccessor(): bool {
         return $this->type === 'T_ACCESSORS';

@@ -15,6 +15,7 @@ use PHireScript\Compiler\Emitter\Internal\NotOperatorEmitter;
 use PHireScript\Compiler\Emitter\Internal\ThrowStatementEmitter;
 use PHireScript\Compiler\Emitter\Internal\TryEmitter;
 use PHireScript\Compiler\Emitter\NodeEmitters\ArrayLiteralEmitter;
+use PHireScript\Compiler\Emitter\NodeEmitters\ArrowFunctionEmitter;
 use PHireScript\Compiler\Emitter\NodeEmitters\AssignmentEmitter;
 use PHireScript\Compiler\Emitter\NodeEmitters\BinaryExpressionEmitter;
 use PHireScript\Compiler\Emitter\NodeEmitters\BoolEmitter;
@@ -134,6 +135,7 @@ class Emitter
             new CastingEmitter(),
             new ParamsListEmitter(),
             new ParamArgumentEmitter(),
+            new ArrowFunctionEmitter(),
         ]);
     }
 

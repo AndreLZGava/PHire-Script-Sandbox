@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace PHireScript\Compiler\Parser\Ast\Nodes;
 
+use PHireScript\Compiler\Parser\Ast\Nodes\Expression\Types\Type;
 use PHireScript\Compiler\Parser\Managers\Token\Token;
 use PHireScript\Runtime\DefaultOverrideMethods\BaseMethods;
 
-class FunctionNode extends Node
+class FunctionNode extends Node implements Type
 {
-    private string $raw = 'Closure';
+    private string $raw = 'Function';
     public mixed $variableBase;
     public BaseMethods $method;
     public ?ParamsNode $params = null;

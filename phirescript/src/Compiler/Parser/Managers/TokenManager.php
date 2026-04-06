@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace PHireScript\Compiler\Parser\Managers;
 
 use Exception;
+use PHireScript\Compiler\Parser\Managers\Builder\SequenceBuilder;
 use PHireScript\Compiler\Parser\Managers\Token\Token;
 
-class TokenManager
-{
+class TokenManager {
     private $tokenLookup;
     public $positionLookup;
 
@@ -16,8 +16,7 @@ class TokenManager
 
     private $endFileToken;
 
-    public function __construct(private readonly string $context, private array $tokens, private int $currentPosition)
-    {
+    public function __construct(private readonly string $context, private array $tokens, private int $currentPosition) {
         $this->currentToken = $this->tokens[$this->currentPosition];
 
         $this->tokenLookup = $this->currentToken;
@@ -31,18 +30,15 @@ class TokenManager
         );
     }
 
-    public function getLeftTokens(int $limit = 100): array
-    {
+    public function getLeftTokens(int $limit = 100): array {
         return array_slice($this->getTokens(), $this->getCurrentPosition(), $limit);
     }
 
-    public function getProcessedTokens(int $limit = 100): array
-    {
+    public function getProcessedTokens(int $limit = 100): array {
         return array_slice($this->getTokens(), $this->getCurrentPosition() - $limit, $limit);
     }
 
-    public function getAll()
-    {
+    public function getAll() {
         return [
             'context' => $this->getContext(),
             'currentPosition' => $this->getCurrentPosition(),
@@ -54,8 +50,7 @@ class TokenManager
         ];
     }
 
-    public function getNextAfterFirstFoundElement($elementsAsValue)
-    {
+    public function getNextAfterFirstFoundElement($elementsAsValue) {
         $leftTokens = $this->getLeftTokens(1000);
         foreach ($leftTokens as $key => $token) {
             if (\in_array($token->value, $elementsAsValue)) {
@@ -64,23 +59,19 @@ class TokenManager
         }
     }
 
-    public function getContext()
-    {
+    public function getContext() {
         return $this->context;
     }
 
-    public function getCurrentPosition()
-    {
+    public function getCurrentPosition() {
         return $this->currentPosition;
     }
 
-    public function getTokens()
-    {
+    public function getTokens() {
         return $this->tokens;
     }
 
-    public function advance()
-    {
+    public function advance() {
         $this->currentPosition++;
 
         if ($this->currentPosition < \count($this->tokens)) {
@@ -93,8 +84,7 @@ class TokenManager
         $this->positionLookup = $this->currentPosition;
     }
 
-    public function walk($positions)
-    {
+    public function walk($positions) {
         $this->currentPosition += $positions;
         if (!$this->isEndOfTokens() && isset($this->tokens[$this->currentPosition + 1])) {
             $this->currentToken = $this->tokens[$this->currentPosition];
@@ -103,55 +93,46 @@ class TokenManager
         }
     }
 
-    public function isEndOfTokens(): bool
-    {
+    public function isEndOfTokens(): bool {
         return $this->currentPosition >= \count($this->tokens);
     }
 
-    public function setCurrentPosition(int $position)
-    {
+    public function setCurrentPosition(int $position) {
         $this->currentPosition = $position;
     }
 
-    public function getNextToken()
-    {
+    public function getNextToken() {
         $this->positionLookup++;
         $this->tokenLookup = $this->tokens[$this->positionLookup] ?? $this->endFileToken;
         return $this->tokenLookup;
     }
 
-    public function getCurrentToken()
-    {
+    public function getCurrentToken() {
         return $this->currentToken ?? $this->endFileToken;
     }
 
-    public function getPreviousTokenBeforeCurrent()
-    {
+    public function getPreviousTokenBeforeCurrent() {
         $this->positionLookup = $this->currentPosition;
         return $this->getPreviousToken();
     }
 
-    public function getNextTokenAfterCurrent()
-    {
+    public function getNextTokenAfterCurrent() {
         $this->positionLookup = $this->currentPosition;
         return $this->getNextToken();
     }
 
-    public function getPreviousToken()
-    {
+    public function getPreviousToken() {
         $this->positionLookup--;
         $this->tokenLookup = $this->tokens[$this->positionLookup] ?? $this->endFileToken;
         return $this->tokenLookup;
     }
 
-    public function peek(int $offset = 0): Token
-    {
+    public function peek(int $offset = 0): Token {
         $position = $this->currentPosition + $offset;
         return $this->tokens[$position] ?? $this->endFileToken;
     }
 
-    public function matchSequence(array $rules, callable $until): bool
-    {
+    public function matchSequence(array $rules, callable $until): bool {
         $offset = 0;
 
         foreach ($rules as $rule) {
@@ -197,5 +178,9 @@ class TokenManager
         }
 
         return true;
+    }
+
+    public function sequence(): SequenceBuilder {
+        return new SequenceBuilder($this);
     }
 }

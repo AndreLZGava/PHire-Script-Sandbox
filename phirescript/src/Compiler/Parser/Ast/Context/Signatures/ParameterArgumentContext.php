@@ -36,14 +36,14 @@ class ParameterArgumentContext extends AbstractContext
         parent::__construct($node);
 
         $this->resolvers = [
-        'types[]' => new TypeResolver(),
-        'name' => new IdentifierResolver(),
-        new EndOfLineResolver(),
-        'value' => new ArgumentAssignmentResolver($node),
-        new PipeResolver(),
-        new CommentResolver(),
-        new CommaResolver(),
-        new ClosingParamsDeclarationResolver(),
+            'types[]' => new TypeResolver(),
+            'name' => new IdentifierResolver(),
+            new EndOfLineResolver(),
+            'value' => new ArgumentAssignmentResolver($node),
+            new PipeResolver(),
+            new CommentResolver(),
+            new CommaResolver(),
+            new ClosingParamsDeclarationResolver(),
         ];
     }
 

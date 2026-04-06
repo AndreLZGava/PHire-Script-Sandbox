@@ -26,7 +26,6 @@ class ContextManager
 
     public function enter(AbstractContext $context): AbstractContext
     {
-        //Debug::show('entering context ' . \get_class($context));
         $context->setParent($this->current);
         $this->current = $context;
 
@@ -35,7 +34,6 @@ class ContextManager
 
     public function exit(): void
     {
-        //Debug::show('closing context ' . \get_class($this->current));
         if ($this->current->getParent() !== null) {
             $this->current = $this->current->getParent();
         }
@@ -68,7 +66,6 @@ class ContextManager
 
     public function handle(Token $token, $parseContext): void
     {
-        //Debug::show([$token->value, $this->current->canClose($token)]);
         $this->current->handle($token, $parseContext);
         $this->current->validation($token, $parseContext);
         $current = $this->current;
