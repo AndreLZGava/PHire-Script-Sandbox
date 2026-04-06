@@ -1,0 +1,21 @@
+{
+    "name": "phire-scrip/phire-script-doc",
+    "description": "This is a project to document PHire Script lang",
+    "type": "project",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "PhireScrip\\PhireScriptDoc\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Andre Luiz Gava",
+            "email": "andrelzgava@gmail.com"
+        }
+    ],
+    "minimum-stability": "beta",
+    "require": {
+        "fastvolt/markdown": "^0.2.5"
+    }
+}

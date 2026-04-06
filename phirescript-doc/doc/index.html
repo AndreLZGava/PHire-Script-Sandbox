@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Documentation</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+        }
+
+        aside {
+            width: 260px;
+            background: #111;
+            color: #eee;
+            height: 100vh;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        aside a {
+            color: #9ad;
+            text-decoration: none;
+        }
+
+        aside ul {
+            list-style: none;
+            padding-left: 15px;
+        }
+
+        main {
+            flex: 1;
+            padding: 40px;
+        }
+
+        .folder {
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .folder ul {
+            margin-left: 10px;
+            padding-left: 10px;
+            border-left: 1px solid #333;
+        }
+
+        .collapsed > ul {
+            display: none;
+        }
+
+        .folder > span {
+            cursor: pointer;
+            display: block;
+        }
+
+        .file.active > a {
+            color: #fff;
+            font-weight: bold;
+        }
+    </style>
+    <script>
+document.querySelectorAll('.folder > span').forEach(folder => {
+    folder.addEventListener('click', () => {
+        folder.parentElement.classList.toggle('collapsed');
+    });
+});
+
+let active = document.querySelector('.file.active');
+
+if (active) {
+    let parent = active.parentElement;
+
+    while (parent) {
+        if (parent.classList.contains('collapsed')) {
+            parent.classList.remove('collapsed');
+        }
+        parent = parent.parentElement.closest('li');
+    }
+}
+</script>
+</head>
+<body>
+
+<aside>
+    <ul><li class="folder ">
+                <span>Types</span><ul><li class="folder ">
+                <span>String</span><ul><li class="file ">
+                    <a href="Types/String/string.html">string</a>
+                  </li><li class="folder ">
+                <span>Methods</span><ul><li class="folder collapsed">
+                <span>AnotherLevel</span><ul><li class="file ">
+                    <a href="Types/String/Methods/AnotherLevel/another.html">another</a>
+                  </li></ul></li><li class="file ">
+                    <a href="Types/String/Methods/AllMethods.html">AllMethods</a>
+                  </li></ul></li></ul></li><li class="file ">
+                    <a href="Types/types.html">types</a>
+                  </li></ul></li><li class="file active">
+                    <a href="index.html">index</a>
+                  </li></ul>
+</aside>
+
+<main>
+    <h1>🚀 PHireScript</h1>
+<p>Bem-vindo ao <strong>PHireScript</strong>.</p>
+<p>Uma linguagem projetada para combinar a simplicidade do PHP com recursos modernos de tipagem, expressividade e uma sintaxe mais fluida.</p>
+<hr />
+<h2>✨ Filosofia</h2>
+<p>PHireScript busca:</p>
+<ul>
+<li>Reduzir ruído sintático</li>
+<li>Tornar o código mais legível</li>
+<li>Melhorar a segurança através de tipagem</li>
+<li>Manter a familiaridade do ecossistema PHP</li>
+</ul>
+<hr />
+<h2>🔥 Exemplo rápido</h2>
+<pre><code class="language-phirescript">
+function sum(a: int, b: int): int
+    return a + b</code></pre>
+</main>
+
+</body>
+</html>
