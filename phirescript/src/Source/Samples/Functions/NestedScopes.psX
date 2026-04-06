@@ -1,0 +1,23 @@
+var item = "global"
+
+outer() {
+    var item = ["list"]
+
+    inner() {
+        var item = 10
+        echo item              // INT
+    }
+
+    item.push("nested")        // ARRAY
+    inner()
+}
+
+var config = {
+    user: {
+        name: "André",
+        id: 1
+    },
+    active: true
+}
+
+echo item.toUpperCase()        // STRING

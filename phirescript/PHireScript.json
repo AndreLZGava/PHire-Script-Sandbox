@@ -1,0 +1,12 @@
+{
+    "dev": true,
+    "namespace": "PHireScript",
+    "currency": "USD",
+    "resolver": "laravel",
+    "paths": {
+        "source": "src/Source/Samples",
+        "dist": "src/Source/Compiled",
+        "test": "src/Source/Tests"
+    },
+    "generated_at": "2026-01-16 00:31:33"
+}

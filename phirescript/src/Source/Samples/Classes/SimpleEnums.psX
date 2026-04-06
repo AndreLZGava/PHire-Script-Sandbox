@@ -1,0 +1,5 @@
+enum Role: String {
+    Admin = 'admin'
+    Editor = 'editor'
+    Guest = 'guest'
+}

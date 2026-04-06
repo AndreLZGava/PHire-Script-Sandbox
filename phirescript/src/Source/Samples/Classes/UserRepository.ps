@@ -1,0 +1,33 @@
+pkg PHireScript.Database
+
+use PHireScript.Database.Repository
+use PHireScript.Samples.User
+
+class UserRepository extends Repository {
+
+    String tableName = 'user'
+
+    inject {
+        Database as database
+        UserApi as api
+        Another as another
+    }
+
+    cache {
+        getUser<Duration('5 m')>
+    }
+
+    schedule {
+        getUser<Cron('@daily')>
+    }
+
+    getUserFromApi(Uuid id): User {
+        user = Json(this.api.getUser(id)) as User
+        return user
+    }
+
+    getUser(Uuid id): Null|Self {
+        return this.database.get(this.tableName).first(id: id)
+    }
+
+}

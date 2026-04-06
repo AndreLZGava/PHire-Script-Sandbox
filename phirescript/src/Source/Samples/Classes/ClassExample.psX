@@ -1,0 +1,76 @@
+
+// 3. Mixins (Traits for conceptual multiple inheritance)
+trait Logger {
+    log(String msg): Void => echo "[LOG]: " + msg
+}
+
+trait PermissionChecker {
+    hasRole?(String role): Bool => this.role == role
+}
+
+// 4. The Complete Class
+// We use 'extends' for the base class and 'with' for mixins/traits (multiple inheritance)
+class AdminUser extends BaseUser with Logger, PermissionChecker implements Authenticator {
+
+    // This will inject UserRepository as a constructor dependency without the need to implement it in .ps
+    inject # readonly UserRepository userRepository
+
+    // Properties with PHireScript types
+    // String is the variable type; class variables do not need to be declared with 'var'
+    // Use of < and > before the variable type indicates the compiled class will generate a getter
+    // and setter respectively. Since there is no # (private) or + (protected) before each character,
+    // the converted code will be public methods.
+    <> String role = 'admin'
+
+    // This will provide a protected setCredentials method without the need for an explicit declaration
+    +> UserCredentials credentials
+
+    // Simplified Constructor
+    constructor(
+        String name,
+        UserCredentials creds
+    ) {
+        super(name) // Calls BaseUser
+        this.setCredentials(creds)
+        this.log("Admin " + name + " instantiated")
+    }
+
+    // Interface Implementation
+    authenticate(UserCredentials creds): Bool {
+        if (this.isSameLogin?(creds.login, this.credentials.login)) {
+            // Only class variables, traits, interfaces, and types do not need a 'var' declaration;
+            // all others require it.
+            // Automatically infers it is a String for PHireScript (.ps), but for PHP,
+            // it will be treated as a primitive string.
+            var mensagem = "Login successful"
+            this.log(mensagem)
+            return true
+        }
+        return false
+    }
+
+    // # is for private
+    // ? and ! are allowed at the end of method names: ? (Returns Bool) ! (Returns Void)
+    # isSameLogin?(String login, String userLogin): Bool {
+        return login == userLogin
+    }
+
+    logout!(): Void {
+        this.log("Session ended")
+    }
+
+    deleteAllUsers!() {
+        this.userRepository.all().each(user => this.deleteUser!(user.id))
+    }
+
+    // Method using Mixin logic
+    // + indicates a Protected method
+    + async deleteUser!(Int id) {
+        if (this.hasRole?('super-admin')) {
+            this.userRepository.deleteUser(id)
+            echo "User " + id + " removed"
+            return
+        }
+        this.log("Access denied to remove users")
+    }
+}

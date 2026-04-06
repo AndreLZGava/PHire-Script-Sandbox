@@ -1,0 +1,12 @@
+services:
+  app:
+    build: .
+    volumes:
+      - .:/var/www/html/phirescript
+    ports:
+      - "7002:8000"
+      - "9003:9003"
+    working_dir: /var/www/html
+    command: php -S 0.0.0.0:8000 -t phirescript
+    stdin_open: true
+    tty: true

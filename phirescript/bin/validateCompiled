@@ -1,0 +1,53 @@
+<?php
+
+use PHireScript\Compiler;
+use PHireScript\Compiler\FileManager;
+use PHireScript\Core\CompileMode;
+use PHireScript\Core\CompilerContext;
+use PHireScript\Helper\Debug\Debug;
+
+require 'vendor/autoload.php';
+
+$context = new CompilerContext(
+  CompileMode::BUILD,
+  true,
+);
+$fileManager = new FileManager($context);
+$compiledPath = __DIR__ . '/../' . $fileManager->getConfigFile()['paths']['dist'];
+$testPath = __DIR__ . '/../' . $fileManager->getConfigFile()['paths']['test'];
+$files = new RecursiveIteratorIterator(
+  new RecursiveDirectoryIterator($compiledPath)
+);
+
+foreach ($files as $file) {
+
+  if ($file->getExtension() !== 'php') {
+    continue;
+  }
+
+  $filePath = $file->getRealPath();
+
+  echo "Validating: {$filePath}\n";
+
+  exec("php -l {$filePath}", $output, $result);
+
+  if ($result !== 0) {
+    echo "❌ Syntax Error in {$filePath}\n";
+    echo \implode("\n", $output);
+    exit(1);
+  }
+
+  echo "✅ Syntax OK\n";
+}
+
+echo "\nRunning PHPUnit...\n";
+
+exec("vendor/bin/phpunit {$testPath}", $output, $result);
+
+if ($result !== 0) {
+    echo "❌ Tests Failed\n";
+    echo \implode("\n", $output);
+    exit(1);
+}
+
+echo "✅ All Compiled Files Validated Successfully";
