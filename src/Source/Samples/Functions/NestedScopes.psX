@@ -1,18 +1,18 @@
-var item = "global"
+item = "global"
 
 outer() {
-    var item = ["list"]
+    item = ["list"]
 
     inner() {
-        var item = 10
-        echo item              // INT
+        item = 10
+        item.display!()
     }
 
-    item.push("nested")        // ARRAY
+    item.add("nested")
     inner()
 }
 
-var config = {
+config = {
     user: {
         name: "André",
         id: 1

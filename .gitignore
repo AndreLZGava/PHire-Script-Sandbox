@@ -1,3 +1,4 @@
 /vendor
 /src/Source/Compiled/
+/coverage-report
 .phpunit.result.cache
