@@ -1,5 +1,5 @@
 subrepo/Laravel/vendor
 subrepo/Symphony/vendor
 phirescript-doc/vendor
-
+/phirescript/
 /vendor/
