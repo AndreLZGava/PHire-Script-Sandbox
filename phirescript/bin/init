@@ -1,4 +1,9 @@
 <?php
+// create PHire Script json file
+
+use PHireScript\Runtime\RuntimeClass;
+
+chmod(__DIR__, 0755);
 
 $currencies = [
   'USD' => 'US Dollar (USD)',
@@ -90,12 +95,13 @@ function askSelect($question, array $options, $step, $total, $defaultKey = null)
 
 
 $total = 6;
-
+$script = RuntimeClass::DEFAULT_FILE_EXTENSION;
+$tests = RuntimeClass::DEFAULT_FILE_TEST_EXTENSION;
 $isDev = askConfirm("Are you developing locally?", 1, $total);
 
-$appName = ask("What is the application's name or pattern? (Namespace)", 2, $total);
+$appName = ask("Enter the root namespace prefix for your application", 2, $total);
 
-$sourcePath = ask("What is the full path where the .ps files are located?", 3, $total, "src");
+$sourcePath = ask("What is the full path where the .{$script}/.{$tests} files are located?", 3, $total, "src");
 
 $distPath = ask("Where should PHireScript send the compiled files?", 4, $total, "dist");
 
@@ -115,14 +121,18 @@ $diAdapter = askSelect(
   'custom'
 );
 
+$namespace = ucfirst($appName);
+
+$dist = \rtrim($distPath, '/');
+
 $config = [
   "dev" => $isDev,
-  "namespace" => ucfirst($appName),
+  "namespace" => $namespace,
   "currency" => $currency,
   "resolver" => $diAdapter,
   "paths" => [
     "source" => \rtrim($sourcePath, '/'),
-    "dist" => \rtrim($distPath, '/')
+    "dist" => $dist
   ],
   "generated_at" => \date('Y-m-d H:i:s')
 ];
@@ -132,10 +142,77 @@ echo "\n--- PHireScript Initializer ---\n";
 echo "(Done!)\n\n";
 
 $jsonContent = \json_encode($config, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
-
-if (\file_put_contents('PHireScript.json', $jsonContent)) {
+if (\file_put_contents(getcwd() . '/PHireScript.json', $jsonContent)) {
+  chmod(getcwd() . '/PHireScript.json', 0755);
   echo "[SUCCESS] PHireScript.json file created successfully in the project root! You can modify it anytime.\n";
   echo "----------------------------------------------------------------------\n";
 } else {
   echo "[ERROR] Could not create the PHireScript.json file.\n";
+}
+
+//Update composer.json
+$path = getcwd() . '/composer.json';
+$namespace = rtrim($namespace, '\\') . '\\';
+
+
+if (!file_exists($path)) {
+    die("[ERROR] composer.json not found in this project.\n");
+}
+
+$jsonContent = file_get_contents($path);
+$data = json_decode($jsonContent, true);
+
+if (json_last_error() !== JSON_ERROR_NONE) {
+    die("[ERROR] composer.json is not a valid JSON.\n");
+}
+
+$autoloadTypes = ['psr-4', 'psr-0'];
+$autoloadUpdated = false;
+
+if (!isset($data['autoload'])) {
+    $data['autoload'] = [];
+}
+
+foreach ($autoloadTypes as $type) {
+    if (isset($data['autoload'][$type])) {
+        if (\array_key_exists($namespace, $data['autoload'][$type])) {
+            unset($data['autoload'][$type][$namespace]);
+        }
+
+        $data['autoload'][$type][$namespace] = $dist;
+        $autoloadUpdated = true;
+    }
+}
+
+if (!$autoloadUpdated) {
+    $data['autoload']['psr-4'][$namespace] = $dist;
+    echo "[INFO] The structure 'autoload -> psr-4' was not found. Creating it...\n";
+}
+
+if (!isset($data['scripts'])) {
+    $data['scripts'] = [];
+}
+
+$customScripts = [
+    "build"    => "./vendor/phirescript/bin/build",
+    "debug"    => "./vendor/phirescript/bin/debug",
+    "snapshot" => "./vendor/phirescript/bin/snapshot",
+    "watch"    => "./vendor/phirescript/bin/watch",
+    "validate"    => "./vendor/phirescript/bin/validate"
+];
+
+foreach ($customScripts as $key => $command) {
+    $data['scripts'][$key] = $command;
+}
+
+$newJson = \json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+
+if ($newJson !== false) {
+    if (\file_put_contents($path, $newJson)) {
+        echo "[SUCCESS] composer.json was successfully updated!\n";
+    } else {
+        echo "[ERROR] Failed to update composer.json. Please verify permissions.\n";
+    }
+} else {
+    echo "[ERROR] There was a problem generating the new JSON.\n";
 }

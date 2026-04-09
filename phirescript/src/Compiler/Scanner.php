@@ -6,6 +6,7 @@ namespace PHireScript\Compiler;
 
 use PHireScript\Compiler\Parser\Managers\Token\Token;
 use PHireScript\Helper\Debug\Debug;
+use PHireScript\Runtime\RuntimeClass;
 
 class Scanner
 {
@@ -62,11 +63,15 @@ class Scanner
             '|Phone|Time)\b/',
         'T_SUPER_TYPE'        => '/^\b(Email|Ipv4|Ipv6|Uuid|Color|Url|' .
             'CardNumber|Cron|Cvv|Duration|ExpiryDate|Json|Mac|Slug)\b/',
-        //'T_VARIABLE'    => '/^\$[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*/',
         'T_CONST' => '/^[A-Z][A-Z0-9_]*\b/',
         'T_IDENTIFIER' => '/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff!?]*/',
         'T_SYMBOL'      => '/^([{}();,:=+<>\#!?\[\]\.$*\/%|-])/',
         'T_BACKSLASH' => '/^\\\\/',
+    ];
+
+    private const TEST_PATTERNS = [
+        'T_TEST_KEYWORD'     => '/^\b(validate|skip|test)\b/',
+        'T_TEST_HOOKS' => '/^\b(beforeAll|beforeEach|afterAll|afterEach)\b/',
     ];
 
     public function __construct(string $code, public string $path)
@@ -78,12 +83,17 @@ class Scanner
     {
         $tokens = [];
         $length = strlen($this->code);
+        $patterns = self::PATTERNS;
+        $isTestingFile = \str_ends_with($this->path, '.' . RuntimeClass::DEFAULT_FILE_TEST_EXTENSION);
+        if($isTestingFile) {
+            $patterns = array_merge(self::TEST_PATTERNS, $patterns);
+        }
 
         while ($this->cursor < $length) {
             $snippet = substr($this->code, $this->cursor);
             $match = false;
 
-            foreach (self::PATTERNS as $type => $pattern) {
+            foreach ($patterns as $type => $pattern) {
                 if (preg_match($pattern, $snippet, $matches)) {
                     $value = $matches[0];
 
@@ -113,9 +123,6 @@ class Scanner
             if (!$match) {
                 $this->cursor++;
             }
-        }
-        if ($this->path === 'src/Source/Samples/Variables/Constants.ps') {
-       //     Debug::show($tokens);exit;
         }
         return $tokens;
     }

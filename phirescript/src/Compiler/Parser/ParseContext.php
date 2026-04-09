@@ -11,6 +11,7 @@ use PHireScript\Compiler\Parser\Managers\Token\Token;
 use PHireScript\Compiler\Parser\Managers\TokenManager;
 use PHireScript\Compiler\Parser\Managers\VariableManager;
 use PHireScript\Compiler\Program;
+use PHireScript\Core\CompilerContext;
 use PHireScript\DependencyGraphBuilder;
 use PHireScript\Helper\Debug\Debug;
 use PHireScript\Runtime\Exceptions\CompileException;
@@ -24,6 +25,7 @@ class ParseContext
         // public ParserDispatcher $emitter,
         public TokenManager $tokenManager,
         public SymbolTableManager $symbolTable,
+        public CompilerContext $compilerContext,
         public ?DependencyGraphBuilder $dependencyBuilder = null,
         public ?ContextManager $contextManager = null,
         private mixed $previous = null,

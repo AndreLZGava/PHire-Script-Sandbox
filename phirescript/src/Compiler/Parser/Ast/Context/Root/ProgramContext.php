@@ -7,6 +7,7 @@ namespace PHireScript\Compiler\Parser\Ast\Context\Root;
 use Exception;
 use PHireScript\Compiler\Emitter\NodeEmitters\AssignmentEmitter;
 use PHireScript\Compiler\Parser\Ast\Context\AbstractContext;
+use PHireScript\Compiler\Parser\Ast\Context\Declarations\ValidateContext;
 use PHireScript\Compiler\Parser\Ast\Resolver\Declaration\ClassResolver;
 use PHireScript\Compiler\Parser\Ast\Resolver\Declaration\ImmutableResolver;
 use PHireScript\Compiler\Parser\Ast\Resolver\Declaration\InterfaceResolver;
@@ -32,6 +33,7 @@ use PHireScript\Compiler\Parser\Ast\Resolver\Statements\IfResolver;
 use PHireScript\Compiler\Parser\Ast\Resolver\Statements\TryResolver;
 use PHireScript\Compiler\Parser\Managers\Token\Token;
 use PHireScript\Compiler\Parser\Ast\Nodes\Node;
+use PHireScript\Compiler\Parser\Ast\Resolver\Declaration\ValidateResolver;
 use PHireScript\Compiler\Parser\Ast\Resolver\Expressions\GlobalConstantResolver;
 use PHireScript\Compiler\Parser\ParseContext;
 use PHireScript\Compiler\Program;
@@ -41,12 +43,10 @@ use PHireScript\Runtime\Exceptions\CompileException;
 /**
  * @extends AbstractContext<ParamsNode>
  */
-class ProgramContext extends AbstractContext
-{
+class ProgramContext extends AbstractContext {
     private array $resolvers = [];
 
-    public function __construct(ParseContext $parseContext)
-    {
+    public function __construct(ParseContext $parseContext) {
         if ($parseContext->tokenManager->getContext() === 'pre') {
             $this->resolvers = [
                 new PackageResolver(),
@@ -88,10 +88,13 @@ class ProgramContext extends AbstractContext
             // interface
             new InterfaceResolver(),
         ];
+
+        if ($parseContext->compilerContext->shouldLoadTestCase()) {
+            $this->resolvers[] = new ValidateResolver();
+        }
     }
 
-    public function handle(Token $token, ParseContext $parseContext): ?Node
-    {
+    public function handle(Token $token, ParseContext $parseContext): ?Node {
 
         foreach ($this->resolvers as $resolver) {
             if ($resolver->isTheCase($token, $parseContext, $this)) {

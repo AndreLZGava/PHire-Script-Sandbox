@@ -60,6 +60,7 @@ class PackageContext extends AbstractContext
                 ->tokenManager
                 ->getNextAfterFirstFoundElement(RuntimeClass::OBJECT_AS_CLASS)
                 ->value;
+                
             $this->node->generateNamespace($parseContext);
             $this->node->validate();
         }

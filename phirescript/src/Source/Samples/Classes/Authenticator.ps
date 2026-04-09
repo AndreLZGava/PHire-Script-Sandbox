@@ -1,8 +1,0 @@
-pkg PHireScript.Samples
-
-use PHireScript.Samples.{UserCredentials, Another}
-
-interface Authenticator extends Another{
-    authenticate(UserCredentials credentials): Bool
-    logout(): Void
-}

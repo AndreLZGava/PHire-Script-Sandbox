@@ -25,6 +25,7 @@ class Transpiler implements TranspilerInterface
     public function __construct(
         private readonly array $config,
         private DependencyGraphBuilder $dependencyManager,
+        private CompilerContext $context,
     ) {
         $this->generator = new PhpFileGeneratorHandler(false);
     }
@@ -39,7 +40,7 @@ class Transpiler implements TranspilerInterface
         $validator = new Validator();
         $validator->validate($tokens);
 
-        $parser = new Parser($this->config, $this->dependencyManager);
+        $parser = new Parser($this->config, $this->dependencyManager, $this->context);
         $ast = $parser->parse($tokens, $path);
         // Debug::show($ast); exit;
         $symbolTable = new SymbolTable();

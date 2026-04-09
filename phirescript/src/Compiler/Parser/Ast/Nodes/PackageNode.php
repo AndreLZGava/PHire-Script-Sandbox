@@ -11,8 +11,7 @@ use PHireScript\Helper\Debug\Debug;
 use PHireScript\Runtime\Exceptions\CompileException;
 use PHireScript\Runtime\RuntimeClass;
 
-class PackageNode extends Statement
-{
+class PackageNode extends Statement {
     public string $namespace;
     public string $completeObjectReference;
 
@@ -27,10 +26,10 @@ class PackageNode extends Statement
         //$this->validate();
     }
 
-    public function validate()
-    {
+    public function validate() {
         $basename = basename($this->file);
         $ext = RuntimeClass::DEFAULT_FILE_EXTENSION;
+        $textExt = RuntimeClass::DEFAULT_FILE_TEST_EXTENSION;
 
         if (is_null($this->package)) {
             throw new CompileException(
@@ -39,23 +38,28 @@ class PackageNode extends Statement
                 $this->token->column,
             );
         }
-
         if (
-            !str_starts_with($basename, $this->object) ||
-            !\str_ends_with($basename, '.' . $ext)
+            !str_starts_with($basename, $this->object) &&
+            (
+                \str_ends_with($basename, '.' . $ext) ||
+                \str_ends_with($basename, '.' . $textExt)
+            )
         ) {
-            throw new CompileException(
+            $message = \str_ends_with($basename, '.' . $ext) ?
                 'File name must match class/interface/type/' .
-                    'immutable/trait name! File ' . $this->file . ' object name '
-                    . $this->object,
+                'immutable/trait name! File ' . $this->file .
+                ' object name ' . $this->object :
+                'File name must match class/validate ' .
+                'name! File ' . $this->file . ' object name ' . $this->object;
+            throw new CompileException(
+                $message,
                 $this->token->line,
                 $this->token->column,
             );
         }
     }
 
-    public function generateNamespace(ParseContext $context): void
-    {
+    public function generateNamespace(ParseContext $context): void {
         $config = $context->contextManager->getConfig();
         $namespace = '';
         $namespace = \current(\explode('/' . $this->object, $this->file));

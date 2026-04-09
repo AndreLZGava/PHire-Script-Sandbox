@@ -8,7 +8,6 @@ use Exception;
 use FilesystemIterator;
 use PHireScript\Core\CompileMode;
 use PHireScript\Core\CompilerContext;
-use PHireScript\Helper\Debug\Debug;
 use PHireScript\Runtime\Exceptions\CompileException;
 use PHireScript\Runtime\RuntimeClass;
 use RecursiveDirectoryIterator;
@@ -19,14 +18,11 @@ use ReflectionClass;
 use RuntimeException;
 use Throwable;
 
-class FileManager
-{
-    public function __construct(private readonly CompilerContext $context)
-    {
+class FileManager {
+    public function __construct(private readonly CompilerContext $context) {
     }
 
-    public function loadAndCompile($sourceDir, $distDir, $transpiler)
-    {
+    public function loadAndCompile($sourceDir, $distDir, $transpiler) {
         if ($this->context->mode === CompileMode::WATCH) {
             $this->watch($sourceDir, $distDir, $transpiler);
             return;
@@ -35,55 +31,90 @@ class FileManager
         $iterator = new RecursiveIteratorIterator($directory);
 
         foreach ($iterator as $file) {
-            if (
-                empty($this->context->file) &&
-                $file->getExtension() === $this->context->getExtensionToPersist() ||
-                $this->context->file === $file->getPathname()
-            ) {
-                $relativePath = substr($file->getPathname(), strlen($sourceDir));
+            $relativePath = substr($file->getPathname(), strlen($sourceDir));
 
-                $outputFile = $distDir  . \str_replace(
-                    '.' . $this->context->getExtensionToPersist(),
-                    '.php',
-                    $relativePath
-                );
-                $this->compileFile($file->getPathname(), $outputFile, $transpiler);
+            $extension = $file->getExtension();
+
+            if (
+                $this->context->file === $file->getPathname() ||
+                empty($this->context->file)
+            ) {
+                if ($extension === RuntimeClass::DEFAULT_FILE_EXTENSION) {
+                    $outputFile = $distDir . str_replace(
+                        '.' . $extension,
+                        '.php',
+                        $relativePath
+                    );
+
+                    $this->compileFile($file->getPathname(), $outputFile, $transpiler);
+                } elseif ($extension === RuntimeClass::DEFAULT_FILE_TEST_EXTENSION) {
+                    $outputFile = $distDir . str_replace(
+                        '.' . $extension,
+                        'Test.php',
+                        $relativePath
+                    );
+
+                    $this->compileFile($file->getPathname(), $outputFile, $transpiler);
+                } else {
+                    $outputFile = $distDir . $relativePath;
+                    $this->copyFile($file->getPathname(), $outputFile);
+                }
             }
         }
     }
 
-    private function watch($sourceDir, $distDir, $transpiler)
-    {
-        $extension = $this->context->getExtensionToPersist();
+    private function watch($sourceDir, $distDir, $transpiler) {
+        $extensionsToWatch = $this->context->getExtensionToPersist();
         $targetDir = $this->context->targetWatch;
         echo "--- PHireScript started the process ---\n";
-        echo "Watching files .$extension in: $targetDir\n";
-
+        $watching = implode(', ', $extensionsToWatch);
+        echo "Watching files .$watching in: $targetDir\n";
+        $filesHash = [];
         while (true) {
             try {
                 $directory = new RecursiveDirectoryIterator($sourceDir, RecursiveDirectoryIterator::SKIP_DOTS);
                 $iterator = new RecursiveIteratorIterator($directory);
 
                 foreach ($iterator as $file) {
-                    if ($file->isFile() && $file->getExtension() === $extension) {
+                    if ($file->isFile()) {
                         try {
                             $filePath = $file->getRealPath();
-                            $relativePath = substr($file->getPathname(), strlen($sourceDir) + 1);
-                            $currentHash = md5_file($filePath);
-
-                            $outputFile = $distDir . '/' .
-                                \str_replace(
-                                    '.' . RuntimeClass::DEFAULT_FILE_EXTENSION,
-                                    '.php',
-                                    $relativePath
-                                );
-                            $outputSubDir = dirname($outputFile);
-
-                            if (!is_dir($outputSubDir)) {
-                                mkdir($outputSubDir, 0755, true);
-                            }
-
+                            $relativePath = \substr($file->getPathname(), \strlen($sourceDir) + 1);
+                            $fileExtension = $file->getExtension();
+                            $isNotWatchedExtension = !\in_array($fileExtension, $extensionsToWatch);
+                            $currentHash =  $isNotWatchedExtension ? \filemtime($filePath) : \md5_file($filePath);
                             if (!isset($filesHash[$filePath]) || $filesHash[$filePath] !== $currentHash) {
+                                if (
+                                    $isNotWatchedExtension
+                                ) {
+                                    $outputFile = $distDir . '/' . $relativePath;
+
+                                    $this->copyFile($file->getPathname(), $outputFile);
+                                    $filesHash[$filePath] = $currentHash;
+                                    continue;
+                                }
+
+                                if ($fileExtension === RuntimeClass::DEFAULT_FILE_EXTENSION) {
+                                    $outputFile = $distDir . '/' . str_replace(
+                                        '.' . $fileExtension,
+                                        '.php',
+                                        $relativePath
+                                    );
+                                } elseif ($fileExtension === RuntimeClass::DEFAULT_FILE_TEST_EXTENSION) {
+                                    continue;
+                                }
+
+                                if (!isset($outputFile)) {
+                                    continue;
+                                }
+
+                                $outputSubDir = dirname($outputFile);
+
+                                if (!is_dir($outputSubDir)) {
+                                    mkdir($outputSubDir, 0755, true);
+                                }
+
+
                                 if (isset($filesHash[$filePath])) {
                                     echo "[" . date('H:i:s') . "] Changes found in : " . $filePath . "\n";
                                     $this->compileFile($file->getPathname(), $outputFile, $transpiler);
@@ -107,13 +138,18 @@ class FileManager
         }
     }
 
-    public function load($sourceDir, $transpiler): array
-    {
+    public function load($sourceDir, $transpiler): array {
         $directory = new RecursiveDirectoryIterator($sourceDir, RecursiveDirectoryIterator::SKIP_DOTS);
         $iterator = new RecursiveIteratorIterator($directory);
+        $allowed = [
+            RuntimeClass::DEFAULT_FILE_EXTENSION,
+            RuntimeClass::DEFAULT_FILE_TEST_EXTENSION
+        ];
         $result = [];
         foreach ($iterator as $file) {
-            if ($file->getExtension() === RuntimeClass::DEFAULT_FILE_EXTENSION) {
+            if (
+                \in_array($file->getExtension(), $allowed)
+            ) {
                 try {
                     $sourceCode = file_get_contents($file->getPathname());
                     $result[] = $transpiler->compile($sourceCode, $file->getPathname());
@@ -127,8 +163,7 @@ class FileManager
     }
 
 
-    private function compileFile($input, $output, $transpiler)
-    {
+    private function compileFile($input, $output, $transpiler) {
         try {
             $sourceCode = file_get_contents($input);
             $result = $transpiler->compile($sourceCode, $input);
@@ -179,8 +214,7 @@ class FileManager
     }
 
 
-    public function getConfigFile()
-    {
+    public function getConfigFile() {
         $configs = json_decode(file_get_contents('PHireScript.json'), true);
         $configs['php'] = phpversion();
         $configs['metatypes'] = $this->listClassesExtending(
@@ -196,8 +230,7 @@ class FileManager
         return $configs;
     }
 
-    private function getErrorInterface($e, $transpiler, $code)
-    {
+    private function getErrorInterface($e, $transpiler, $code) {
         $width = (int) shell_exec('tput cols') ?: 120;
 
         $gutterWidth = 10;
@@ -283,8 +316,7 @@ class FileManager
         echo "{$red}" . str_repeat('=', $width) . "{$reset}\n";
     }
 
-    private function getErrorInterfaceWeb($e, $transpiler, $code): string
-    {
+    private function getErrorInterfaceWeb($e, $transpiler, $code): string {
         $width = 120;
         $gutterWidth = 8;
         $availableWidth = $width - $gutterWidth;
@@ -363,8 +395,7 @@ class FileManager
         exit;
     }
 
-    private function getExecutionInterface(string $compiledCode, string $executionResult)
-    {
+    private function getExecutionInterface(string $compiledCode, string $executionResult) {
         $compiledSafe = htmlspecialchars($compiledCode);
         $resultSafe   = htmlspecialchars($executionResult);
 
@@ -491,8 +522,7 @@ class FileManager
         return $classes;
     }
 
-    private function cleanDirectory($dir)
-    {
+    private function cleanDirectory($dir) {
         $files = new RecursiveIteratorIterator(
             new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS),
             RecursiveIteratorIterator::CHILD_FIRST
@@ -502,5 +532,17 @@ class FileManager
             $todo = ($fileinfo->isDir() ? 'rmdir' : 'unlink');
             $todo($fileinfo->getRealPath());
         }
+    }
+
+    private function copyFile(string $input, string $output): void {
+        $outputDir = dirname($output);
+
+        if (!is_dir($outputDir)) {
+            mkdir($outputDir, 0755, true);
+        }
+
+        copy($input, $output);
+
+        echo "\033[1;34m📄 Copied: $input -> $output\033[0m\n";
     }
 }
