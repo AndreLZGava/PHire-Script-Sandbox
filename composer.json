@@ -5,16 +5,24 @@
   "license": "MIT",
   "autoload": {
     "psr-4": {
-      "PhireScript\\Sandbox\\": "src/"
+      "PhireScript\\Sandbox\\": "src/output",
+      "PHireScript\\": "phirescript/src"
     }
   },
-  "scripts": {
-    "init": "docker exec -it phirescript_app php phirescript/phirescript/bin/init",
-    "build": "docker exec -it phirescript_app php phirescript/phirescript/bin/build",
-    "debug": "docker exec -it phirescript_app php phirescript/phirescript/bin/debug",
-    "snapshot": "docker exec -it phirescript_app php phirescript/phirescript/bin/snapshot",
-    "watch": "docker exec -it phirescript_app php phirescript/phirescript/bin/watch"
-  },
   "minimum-stability": "dev",
-  "require": {}
+  "require": {
+    "phire-script/phire-script": "*"
+  },
+  "repositories": [
+    {
+      "type": "path",
+      "url": "./phirescript"
+    }
+  ],
+  "scripts": {
+    "build": "./vendor/phirescript/bin/build",
+    "debug": "./vendor/phirescript/bin/debug",
+    "snapshot": "./vendor/phirescript/bin/snapshot",
+    "watch": "./vendor/phirescript/bin/watch"
+  }
 }

@@ -3,11 +3,11 @@ services:
     container_name: phirescript_app
     build: .
     volumes:
-      - .:/var/www/html/phirescript
+      - .:/var/www/html
     ports:
       - "7002:8000"
       - "9003:9003"
     working_dir: /var/www/html
-    command: php -S 0.0.0.0:8000 -t phirescript
+    command: php -S 0.0.0.0:8000
     stdin_open: true
     tty: true

@@ -7,6 +7,7 @@ use PHireScript\Compiler;
 use PHireScript\Core\CompileMode;
 use PHireScript\Core\CompilerContext;
 use PHireScript\Helper\Debug\Debug;
+use PHireScript\Runtime\RuntimeClass;
 
 $baseDir = __DIR__;
 $requestFile = $_GET['file'] ?? null;
@@ -19,13 +20,16 @@ if ($requestFile !== null) {
         $file !== false &&
         is_file($file) &&
         str_starts_with($file, $baseDir) &&
-        pathinfo($file, PATHINFO_EXTENSION) === 'ps'
+        in_array(pathinfo($file, PATHINFO_EXTENSION), [
+            RuntimeClass::DEFAULT_FILE_EXTENSION,
+            RuntimeClass::DEFAULT_FILE_TEST_EXTENSION
+        ])
     ) {
         $context = new CompilerContext(
             CompileMode::DEBUG,
             true,
             file: $requestFile,
-            displayInsideCompiler:true,
+            displayInsideCompiler: true,
         );
 
         $compiler = new Compiler($context);
@@ -38,8 +42,7 @@ if ($requestFile !== null) {
     exit;
 }
 
-function findPsFiles(string $baseDir): array
-{
+function findPsFiles(string $baseDir): array {
     $files = [];
 
     $iterator = new RecursiveIteratorIterator(
@@ -50,7 +53,10 @@ function findPsFiles(string $baseDir): array
     );
 
     foreach ($iterator as $file) {
-        if ($file->isFile() && $file->getExtension() === 'ps') {
+        if ($file->isFile() && in_array($file->getExtension(), [
+            RuntimeClass::DEFAULT_FILE_EXTENSION,
+            RuntimeClass::DEFAULT_FILE_TEST_EXTENSION
+        ])) {
             $files[] = \str_replace($baseDir . DIRECTORY_SEPARATOR, '', $file->getPathname());
         }
     }

@@ -1,0 +1,19 @@
+enum UserStatus: String {
+    Active   = 'A'
+    Inactive = 'I'
+    Banned   = 'B'
+
+    // Checks if the user status allows authentication
+    canLogin(): Bool {
+        return this == Active
+    }
+
+    // Returns a human-readable description for the status
+    label(): String {
+        return match(this) {
+            Active   => "Active User"
+            Inactive => "System Inactive"
+            Banned   => "Blocked for Violation"
+        }
+    }
+}

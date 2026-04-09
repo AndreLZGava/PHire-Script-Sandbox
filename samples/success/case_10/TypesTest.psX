@@ -1,0 +1,16 @@
+var fruits = ["apple", "banana"]
+fruits.push("grape")
+fruits.push("orange")
+
+var user = "William"
+var nick = user.toUpperCase()
+
+var listOfFruits = fruits.join(" - ")
+
+var counter = 10
+counter = ["one", "two"]
+counter.push("three")
+
+echo "Fruits: " + listOfFruits
+echo "User: " + nick
+echo "Counter: " + counter.join(" | ")

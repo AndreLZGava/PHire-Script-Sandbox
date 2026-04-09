@@ -1,0 +1,137 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "888c16ce612f0f8c17b88d34283249e4",
+    "packages": [
+        {
+            "name": "nikic/php-parser",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nikic/PHP-Parser.git",
+                "reference": "50f0d9c9d0e3cff1163c959c50aaaaa4a7115f08"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/50f0d9c9d0e3cff1163c959c50aaaaa4a7115f08",
+                "reference": "50f0d9c9d0e3cff1163c959c50aaaaa4a7115f08",
+                "shasum": ""
+            },
+            "require": {
+                "ext-ctype": "*",
+                "ext-json": "*",
+                "ext-tokenizer": "*",
+                "php": ">=7.4"
+            },
+            "require-dev": {
+                "ircmaxell/php-yacc": "^0.0.7",
+                "phpunit/phpunit": "^9.0"
+            },
+            "default-branch": true,
+            "bin": [
+                "bin/php-parse"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "5.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "PhpParser\\": "lib/PhpParser"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Nikita Popov"
+                }
+            ],
+            "description": "A PHP parser written in PHP",
+            "keywords": [
+                "parser",
+                "php"
+            ],
+            "support": {
+                "issues": "https://github.com/nikic/PHP-Parser/issues",
+                "source": "https://github.com/nikic/PHP-Parser/tree/master"
+            },
+            "time": "2026-02-26T13:20:22+00:00"
+        },
+        {
+            "name": "phire-script/phire-script",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "./phirescript",
+                "reference": "f88bf5b0943342fd404b580962312ce766647ebe"
+            },
+            "require": {
+                "nikic/php-parser": "^5.0",
+                "php": ">=8.1"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.92",
+                "phpmd/phpmd": "^2.15",
+                "phpstan/phpstan": "^2.1",
+                "phpunit/phpunit": "^12.5",
+                "rector/rector": "^2.3",
+                "squizlabs/php_codesniffer": "^4.0"
+            },
+            "type": "project",
+            "autoload": {
+                "psr-4": {
+                    "PHireScript\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "PHireScript\\Tests\\": "tests/"
+                }
+            },
+            "scripts": {
+                "refactor": [
+                    "vendor/bin/rector process"
+                ],
+                "format": [
+                    "vendor/bin/php-cs-fixer fix --allow-risky=yes"
+                ],
+                "analyse": [
+                    "vendor/bin/phpstan analyse",
+                    "vendor/bin/phpmd src text phpmd.xml"
+                ],
+                "quality": [
+                    "@refactor",
+                    "@format",
+                    "@analyse"
+                ]
+            },
+            "authors": [
+                {
+                    "name": "André Luiz Gava",
+                    "email": "andrelzgava@gmail.com"
+                }
+            ],
+            "description": "This is a custom PHP transpiler",
+            "transport-options": {
+                "relative": true
+            }
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "dev",
+    "stability-flags": {},
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": {},
+    "platform-dev": {},
+    "plugin-api-version": "2.6.0"
+}
