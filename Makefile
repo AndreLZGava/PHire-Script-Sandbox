@@ -37,10 +37,3 @@ snapshot:
 watch:
 	$(PHP_BIN) phirescript/bin/watch
 
-subtree-push:
-	@echo "Sending subtree $(SUBTREE_PREFIX)..."
-	git subtree push --prefix $(SUBTREE_PREFIX) $(SUBTREE_REMOTE) $(SUBTREE_BRANCH)
-
-subtree-pull:
-	@echo "Geting subtree $(SUBTREE_PREFIX)..."
-	git subtree pull --prefix $(SUBTREE_PREFIX) $(SUBTREE_REMOTE) $(SUBTREE_BRANCH) --squash
