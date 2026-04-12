@@ -3,18 +3,58 @@ pkg PHireScript.Database
 class MagicMethods as newable {
 
     onCreate(String test = 't', Bool isSelf = true): Void {
-      return
+        return
     }
 
     onDestroy(): Void {
-      return
+        return
     }
 
     onGet(String myTest): Mixed {
-      return
+        return true
     }
 
     onSet(String property, Mixed value): Void {
-      return
+        return
+    }
+
+    hasHas(String property): Bool {
+        return true
+    }
+
+    onUnset(String property): Void {
+        return
+    }
+
+    onCall(String method, Array arguments): Mixed {
+        return true
+    }
+
+    onStaticCall(String method, Array arguments): Mixed {
+        return true
+    }
+
+    toString(): String {
+        return 'example'
+    }
+
+    toSerialize(): Array {
+        return ['not empty']
+    }
+
+    beforeSerialize(): Array {
+        return ['another array']
+    }
+
+    afterUnserialize(): Void {
+        return
+    }
+
+    onClone(): Void {
+        return
+    }
+
+    toInspect(): Array {
+        return ['Example']
     }
 }

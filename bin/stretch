@@ -1,0 +1,17 @@
+#!/usr/bin/env php
+<?php
+// php bin/stretch --mode=success --tags=tag1,tag2
+use PHireScript\Orchestrator\Orchestrator;
+
+require __DIR__ . '/../vendor/autoload.php';
+
+$options = getopt('m:t:', ['mode:', 'tags:']);
+
+$modes = isset($options['m']) ? explode(',', $options['m']) : ['success', 'warning', 'error'];
+$tags = isset($options['t']) ? explode(',', $options['t']) : [];
+
+$orchestrator = new Orchestrator();
+
+foreach ($modes as $mode) {
+    $orchestrator->run($mode, $tags);
+}

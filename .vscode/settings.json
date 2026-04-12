@@ -1,0 +1,50 @@
+{
+  "workbench.colorTheme": "Dark Modern",
+  "workbench.iconTheme": "material-icon-theme",
+
+  "editor.tabSize": 4,
+  "editor.insertSpaces": true,
+  "editor.autoIndent": "full",
+  "editor.formatOnPaste": true,
+  "editor.formatOnSave": true,
+  "editor.wordWrapColumn": 120,
+  "editor.rulers": [120],
+
+  "[php]": {
+    "editor.defaultFormatter": "bmewburn.vscode-intelephense-client",
+    "editor.formatOnSave": true
+  },
+
+  "phpsab.enable": false,
+  "phpcs.enable": false,
+  "drupal.phpcs.enabled": false,
+  "drupal.phpstan.enabled": false,
+  "valeryanm.vscode-phpsab.enabled": false,
+  "phpsab.autoFixOnSave": false,
+  "phpsab.executablePath": "",
+  "phpsab.standard": "PSR12",
+  "phpsab.snifferEnable": false,
+  "phpsab.beautifierEnable": false,
+  "phpcs.autoRun": "never",
+
+  "intelephense.format.enable": true,
+  "intelephense.format.braces": "psr12",
+  "intelephense.files.associations": ["*.php", "*.phtml"],
+  "intelephense.files.maxSize": 5000000,
+
+  "files.associations": {
+    "*.php": "php",
+    "*.inc": "php"
+  },
+
+  "[typescript]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[javascript]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features"
+  },
+  "[json]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[jsonc]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+
+  "telemetry.telemetryLevel": "off",
+  "github.copilot.editor.enableAutoCompletions": true,
+  "explorer.confirmDelete": false
+}

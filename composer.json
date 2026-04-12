@@ -5,7 +5,9 @@
   "license": "MIT",
   "autoload": {
     "psr-4": {
-      "PhireScript\\Sandbox\\": "src/output",
+      "PHireScript\\Orchestrator\\": "orchestrator",
+      "Sandbox\\Samples\\": "samples",
+      "PHireScript\\Sandbox\\": "src/output",
       "PHireScript\\": "phirescript/src"
     }
   },
@@ -24,5 +26,8 @@
     "debug": "./vendor/phirescript/bin/debug",
     "snapshot": "./vendor/phirescript/bin/snapshot",
     "watch": "./vendor/phirescript/bin/watch"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^12.5"
   }
 }
