@@ -46,5 +46,20 @@
 
   "telemetry.telemetryLevel": "off",
   "github.copilot.editor.enableAutoCompletions": true,
-  "explorer.confirmDelete": false
+  "explorer.confirmDelete": false,
+  "search.useIgnoreFiles": false,
+
+  "search.exclude": {
+    "subrepo/Laravel/vendor": true,
+    "subrepo/Symphony/vendor": true,
+    "phirescript-doc/vendor": true,
+    "/vendor": true
+  },
+
+  "files.exclude": {
+    "subrepo/Laravel/vendor": true,
+    "subrepo/Symphony/vendor": true,
+    "phirescript-doc/vendor": true,
+    "/vendor": true
+  }
 }

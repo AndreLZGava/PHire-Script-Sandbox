@@ -1,11 +1,10 @@
 <?php
 
+use PHireScript\Sandbox\src\output\UserCredentials;
+use PHireScript\Runtime\Types\MetaTypes\Date;
 use PHPUnit\Framework\TestCase;
 
-require_once __DIR__ . '/../../Compiled/Classes/UserCredentials.php';
-
-use PHireScript\Classes\UserCredentials;
-use PHireScript\Runtime\Types\MetaTypes\Date;
+require_once __DIR__ . '/UserCredentials.php';
 
 class UserCredentialsTest extends TestCase
 {
@@ -38,8 +37,7 @@ class UserCredentialsTest extends TestCase
         $credentials->dateBirth;
     }
 
-
-    public function testUnionTypeIpValidationException()
+    public function testLastIpIsPrivate()
     {
         $credentials = new UserCredentials(
             'Andre',
@@ -50,6 +48,36 @@ class UserCredentialsTest extends TestCase
 
         $this->expectException(Error::class);
 
-        $this->assertIsString($credentials->lastIp);
+        $credentials->lastIp;
+    }
+
+    public function testInvalidIpThrowsException()
+    {
+        $this->expectException(\Throwable::class);
+
+        new UserCredentials(
+            'Andre',
+            'andrelzgava@gmail.com',
+            new Date('1993-10-15'),
+            'invalid-ip'
+        );
+    }
+
+    public function testDateIsConvertedWhenStringIsPassed()
+    {
+        $credentials = new UserCredentials(
+            'Andre',
+            'andrelzgava@gmail.com',
+            new Date('1993-10-15'),
+            '127.0.0.1'
+        );
+
+        $reflection = new ReflectionClass($credentials);
+        $property = $reflection->getProperty('dateBirth');
+        $property->setAccessible(true);
+
+        $value = $property->getValue($credentials);
+
+        $this->assertInstanceOf(Date::class, $value);
     }
 }

@@ -90,6 +90,7 @@ abstract class AbstractCaseValidation
         if ($exitCode === 0) {
             if (str_contains($cleanOutput, 'No tests executed')) {
                 if ($this->stopIfNoTest) {
+                    echo "\n\033[1;33m✖ Stopped cause its has no tests, and its required!\033[0m\n";
                     exit;
                 }
                 echo "\n\033[1;33m✖ No tests executed\033[0m\n";
