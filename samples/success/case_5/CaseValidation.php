@@ -19,7 +19,7 @@ class CaseValidation extends AbstractCaseValidation
     public function execute()
     {
         $this->assertHasMessage([
-            "✔ src/output/UserCredentials.ps -> src/compiled/UserCredentials.php",
+            "✔ src/output/UserCredentials.ps → src/compiled/UserCredentials.php",
         ]);
     }
 }

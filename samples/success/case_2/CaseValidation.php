@@ -20,10 +20,10 @@ class CaseValidation extends AbstractCaseValidation
     public function execute()
     {
         $this->assertHasMessage([
-            "✔ src/output/UserCredentials.ps -> src/compiled/UserCredentials.php",
-            "✔ src/output/Authenticator.ps -> src/compiled/Authenticator.php",
-            "[Copied]: src/output/Authenticator.psc -> src/compiled/Authenticator.psc",
-            "✔ src/output/Another.interface.ps -> src/compiled/Another.interface.php",
+            "✔ src/output/UserCredentials.ps → src/compiled/UserCredentials.php",
+            "✔ src/output/Authenticator.ps → src/compiled/Authenticator.php",
+            "[Copied]: src/output/Authenticator.psc → src/compiled/Authenticator.psc",
+            "✔ src/output/Another.interface.ps → src/compiled/Another.interface.php",
         ]);
     }
 }

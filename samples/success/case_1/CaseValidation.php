@@ -19,8 +19,8 @@ class CaseValidation extends AbstractCaseValidation
     public function execute()
     {
         $this->assertHasMessage([
-            "[Copied]: src/output/Another.interface.psc -> src/compiled/Another.interface.psc",
-            "✔ src/output/Another.interface.ps -> src/compiled/Another.interface.php",
+            "[Copied]: src/output/Another.interface.psc  →  src/compiled/Another.interface.psc",
+            "✔ src/output/Another.interface.ps  →  src/compiled/Another.interface.php",
         ]);
     }
 }

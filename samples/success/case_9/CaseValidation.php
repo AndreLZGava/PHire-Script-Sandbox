@@ -19,7 +19,7 @@ class CaseValidation extends AbstractCaseValidation
     {
         $this->stopIfNoTest = false;
         $this->assertHasMessage([
-            "✔ src/output/TryHandleAlways.ps -> src/compiled/TryHandleAlways.php",
+            "✔ src/output/TryHandleAlways.ps → src/compiled/TryHandleAlways.php",
         ]);
     }
 }

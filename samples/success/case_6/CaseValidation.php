@@ -20,7 +20,7 @@ class CaseValidation extends AbstractCaseValidation
     {
         $this->stopIfNoTest = true;
         $this->assertHasMessage([
-            "✔ src/output/UserImmutable.ps -> src/compiled/UserImmutable.php",
+            "✔ src/output/UserImmutable.ps → src/compiled/UserImmutable.php",
         ]);
     }
 }

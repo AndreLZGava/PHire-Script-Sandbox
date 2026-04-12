@@ -19,7 +19,7 @@ class CaseValidation extends AbstractCaseValidation
     public function execute()
     {
         $this->assertHasMessage([
-            "✔ src/output/MagicMethods.ps -> src/compiled/MagicMethods.php",
+            "✔ src/output/MagicMethods.ps → src/compiled/MagicMethods.php",
         ]);
     }
 }

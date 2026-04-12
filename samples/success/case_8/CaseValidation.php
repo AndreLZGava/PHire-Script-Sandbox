@@ -18,7 +18,7 @@ class CaseValidation extends AbstractCaseValidation
     {
         $this->stopIfNoTest = true;
         $this->assertHasMessage([
-            "✔ src/output/MultipleSuperTypesVariables.ps -> src/compiled/MultipleSuperTypesVariables.php",
+            "✔ src/output/MultipleSuperTypesVariables.ps → src/compiled/MultipleSuperTypesVariables.php",
         ]);
     }
 }
