@@ -3,3 +3,4 @@ subrepo/Symphony/vendor
 phirescript-doc/vendor
 /phirescript/
 /vendor/
+.phpunit.result.cache
