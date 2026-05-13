@@ -12,19 +12,19 @@ class Container
         $this->parent = $parent;
     }
 
-    // Registra uma classe como Transient (nova instância a cada chamada)
+    // Registers a class as Transient (new instance on every call)
     public function addTransient(string $abstract, string $concrete = null): void
     {
         $this->bind($abstract, $concrete, 'transient');
     }
 
-    // Registra uma classe como Singleton (mesma instância para toda a aplicação)
+    // Registers a class as Singleton (same instance across the entire application)
     public function addSingleton(string $abstract, string $concrete = null): void
     {
         $this->bind($abstract, $concrete, 'singleton');
     }
 
-    // Registra uma classe como Scoped (mesma instância dentro do mesmo escopo)
+    // Registers a class as Scoped (same instance within the same scope)
     public function addScoped(string $abstract, string $concrete = null): void
     {
         $this->bind($abstract, $concrete, 'scoped');
@@ -32,10 +32,10 @@ class Container
 
     private function bind(string $abstract, ?string $concrete, string $lifetime): void
     {
-        // Se a classe concreta não for informada, ela é a própria classe abstrata
+        // If no concrete class is given, the abstract class itself is used
         $concrete = $concrete ?? $abstract;
 
-        // As definições são sempre salvas no container raiz (Root)
+        // Definitions are always stored on the root container
         $targetContainer = $this->getRoot();
         $targetContainer->bindings[$abstract] = [
             'concrete' => $concrete,
@@ -43,7 +43,7 @@ class Container
         ];
     }
 
-    // Cria um novo escopo isolado
+    // Creates a new isolated scope
     public function createScope(): Container
     {
         return new Container($this);
@@ -53,9 +53,9 @@ class Container
     {
         $root = $this->getRoot();
 
-        // Verifica se a dependência está registrada
+        // Checks if the dependency is registered
         if (!isset($root->bindings[$abstract])) {
-            // Tenta resolver automaticamente mesmo se não foi registrada previamente
+            // Attempts to resolve automatically even if not previously registered
             return $this->resolve($abstract);
         }
 
@@ -81,17 +81,17 @@ class Container
         return $this->resolve($concrete);
     }
 
-    // Usa Reflection para instanciar a classe e suas dependências
+    // Uses Reflection to instantiate the class and its dependencies
     private function resolve(string $concrete)
     {
         try {
             $reflector = new ReflectionClass($concrete);
         } catch (ReflectionException $e) {
-            throw new Exception("Classe {$concrete} não encontrada.");
+            throw new Exception("Class {$concrete} not found.");
         }
 
         if (!$reflector->isInstantiable()) {
-            throw new Exception("A classe {$concrete} não pode ser instanciada.");
+            throw new Exception("Class {$concrete} cannot be instantiated.");
         }
 
         $constructor = $reflector->getConstructor();
@@ -107,10 +107,10 @@ class Container
             $type = $parameter->getType();
 
             if (!$type || $type->isBuiltin()) {
-                throw new Exception("Não é possível resolver dependências de tipos primitivos na classe {$concrete}.");
+                throw new Exception("Cannot resolve primitive type dependencies in class {$concrete}.");
             }
 
-            // Pede ao container para resolver a dependência recursivamente
+            // Asks the container to resolve the dependency recursively
             $dependencies[] = $this->get($type->getName());
         }
 

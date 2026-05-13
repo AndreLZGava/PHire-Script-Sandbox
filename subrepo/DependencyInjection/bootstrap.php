@@ -4,34 +4,34 @@ require_once 'Container.php';
 
 $container = new Container();
 
-// 1. Ensinamos o container como resolver as dependências
+// 1. We teach the container how to resolve dependencies
 $container->addSingleton(DatabaseConnection::class);
 
-// Quando alguém pedir a UserRepositoryInterface, entregue o MySQLUserRepository
+// When UserRepositoryInterface is requested, deliver MySQLUserRepository
 $container->addScoped(UserRepositoryInterface::class, MySQLUserRepository::class);
 
-// Quando alguém pedir a MailServiceInterface, entregue o SmtpMailService
+// When MailServiceInterface is requested, deliver SmtpMailService
 $container->addTransient(MailServiceInterface::class, SmtpMailService::class);
 
-// (Opcional) Podemos registrar o Service e o Controller, mas como não usam interface,
-// o nosso método get() já consegue resolvê-los usando o fallback do autowiring.
+// (Optional) We can register the Service and Controller, but since they don't use interfaces,
+// our get() method can already resolve them using the autowiring fallback.
 
 // ---------------------------------------------------------
-// 3. A Execução (Simulando o roteador do seu Framework)
+// 3. Execution (Simulating your Framework's router)
 // ---------------------------------------------------------
 
-// O Roteador percebeu que a URL é "/users/store" e que ela aponta para o UserController.
-// Ele pede ao Container para criar o Controller.
-// A MÁGICA ACONTECE AQUI: O Container lê o construtor do UserController,
-// cria o Service, que cria o Repo e o Mailer, que cria a Conexão DB, e monta TUDO sozinho!
+// The Router detected that the URL is "/users/store" and it maps to the UserController.
+// It asks the Container to create the Controller.
+// THE MAGIC HAPPENS HERE: The Container reads UserController's constructor,
+// creates the Service, which creates the Repo and Mailer, which creates the DB Connection, and wires EVERYTHING by itself!
 
 $controller = $container->get(UserController::class);
 
-// Simula os dados vindos de um $_POST
+// Simulates data coming from a $_POST
 $requestData = [
     'name' => 'Maria Silva',
     'email' => 'maria@exemplo.com'
 ];
 
-// Executa a ação
+// Executes the action
 $controller->store($requestData);

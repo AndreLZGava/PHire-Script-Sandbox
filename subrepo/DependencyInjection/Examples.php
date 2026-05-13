@@ -12,18 +12,18 @@ interface MailServiceInterface {
 }
 
 // ---------------------------------------------------------
-// Implementações Concretas
+// Concrete Implementations
 // ---------------------------------------------------------
 
-// Singleton: Conexão com o banco (Pesada, queremos apenas uma)
+// Singleton: Database connection (expensive, we want only one)
 class DatabaseConnection {
     public function execute(string $sql) {
-        // Finge que está executando no banco
+        // Simulates execution on the database
         echo "[DB] Executando: {$sql}\n";
     }
 }
 
-// Scoped: Repositório que usa a conexão
+// Scoped: Repository that uses the connection
 class MySQLUserRepository implements UserRepositoryInterface {
     private DatabaseConnection $db;
 
@@ -37,7 +37,7 @@ class MySQLUserRepository implements UserRepositoryInterface {
     }
 }
 
-// Transient: Serviço de envio de email
+// Transient: Email sending service
 class SmtpMailService implements MailServiceInterface {
     public function send(string $to, string $subject): void {
         echo "[MAIL] Enviando email para {$to} - Assunto: {$subject}\n";
@@ -45,15 +45,15 @@ class SmtpMailService implements MailServiceInterface {
 }
 
 // ---------------------------------------------------------
-// Regra de Negócio e Controller
+// Business Rule and Controller
 // ---------------------------------------------------------
 
-// O serviço que orquestra a lógica de negócio
+// The service that orchestrates the business logic
 class UserRegistrationService {
     private UserRepositoryInterface $userRepository;
     private MailServiceInterface $mailService;
 
-    // Pedimos as INTERFACES, o Container vai injetar as classes concretas!
+    // We request the INTERFACES, the Container will inject the concrete classes!
     public function __construct(UserRepositoryInterface $userRepository, MailServiceInterface $mailService) {
         $this->userRepository = $userRepository;
         $this->mailService = $mailService;
@@ -61,11 +61,11 @@ class UserRegistrationService {
 
     public function registerUser(string $name, string $email): void {
         $this->userRepository->save(['name' => $name, 'email' => $email]);
-        $this->mailService->send($email, "Bem-vindo ao sistema, {$name}!");
+        $this->mailService->send($email, "Welcome to the system, {$name}!");
     }
 }
 
-// O Controller que recebe a requisição HTTP (simulada)
+// The Controller that handles the simulated HTTP request
 class UserController {
     private UserRegistrationService $registrationService;
 
@@ -74,8 +74,8 @@ class UserController {
     }
 
     public function store(array $requestData): void {
-        echo "Iniciando request no UserController...\n";
+        echo "Starting request in UserController...\n";
         $this->registrationService->registerUser($requestData['name'], $requestData['email']);
-        echo "Request finalizado com sucesso!\n";
+        echo "Request completed successfully!\n";
     }
 }

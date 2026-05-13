@@ -1,14 +1,14 @@
 <?php
 
 function require_find(string $target): string {
-    // ⏱️ 1. Inicia o cronômetro
+    // ⏱️ 1. Starts the timer
     $startTime = microtime(true);
-    $warningEmitted = false; // Flag para não flodar o terminal com o mesmo alerta
+    $warningEmitted = false; // Flag to avoid flooding the terminal with the same warning
 
     $startDir = realpath(getcwd());
 
     if (!$startDir) {
-        throw new Exception("Diretório atual inválido.");
+        throw new Exception("Invalid current directory.");
     }
 
     $target = preg_replace('/^(\.\.\/|\.\/|\/|\\\\)+/', '', $target);
@@ -16,14 +16,14 @@ function require_find(string $target): string {
     $target = str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $target);
 
     if (empty($target)) {
-        throw new Exception("O caminho de busca fornecido está vazio ou é inválido.");
+        throw new Exception("The provided search path is empty or invalid.");
     }
 
     $currentDir = $startDir;
     $excludeDir = null;
 
     while (true) {
-        // Passamos o tempo inicial e a flag por referência (&$warningEmitted) para a função
+        // We pass the start time and flag by reference (&$warningEmitted) to the function
         $result = searchDownwards($currentDir, $target, $excludeDir, $startTime, $warningEmitted);
 
         if ($result !== null) {
@@ -47,10 +47,10 @@ function require_find(string $target): string {
         $currentDir = $parentDir;
     }
 
-    throw new Exception("O arquivo ou diretório '{$target}' não foi encontrado no projeto.");
+    throw new Exception("File or directory '{$target}' not found in the project.");
 }
 
-// ⏱️ 2. Recebemos $startTime e usamos &$warningEmitted (passagem por referência)
+// ⏱️ 2. Receives $startTime and uses &$warningEmitted (passed by reference)
 function searchDownwards(string $dir, string $target, ?string $excludeDir, float $startTime, bool &$warningEmitted): ?string {
     if (!is_dir($dir)) return null;
 
@@ -73,18 +73,18 @@ function searchDownwards(string $dir, string $target, ?string $excludeDir, float
     $targetMatch = DIRECTORY_SEPARATOR . $target;
 
     foreach ($iterator as $file) {
-        // ⏱️ 3. Calcula quanto tempo passou desde o início
+        // ⏱️ 3. Calculates elapsed time since start
         $elapsedTime = microtime(true) - $startTime;
 
-        // 🚨 Timeout Crítico: Aborta após 10 segundos
+        // 🚨 Critical Timeout: Aborts after 10 seconds
         if ($elapsedTime > 10.0) {
-            throw new Exception("\n[Timeout] A busca por '{$target}' foi abortada após 10 segundos. Verifique se o nome digitado está correto.");
+            throw new Exception("\n[Timeout] Search for '{$target}' was aborted after 10 seconds. Check if the name is spelled correctly.");
         }
 
-        // ⚠️ Alerta de Lentidão: Avisa aos 2 segundos (apenas uma vez)
+        // ⚠️ Slowness Warning: alerts at 2 seconds (only once)
         if ($elapsedTime > 2.0 && !$warningEmitted) {
-            echo "\n[Aviso] A busca por '{$target}' está demorando mais de 2 segundos. Vasculhando projeto...\n";
-            $warningEmitted = true; // Marca como emitido para não repetir no próximo arquivo
+            echo "\n[Warning] Search for '{$target}' is taking more than 2 seconds. Scanning project...\n";
+            $warningEmitted = true; // Marks as emitted to avoid repeating on the next file
         }
 
         $path = $file->getPathname();
@@ -98,13 +98,13 @@ function searchDownwards(string $dir, string $target, ?string $excludeDir, float
 }
 
 // ==========================================
-// EXEMPLOS DE USO:
+// USAGE EXAMPLES:
 // ==========================================
 try {
-    // Simulando um erro de digitação proposital
+    // Simulating an intentional typo
     $path = require_find('Example.txt');
 
-    echo "Encontrado em: {$path}\n";
+    echo "Found at: {$path}\n";
 } catch (Exception $e) {
     echo $e->getMessage() . "\n";
 }

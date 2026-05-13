@@ -3,10 +3,10 @@
 require_once 'Container.php';
 
 // ---------------------------------------------------------
-// 1. Classes de Exemplo
+// 1. Example Classes
 // ---------------------------------------------------------
 
-// Singleton: Conexão com Banco de Dados (Deve ser a mesma para a aplicação inteira)
+// Singleton: Database Connection (must be the same across the entire application)
 class DatabaseConnection {
     public string $id;
     public function __construct() {
@@ -14,7 +14,7 @@ class DatabaseConnection {
     }
 }
 
-// Scoped: Transação/Log de Requisição (A mesma dentro do mesmo escopo, diferente fora dele)
+// Scoped: Request Transaction/Log (same within the same scope, different outside it)
 class RequestLogger {
     public string $id;
     public function __construct() {
@@ -22,7 +22,7 @@ class RequestLogger {
     }
 }
 
-// Transient: Envio de Email (Uma nova instância para cada vez que for chamado)
+// Transient: Email Sending (a new instance every time it is called)
 class MailService {
     public string $id;
     public function __construct() {
@@ -30,7 +30,7 @@ class MailService {
     }
 }
 
-// Classe que recebe tudo via Injeção de Dependência no Construtor
+// Class that receives everything via Constructor Dependency Injection
 class AppController {
     public DatabaseConnection $db;
     public RequestLogger $logger;
@@ -44,47 +44,47 @@ class AppController {
 }
 
 // ---------------------------------------------------------
-// 2. Configurando o Container
+// 2. Setting up the Container
 // ---------------------------------------------------------
 
 $container = new Container();
 
-// Registrando os comportamentos
+// Registering the behaviors
 $container->addSingleton(DatabaseConnection::class);
 $container->addScoped(RequestLogger::class);
 $container->addTransient(MailService::class);
 
-echo "=== TESTANDO INJEÇÃO DE DEPENDÊNCIAS ===\n\n";
+echo "=== TESTING DEPENDENCY INJECTION ===\n\n";
 
 // ---------------------------------------------------------
-// 3. Executando os Testes
+// 3. Running the Tests
 // ---------------------------------------------------------
 
-// Criando dois escopos diferentes (como se fossem duas requisições separadas no Swoole)
+// Creating two different scopes (as if they were two separate requests in Swoole)
 $scope1 = $container->createScope();
 $scope2 = $container->createScope();
 
-// Resolvendo o AppController no Escopo 1 duas vezes para comparar
+// Resolving AppController in Scope 1 twice for comparison
 $controllerA_Scope1 = $scope1->get(AppController::class);
 $controllerB_Scope1 = $scope1->get(AppController::class);
 
-// Resolvendo o AppController no Escopo 2
+// Resolving AppController in Scope 2
 $controllerC_Scope2 = $scope2->get(AppController::class);
 
-echo "1. TESTE SINGLETON (DatabaseConnection):\n";
-echo "Instância em A (Escopo 1): " . spl_object_id($controllerA_Scope1->db) . "\n";
-echo "Instância em B (Escopo 1): " . spl_object_id($controllerB_Scope1->db) . "\n";
-echo "Instância em C (Escopo 2): " . spl_object_id($controllerC_Scope2->db) . "\n";
-echo "-> Conclusão: O ID do objeto é sempre o MESMO em toda a aplicação.\n\n";
+echo "1. SINGLETON TEST (DatabaseConnection):\n";
+echo "Instance in A (Scope 1): " . spl_object_id($controllerA_Scope1->db) . "\n";
+echo "Instance in B (Scope 1): " . spl_object_id($controllerB_Scope1->db) . "\n";
+echo "Instance in C (Scope 2): " . spl_object_id($controllerC_Scope2->db) . "\n";
+echo "-> Conclusion: The object ID is always the SAME across the entire application.\n\n";
 
-echo "2. TESTE SCOPED (RequestLogger):\n";
-echo "Instância em A (Escopo 1): " . spl_object_id($controllerA_Scope1->logger) . "\n";
-echo "Instância em B (Escopo 1): " . spl_object_id($controllerB_Scope1->logger) . "\n";
-echo "Instância em C (Escopo 2): " . spl_object_id($controllerC_Scope2->logger) . "\n";
-echo "-> Conclusão: O ID é o MESMO dentro do Escopo 1, mas MUDA no Escopo 2.\n\n";
+echo "2. SCOPED TEST (RequestLogger):\n";
+echo "Instance in A (Scope 1): " . spl_object_id($controllerA_Scope1->logger) . "\n";
+echo "Instance in B (Scope 1): " . spl_object_id($controllerB_Scope1->logger) . "\n";
+echo "Instance in C (Scope 2): " . spl_object_id($controllerC_Scope2->logger) . "\n";
+echo "-> Conclusion: The ID is the SAME within Scope 1, but CHANGES in Scope 2.\n\n";
 
-echo "3. TESTE TRANSIENT (MailService):\n";
-echo "Instância em A (Escopo 1): " . spl_object_id($controllerA_Scope1->mailer) . "\n";
-echo "Instância em B (Escopo 1): " . spl_object_id($controllerB_Scope1->mailer) . "\n";
-echo "Instância em C (Escopo 2): " . spl_object_id($controllerC_Scope2->mailer) . "\n";
-echo "-> Conclusão: O ID muda TODAS as vezes. Uma nova instância é sempre criada.\n\n";
+echo "3. TRANSIENT TEST (MailService):\n";
+echo "Instance in A (Scope 1): " . spl_object_id($controllerA_Scope1->mailer) . "\n";
+echo "Instance in B (Scope 1): " . spl_object_id($controllerB_Scope1->mailer) . "\n";
+echo "Instance in C (Scope 2): " . spl_object_id($controllerC_Scope2->mailer) . "\n";
+echo "-> Conclusion: The ID changes EVERY time. A new instance is always created.\n\n";

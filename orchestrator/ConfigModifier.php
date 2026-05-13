@@ -19,7 +19,7 @@ class ConfigModifier
     {
         if (!$this->modifying) {
             if (!file_exists($this->filePath)) {
-                throw new Exception("Arquivo {$this->filePath} não encontrado.");
+                throw new Exception("File {$this->filePath} not found.");
             }
             $this->original = file_get_contents($this->filePath);
             $this->modifying = true;
