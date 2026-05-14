@@ -1,6 +1,7 @@
 #!/usr/bin/env php
 <?php
 // php bin/stretch --mode=success --tags=tag1,tag2
+use PHireScript\Helper\Messenger;
 use PHireScript\Orchestrator\Orchestrator;
 
 require __DIR__ . '/../vendor/autoload.php';
@@ -15,3 +16,5 @@ $orchestrator = new Orchestrator();
 foreach ($modes as $mode) {
     $orchestrator->run($mode, $tags);
 }
+
+Messenger::success('[success] All compilations and tests completed.');

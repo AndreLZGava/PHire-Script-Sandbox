@@ -25,7 +25,11 @@
     "build": "./vendor/phirescript/bin/build",
     "debug": "./vendor/phirescript/bin/debug",
     "snapshot": "./vendor/phirescript/bin/snapshot",
-    "watch": "./vendor/phirescript/bin/watch"
+    "watch": "./vendor/phirescript/bin/watch",
+    "validate-all": [
+      "@composer -d phirescript test",
+      "php bin/stretch"
+    ]
   },
   "require-dev": {
     "phpunit/phpunit": "^12.5"

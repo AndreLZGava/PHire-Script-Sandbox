@@ -1,6 +1,7 @@
-pkg PHireScript.Samples
 
-use PHireScript.Samples.{
+pkg PHireScript.Samples28
+
+use PHireScript.Samples28.{
     UserCredentials
     User as UserAccess,
     Authenticator,
@@ -11,6 +12,17 @@ use PHireScript.Samples.{
 external Symfony\Component\DependencyInjection\Loader\GlobFileLoader
 
 class AuthenticatorClass with Logger as singleton implements Authenticator, Another {
+    save?(Array data): Bool {
+        return true
+    }
+
+    delete!(): Void {
+        return
+    }
+
+    getCompleteUserName(): String|Null {
+        return null
+    }
 
     authenticate(Null|UserCredentials credentials = null): Bool {
         return true

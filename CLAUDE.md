@@ -66,6 +66,34 @@ before()
 4. Use `assertHasMessage([...])` to assert expected compiler output
 5. Run `php bin/stretch --mode=success` to validate
 
+## Conventions
+
+### Package naming in `.ps` files
+
+Every `.ps` file inside `samples/success/case_N/` must declare its package as `PHireScript.SamplesN`, where **N is the exact number of the case folder**:
+
+```
+pkg PHireScript.Samples28       # file inside case_28/
+use PHireScript.Samples28.{...} # import from a file in the same case
+```
+
+This ensures each case is isolated (no cross-case dependency collisions) while remaining compatible with the shared web environment, where packages are resolved globally. Using a generic suffix like `SamplesX` breaks that compatibility.
+
+### PHireScript.json source path
+
+The committed state of `PHireScript.json` must always have `source` pointing to a path inside `samples/`:
+
+```json
+{
+  "paths": {
+    "source": "samples",
+    "dist": "src/compiled"
+  }
+}
+```
+
+`src/output` is a transient directory used internally by the orchestrator during test runs — it must never be committed as the `source`. When working on a specific case manually, change `source` locally but do not commit that change.
+
 ## Compiler Commands (via phirescript)
 
 Run from the sandbox root — these call the phirescript compiler directly:

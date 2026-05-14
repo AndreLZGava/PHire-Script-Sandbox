@@ -1,7 +1,7 @@
 pkg PHireScript.Test
 
 use PHireScript.Database.Repository
-use PHireScript.Samples.User
+//use PHireScript.Samples.User
 
 validate UserRepository {
 

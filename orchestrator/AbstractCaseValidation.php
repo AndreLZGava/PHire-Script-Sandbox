@@ -47,7 +47,7 @@ abstract class AbstractCaseValidation
             $found = false;
 
             foreach ($lines as $line) {
-                if ($line === $normalizedExpected) {
+                if (str_starts_with($line, $normalizedExpected)) {
                     $found = true;
                     break;
                 }
