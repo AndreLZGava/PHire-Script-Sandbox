@@ -1,4 +1,6 @@
-# Add a New PHireScript Language Feature
+# PHireScript Compiler — Code Update Guide
+
+> Use this skill whenever modifying the PHireScript compiler: adding a new language feature, refactoring a compiler phase, adding or updating unit tests, or changing the pipeline architecture.
 
 > **Auto-execution policy:** When this skill is active, run the following without asking for permission:
 > - Any `php` command (compiler, bin/build, bin/debug, bin/stretch, bin/watch, bin/snapshot)
@@ -9,7 +11,7 @@
 > - Read / Write / Edit on any file inside this repo or phirescript/
 > - `git log`, `git diff`, `git status` (read-only git)
 
-> **Self-update protocol:** After every completed feature, update this file with:
+> **Self-update protocol:** After every code change to the compiler (feature, refactor, fix, test), update this file with:
 > - Any new pattern, node type, resolver variant, or context trick discovered
 > - Any correction to an existing section that turned out to be wrong or incomplete
 > - A one-line entry at the bottom of section 12 (Changelog) describing what was added
@@ -65,16 +67,44 @@ File: `phirescript/src/Compiler/Scanner.php`
 
 ## 2. Validator — guard against misuse (if needed)
 
-File: `phirescript/src/Compiler/Validator.php`
+Directory: `phirescript/src/Compiler/Validator/`
 
-- Only add to `$forbidden` if the raw token string is entirely disallowed in the language.
-- The `<`/`>` balance check must only run outside parentheses to avoid false positives from comparison expressions:
-  ```php
-  if ($this->parenDepth === 0) {
-      $this->countCounterPart($token, '<', '>');
-  }
-  ```
-  Track paren depth using a private `int $parenDepth` property updated on `(` / `)` tokens.
+The Validator is structured like the Checker and Binder: a main `Validator.php` holds a `public ValidatorRule[] $rules` list and dispatches to each rule on every token.
+
+**Interface** (`src/Compiler/Validator/ValidatorRule.php`):
+```php
+interface ValidatorRule {
+    public function handleToken(Token $token, CompilerValidator $validator): void;
+    public function afterTokens(CompilerValidator $validator): void;
+}
+```
+
+**Rule folder structure:**
+
+| Folder | Rule | Concern |
+|---|---|---|
+| `Tokens/` | `ForbiddenTokenRule` | Forbidden token map; throws on match |
+| `Structure/` | `ObjectCountRule` | Max one class/interface/trait/type/immutable/validate per file; sets `$validator->mustHavePkg` |
+| `Structure/` | `PackageRule` | Ensures `pkg` appears exactly once; enforces presence when required |
+| `Structure/` | `BracketBalanceRule` | Counts `()`, `{}`, `[]`, `<>` pairs; `<>` only outside parens |
+
+**Main `Validator.php`** exposes one shared state field accessed by rules:
+- `public bool $mustHavePkg = false` — written by `ObjectCountRule`, read by `PackageRule::afterTokens`
+
+**Rule ordering matters for `afterTokens`:** `BracketBalanceRule` is registered before `PackageRule` so bracket validation runs first (matching original behavior).
+
+**Adding a new validation:**
+1. Create `src/Compiler/Validator/<Folder>/FooRule.php` implementing `ValidatorRule`
+2. Add it to `$this->rules` in `src/Compiler/Validator.php`
+
+**`<`/`>` balance check must only run outside parentheses** — `BracketBalanceRule` tracks `$parenDepth` internally and guards:
+```php
+if ($this->parenDepth === 0) {
+    $this->count($value, '<', '>');
+}
+```
+
+**PHPStan note:** `Token::$value` is `readonly mixed`. Casting `(string) $token->value` triggers `cast.string` at level 9. Baseline these errors in `phpstan.baseline.neon` — the type cannot be changed and values are always strings at runtime.
 
 ---
 
@@ -260,7 +290,71 @@ If a token is valid in two contexts with different meanings (e.g., `<`/`>` as ge
 
 ---
 
-## 6. Comparison / Binary expressions
+## 6. Binder — symbol binding for new declarations
+
+Directory: `phirescript/src/Compiler/Binder/`
+
+Skip this step for features that don't introduce new named declarations, new type categories, or new property annotations on class body members.
+
+**Interface** (`src/Compiler/Binder/Binder.php`):
+```php
+interface Binder {
+    public function mustBind(Node $node): bool;
+    public function bind(Node $node, AstBinder $binder): void;
+}
+```
+
+**The cascade pattern:** `ProgramBinder` iterates all `$binder->binders` for each top-level statement. `ClassBinder`/`InterfaceBinder` iterate all `$binder->binders` for each class/interface body child. Each binder is queried via `mustBind(Node)` — return `true` for the node type(s) it owns.
+
+**Folder structure** mirrors the AST hierarchy:
+
+| Folder | Handles |
+|---|---|
+| `Root/` | Program-level nodes (`TypeRegistrationBinder`, `ClassBodyBinder`) |
+| `Declaration/` | `ClassNode`, `InterfaceNode`, `PropertyNode` |
+| `Declaration/Class/` | `MethodDeclarationNode` inside a class |
+| `Declaration/Interface/` | `InterfaceMethodDeclarationNode` |
+| `Signatures/` | Modifier resolution |
+
+**Creating a new binder:**
+1. Create `src/Compiler/Binder/<Folder>/FooBinder.php` implementing `Binder`
+2. Add it to `$this->binders` in `src/Compiler/Binder.php`
+
+**Ordering rule — critical:** `TypeRegistrationBinder` is at index 0 and runs in the main `bind()` loop before `ProgramBinder` cascades. This guarantees all types are in `SymbolTable` before any body-level binder runs. If your binder reads from `SymbolTable`, place it after `ProgramBinder` in the array.
+
+**Accessing `SymbolTable` and `Program` from a sub-binder:**
+The main `Binder` class exposes two public fields for this purpose:
+- `public readonly SymbolTable $globalTable` — type lookups and registration
+- `public Program $program` — scan `UseNode` imports for alias resolution
+
+Access them inside `bind(Node $node, AstBinder $binder)` via `$binder->globalTable` and `$binder->program`.
+
+**PHPStan:** Sub-binders that access `$node->someProperty` (not declared on `Node` base class) need baseline entries. Follow the pattern of existing binder entries in `phpstan.baseline.neon` — each untyped property access gets one entry with `property.notFound` identifier. Update the baseline **manually** (surgical edits) rather than regenerating it — see Section 12.
+
+---
+
+## 7. Checker — semantic validation
+
+File: `phirescript/src/Compiler/Checker.php`
+
+Skip this step for features that don't need semantic rules beyond what the parser already enforces.
+
+**`$this->checkers` list:** analogous to `$this->binders`. Register a new checker class here for new validation concerns.
+
+**The two built-in validation entry points:**
+- `checkClassBody($classNode)` — iterates body members; validates property constraints such as `readonly` + `defaultValue` conflict, and `abstract` property in a non-abstract class.
+- `ensureReturnsForMethods(MethodDeclarationNode $method)` — validates return-type constraints imposed by method naming conventions (`mustBeBool`, `mustBeVoid`).
+
+**Throwing validation errors:**
+```php
+throw new CheckerException("message", $node->line, $node->column);
+```
+
+**PHP 8.3 caution — `CheckerException`:** Do NOT use `readonly` on `$line` and `$column` in this class. PHP 8.3's `Exception::__construct` writes `$this->line` (backtrace line) after the promoted property is set, causing a fatal "modification of readonly property" error. Both properties are declared as plain `public` (no `readonly`).
+
+---
+
+## 8. Comparison / Binary expressions (Parser)
 
 If the feature involves comparison or logical operators, use the existing infrastructure:
 
@@ -271,7 +365,7 @@ If the feature involves comparison or logical operators, use the existing infras
 
 ---
 
-## 7. Emitter — AST node → PHP string
+## 9. Emitter — AST node → PHP string
 
 Directory: `phirescript/src/Compiler/Emitter/`
 
@@ -311,13 +405,13 @@ public function emit(object $node, EmitContext $ctx): string {
 
 ---
 
-## 8. Register the emitter
+## 10. Register the emitter
 
 Verify in `phirescript/src/Compiler/Emitter.php` how emitters are registered and add an entry if needed. Many emitters are auto-discovered if they implement `NodeEmitter` — confirm the discovery mechanism before adding manual registration.
 
 ---
 
-## 9. Sandbox — validate with a case
+## 11. Sandbox — validate with a case
 
 Directory: `PHire-Script-Sandbox/samples/success/case_N/`
 
@@ -341,7 +435,7 @@ Directory: `PHire-Script-Sandbox/samples/success/case_N/`
 
 ---
 
-## 10. Quality checks
+## 12. Quality checks
 
 ```bash
 # From phirescript/ directory:
@@ -355,17 +449,28 @@ php bin/stretch --mode=success
 PHPStan runs at level 9. New files will typically produce the same pre-existing error classes:
 - `missingType.iterableValue` on untyped `array` properties
 - `missingType.generics` on `AbstractContext` params without `<T>` annotation
+- `property.notFound` on `$node->someProperty` inside Binder sub-classes (Node base does not declare concrete properties)
+- `nullsafe.neverNull` when using `?->children` / `?->params` on the left side of `??` — PHPStan infers non-null but runtime may differ; baseline it
 
-These are baselined in `phirescript/phpstan.baseline.neon`. After adding new files, regenerate it:
+These are baselined in `phirescript/phpstan.baseline.neon`. **Prefer surgical manual edits over `--generate-baseline`**: the regenerate command overwrites the entire file and can silently absorb unrelated regressions. Instead, run PHPStan with `--error-format=raw` to see exactly which new errors appeared, add each as a targeted entry, and remove entries for methods/properties that no longer exist:
+
 ```bash
 # From phirescript/ directory:
-vendor/bin/phpstan analyse --generate-baseline phpstan.baseline.neon
+vendor/bin/phpstan analyse --memory-limit=512M --error-format=raw 2>&1
 ```
-Verify the error count increases only by the expected amount (≈2 per resolver, ≈1 per scope context). One pre-existing error in `CheckerException.php` (readonly override) cannot be baselined — that is expected.
+
+Each baseline entry follows this schema (copy from any adjacent entry):
+```yaml
+-
+    message: '#^Access to an undefined property PHireScript\\...\\Node\:\:\$myProp\.$#'
+    identifier: property.notFound
+    count: 1
+    path: src/Compiler/Binder/Declaration/MyBinder.php
+```
 
 ---
 
-## 11. SOLID / DRY / KISS guidelines for this codebase
+## 13. SOLID / DRY / KISS guidelines for this codebase
 
 | Principle | How it applies here |
 |---|---|
@@ -386,9 +491,12 @@ Verify the error count increases only by the expected amount (≈2 per resolver,
 
 ---
 
-## 12. Changelog
+## 14. Changelog
 
 | Feature | What was learned |
 |---|---|
 | Comparison operators (`==`, `===`, `!=`, `!==`, `>=`, `<=`, `>`, `<`) | Context disambiguation for `<`/`>`: scanner is neutral, resolvers decide by context. `BinaryExpressionContext` handles chaining for `&&`/`\|\|`. `walk(-1)` in `afterClose` re-presents non-value closing tokens to parent. Validator must track paren depth to not count `<`/`>` inside `()`. |
 | `elseif` blocks | Chained clause pattern: parent node holds `array $elseIfClauses`; resolver uses int key + direct mutation (`$ifNode->elseIfClauses[] = $node`). `ElseIfScopeContext.afterClose` exits two levels (ElseIfContext + optionally IfContext). `IfScopeContext.afterClose` must check for both `'else'` and `'elseif'` before deciding to exit `IfContext`. When adding constructor params to an existing node, fix all unit tests that pass positional args. |
+| Binder refactoring + unit testing | Binder sub-classes access `$binder->globalTable` and `$binder->program` (both public). `TypeRegistrationBinder` must be index 0 so all types are in `SymbolTable` before body-level binders run. `CheckerException` must not use `readonly` on `$line`/`$column` — PHP 8.3 fatal. PHPStan baseline: surgical manual edits, not `--generate-baseline`. |
+| Checker refactoring | Checker sub-classes add `assert($node instanceof SpecificNodeClass)` at the top of `check()` to narrow the `Node` type — PHPStan requires it at level 9. `ReturnTypeNode` has no `__toString`; use `->types` array directly (e.g. `implode('|', $method->returnType->types)`). `PropertyNode` uses `->value` (`?Node`) not `->defaultValue`. `ClassNode::$body` is `?ClassBodyNode` — guard with `$node->body !== null ? $node->body->children : []` (PHPStan 2 flags `?->prop ?? []` on the left of `??`). Test helper `StringableReturnType` must populate `$this->types = explode('|', $typeString)` rather than implement `__toString`. |
+| Validator refactoring | Pattern mirrors Checker/Binder: `ValidatorRule` interface with `handleToken(Token, CompilerValidator)` + `afterTokens(CompilerValidator)`. Main `Validator` exposes `public bool $mustHavePkg` for cross-rule shared state. Rules: `ForbiddenTokenRule` (Tokens/), `ObjectCountRule` + `PackageRule` + `BracketBalanceRule` (Structure/). Ordering in `$rules` controls `afterTokens` order: BracketBalance before PackageRule preserves original validation sequence. `Token::$value` is `readonly mixed` — `(string)` cast triggers `cast.string` at PHPStan level 9; baseline it. PHP allows a class name and a namespace of the same FQN to coexist (e.g., `PHireScript\Compiler\Validator` class + `PHireScript\Compiler\Validator\Structure\` namespace). |

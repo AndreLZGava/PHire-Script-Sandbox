@@ -65,21 +65,6 @@ foreach ($classLike as $node) {
 
 ---
 
-### 1.3 Duplicated `match()` / `executeSub()` switch-case in SequenceBuilder
-
-**File:** `src/Compiler/Parser/Managers/Builder/SequenceBuilder.php` lines ~135–430
-
-**Problem:** The `match()` method (lines ~135–273) and the `executeSub()` method (lines ~281–430)
-contain near-identical `switch` statements handling the same rule types (`once`, `separated`,
-`optional`, `group`, `or`, `skip_until`, `around`). Any change to one must be manually mirrored
-in the other.
-
-**Fix:** Extract the shared rule-execution logic into a single private
-`executeRules(array $rules, int &$offset, int &$steps, int $limit): bool` method.
-Both `match()` and `executeSub()` delegate to it.
-
----
-
 ### 1.4 Duplicated return-type validation in Checker
 
 **File:** `src/Compiler/Checker.php` lines ~130–150
@@ -102,45 +87,6 @@ private function assertReturnType(array $returnMethod, object $prop, string $typ
     }
 }
 ```
-
----
-
-## 2. God Classes and Long Methods
-
-### 2.1 FileManager does too much (582 lines, 5+ responsibilities)
-
-**File:** `src/Compiler/FileManager.php`
-
-**Problem:** A single class handles file I/O, compilation orchestration, watch mode, CLI/web error
-rendering, Reflection-based class scanning, and token inspection. Any change to one concern risks
-breaking another.
-
-**Fix:** Split into focused classes:
-
-| New Class | Responsibility |
-|---|---|
-| `FileLoader` | Reading `.ps` source files from disk |
-| `FileWriter` | Writing `.php` output files |
-| `ErrorRenderer` | CLI vs. web error formatting (currently duplicated within the class) |
-| `FileWatcher` | The `while(true)` watch loop |
-| `ClassScanner` | Reflection-based PHP class discovery |
-
-Keep `FileManager` as a thin facade that composes these.
-
----
-
-### 2.2 SequenceBuilder is a god class (454 lines)
-
-**File:** `src/Compiler/Parser/Managers/Builder/SequenceBuilder.php`
-
-**Problem:** The class owns token matching strategies, direction logic, rule execution, and
-sub-builder spawning. Methods like `match()` and `executeSub()` are 130+ lines each.
-
-**Fix:**
-- Extract each rule strategy (`once`, `separated`, `optional`, `group`, `or`, etc.) into small
-  private rule-handler methods.
-- Extract `executeSub` duplication (see 1.3 above).
-- The class should orchestrate; the logic should live in the extracted methods.
 
 ---
 
@@ -194,23 +140,11 @@ public function getProcessedTokens(int $limit = self::DEFAULT_TOKEN_WINDOW): arr
 
 ---
 
-### 3.3 MAX_FORWARD / MAX_BACKWARD constants lack explanation
-
-**File:** `src/Compiler/Parser/Managers/Builder/SequenceBuilder.php` lines 15–16
-
-**Problem:** `MAX_FORWARD = 20` and `MAX_BACKWARD = 10` are defined without context. Future
-maintainers cannot know why they differ.
-
-**Fix:** Add a brief comment explaining what would happen if the limit is exceeded and why the
-values were chosen.
-
----
-
 ## 4. Code Smells
 
 ### 4.1 `gettype()` used instead of `is_int()`
 
-**File:** `src/Compiler/Emitter/NodeEmitters/FunctionEmitter.php` line ~125
+**File:** `src/Compiler/Emitter/Declarations/FunctionEmitter.php` line ~132
 
 **Problem:**
 ```php
@@ -220,41 +154,6 @@ if (\gettype($paramName) !== 'integer') { ... }
 **Fix:**
 ```php
 if (!is_int($paramName)) { ... }
-```
-
----
-
-### 4.2 Ambiguous operator precedence in Checker conditionals
-
-**File:** `src/Compiler/Checker.php` lines ~133–135
-
-**Problem:** `&&` and `||` mixed without grouping parentheses.
-```php
-if ($prop->mustBeBool && \count($returnMethod) > 1 ||
-    $prop->mustBeBool && \current($returnMethod) !== 'Bool') {
-```
-
-**Fix:** Add explicit grouping to make intent clear:
-```php
-if ($prop->mustBeBool && (\count($returnMethod) > 1 || \current($returnMethod) !== 'Bool')) {
-```
-
----
-
-### 4.3 Redundant dual-check in Validator
-
-**File:** `src/Compiler/Validator.php` lines ~119–122
-
-**Problem:** The `isForbidden()` method checks the same array with both `array_key_exists` (key
-check) and `in_array` (value check) — these are not equivalent but the intent here is clearly
-a key lookup, making the second check redundant and slower.
-
-**Fix:**
-```php
-private function isForbidden(string $word): bool
-{
-    return \array_key_exists($word, $this->forbidden);
-}
 ```
 
 ---
@@ -299,8 +198,6 @@ dead code in the file.
 ---
 
 ## 5. SOLID Violations
-
-### 5.1 SRP — FileManager (see 2.1 above for the split plan)
 
 ### 5.2 OCP — Checker's `ensureReturnsForMethods` is closed to extension
 
