@@ -1,7 +1,7 @@
 <?php
 
 
-namespace PHireScript\Sandbox;
+namespace PHireScript\Sandbox\samples\success\case_28;
 
 
 interface Another

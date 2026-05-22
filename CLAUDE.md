@@ -138,3 +138,8 @@ composer install
 ```
 
 PHPUnit is the only dev dependency. The compiler itself comes from `phirescript/` via the local path repository configured in `composer.json`.
+
+<!-- SPECKIT START -->
+For additional context about technologies to be used, project structure,
+shell commands, and other important information, read the current plan
+<!-- SPECKIT END -->

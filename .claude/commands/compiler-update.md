@@ -2,6 +2,42 @@
 
 > Use this skill whenever modifying the PHireScript compiler: adding a new language feature, refactoring a compiler phase, adding or updating unit tests, or changing the pipeline architecture.
 
+---
+
+## Language Design Philosophy
+
+PHireScript is designed to be **simple, readable, and easy to generate by any AI model**. This is a core constraint — not a nice-to-have.
+
+**Inspirations (in order of priority):** TypeScript → Ruby → Java. When a new syntax decision is ambiguous, default to the TypeScript convention first. If TypeScript has no clear parallel, look to Ruby. Java is the last resort.
+
+When designing or reviewing syntax:
+- Prefer explicit keywords over symbolic shortcuts when the symbol is non-obvious
+- Avoid context-dependent token meanings (e.g., the same symbol meaning two different things depending on position)
+- Prefer consistent patterns: if one construct uses `keyword Name { }`, all similar constructs should too
+- Syntax should be guessable from intent — an AI generating code for the first time should produce valid PHireScript with minimal training
+- When a new construct could follow multiple conventions, ask: what would a TypeScript developer expect here?
+
+See also: [`phirescript-features`](./../commands/phirescript-features.md) — full feature reference with AI-friendliness notes per construct.
+
+---
+
+## Behavioral Rules (how Claude must behave in this project)
+
+### Before any implementation
+Read the relevant files first. Understand the existing patterns, then structure and present a plan of what will be done before writing any code. Do not start implementing before the user confirms the approach.
+
+### When modeling new language constructs
+When the user proposes new syntax or a new language concept:
+1. Read the relevant files (existing features, similar constructs)
+2. Evaluate and comment on how AI-friendly the proposed syntax is: is it unambiguous? predictable? consistent with existing patterns?
+3. Suggest alternatives if the syntax could be simpler or more consistent
+4. Ask whether the user wants to revise the proposed syntax before proceeding
+
+### When anything is unclear
+Do not assume. Ask until every point is clear. Ambiguity in language design cascades — one unclear token can break the entire parsing model.
+
+---
+
 > **Auto-execution policy:** When this skill is active, run the following without asking for permission:
 > - Any `php` command (compiler, bin/build, bin/debug, bin/stretch, bin/watch, bin/snapshot)
 > - Any `composer` command (quality, test, format, refactor, analyse)

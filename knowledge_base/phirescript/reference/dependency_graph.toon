@@ -1,0 +1,54 @@
+# Dependency Graph — PHireScript Compiler
+# Text representation — no tooling available for diagram generation
+
+## Compilation Flow Dependencies
+
+bin/build
+  └── Compiler::compile()
+        ├── FileManager (config, file I/O, watch)
+        ├── DependencyGraphBuilder (topological sort, caching)
+        ├── TranspilerDependencyTree (light parse for dependency graph)
+        └── Transpiler::parseAndBind() / checkAndEmit()
+              ├── Scanner (tokenize)
+              ├── Validator (pre-parse check + ModifiersTransform)
+              ├── Parser (AST)
+              │     ├── ContextManager (context stack)
+              │     ├── TokenManager (cursor)
+              │     ├── SymbolTableManager (type-method registry)
+              │     ├── VariableManager (scope)
+              │     ├── Contexts (one per construct)
+              │     ├── Resolvers (token matchers)
+              │     └── Nodes (data holders)
+              ├── Binder (PassDiscovery → sorted Binder impls)
+              │     └── SymbolTable (global type registry)
+              ├── Checker (PassDiscovery → sorted Checker impls)
+              ├── Emitter (EmitterDispatcher → NodeEmitters)
+              │     ├── EmitContext (shared state)
+              │     ├── PhpTypeResolver (type mapping)
+              │     └── UseRegistry (PHP use statements)
+              └── PhpFileGeneratorHandler (nikic/php-parser)
+                    ├── Visitors: TypeCollector, StringObjectTransformer, ...
+                    └── PrettyPrinter
+
+## Key Shared State
+
+SymbolTable          shared across all files; written during Bind, read during Check/Emit
+EmitterDispatcher    built once; fast-path cached
+PassDiscovery        discovers Binder/Checker impls via reflection at startup
+CompilerContext      read-only runtime config passed through all phases
+
+## Subsystem Isolation
+
+Scanner    → no deps on other compiler subsystems
+Validator  → depends on Scanner output (Token[])
+Parser     → depends on Validator output (Token[]); writes to SymbolTable via SymbolTableManager
+Binder     → depends on Parser AST; writes to SymbolTable
+Checker    → depends on Binder output (annotated AST); reads SymbolTable
+Emitter    → depends on Checker output; reads SymbolTable; writes to UseRegistry
+Processors → depends on Emitter string output; uses nikic/php-parser
+
+## External Dependencies
+
+nikic/php-parser ^5.0   → post-emission AST transformation
+PHPUnit ^12.5           → tests only
+PHPStan, PHPMD, Rector  → dev/CI quality tools only

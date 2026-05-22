@@ -1,62 +1,82 @@
 <?php
 
 
-namespace PHireScript\Classes;
+namespace PHireScript\Sandbox\samples\success\case_28;
 
 
-use PHireScript\Classes\UserCredentials;
-use PHireScript\Classes\User as UserAccess;
-use PHireScript\Classes\Authenticator;
-use PHireScript\Classes\Another;
-use PHireScript\Classes\Logger;
+use PHireScript\Sandbox\samples\success\case_28\UserCredentials;
+use PHireScript\Sandbox\samples\success\case_28\User as UserAccess;
+use PHireScript\Sandbox\samples\success\case_28\Authenticator;
+use PHireScript\Sandbox\samples\success\case_28\Another;
+use PHireScript\Sandbox\samples\success\case_28\Logger;
 
 use Symfony\Component\DependencyInjection\Loader\GlobFileLoader;
 
- class AuthenticatorClass implements Authenticator, Another {
+ class AuthenticatorClass implements Authenticator, Another
+{
     use Logger;
-    public function authenticate(UserCredentials $credentials): bool {
-        return true;
-    }
+    public function save(Array $data): bool{
+return true;
+}
 
-    public function logout(): void {
-        return ;
-    }
+    public function delete(): void{
+return ;
+}
 
-    public function returnNull(): null {
-        return Null;
-    }
+    public function getCompleteUserName(): string|null{
+return null;
+}
 
-    public function returnStringSingle(): string {
-        return 'single quotes';
-    }
+    public function authenticate(Null $credentials = null): bool{
+return true;
+}
 
-    public function returnStringDouble(): string {
-        return "double quotes";
-    }
+    public function logout(): void{
+return ;
+}
 
-    public function returnFloat(): float {
-        return 15.2;
-    }
+    public function returnNull(): null{
+return null;
+}
 
-    public function returnInt(): int {
-        return 10;
-    }
+    public function returnStringSingle(): string{
+return 'single quotes';
+}
 
-    public function returnArrayEmpty(): array {
-        return [];
-    }
+    public function returnStringDouble(): string{
+return "double quotes";
+}
 
-    public function returnArrayComplete(): array {
-        return ['example' => ['another', 'array']];
-    }
+    public function returnFloat(): float{
+return 15.2;
+}
 
-    public function returnObjectEmpty(): object {
-        return (object) [];
-    }
+    public function returnInt(): int{
+return 10;
+}
 
-    public function returnObject(): object {
-        return (object) ["test" => 1];
-    }
+    public function returnArrayEmpty(): array{
+return [
+
+];
+}
+
+    public function returnArrayComplete(): array{
+return [
+'example' => [
+'another', 
+'array'
+]
+];
+}
+
+    public function returnObjectEmpty(): object{
+return (object) [];
+}
+
+    public function returnObject(): object{
+return (object) ['test' => 1];
+}
 
 }
 

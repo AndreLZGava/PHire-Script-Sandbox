@@ -1,0 +1,8 @@
+repos:
+  - path: .
+    name: PHire-Script-Sandbox
+    description: Integration and testing sandbox for the PHireScript transpiler
+
+  - path: phirescript
+    name: PHireScript
+    description: PHireScript compiler — transpiles .ps source files to PHP

@@ -1,0 +1,34 @@
+# Dependency Graph — PHire-Script-Sandbox
+# Placeholder — generated diagram would go here
+
+## Runtime Dependencies
+
+bin/stretch
+  └── PHireScript\Orchestrator\Orchestrator
+        ├── PHireScript\Orchestrator\ConfigModifier  → PHireScript.json
+        ├── PHireScript\Orchestrator\FileManager     → src/output/, src/compiled/
+        ├── PHireScript\Orchestrator\ModeTest
+        │     └── Sandbox\Samples\success\SuccessMode
+        │           └── PHireScript\Compiler\CompilerContext
+        │                 └── PHireScript\Compiler\Compiler (phirescript/src/)
+        └── Sandbox\Samples\{mode}\case_N\CaseValidation
+              └── PHireScript\Orchestrator\AbstractCaseValidation
+
+## Autoload Map
+
+PHireScript\Orchestrator\  ←  orchestrator/
+Sandbox\Samples\           ←  samples/
+PHireScript\Sandbox\       ←  src/output/
+PHireScript\               ←  phirescript/src/
+
+## Composer Dependencies
+
+require:
+  phire-script/phire-script: *   (path repo: ./phirescript)
+
+require-dev:
+  phpunit/phpunit: ^12.5
+
+## External Repos
+
+phirescript/     → PHPScript.git (separate git repo, git-ignored in sandbox)
