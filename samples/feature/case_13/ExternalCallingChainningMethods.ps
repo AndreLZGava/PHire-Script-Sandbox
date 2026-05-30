@@ -1,0 +1,8 @@
+// Alias for external package becomes namespace
+external DateTime as DateTimePhp
+// Creates a new class by calling () after identifier, and then can call the chaining methods
+date = DateTimePhp().modify('+3 days')
+.modify('+2 hours')
+.format('d/m/Y H:i')
+
+date.display()
