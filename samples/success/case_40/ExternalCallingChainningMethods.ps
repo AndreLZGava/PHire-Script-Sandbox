@@ -1,0 +1,10 @@
+pkg PHireScript.Samples40
+
+// Alias for external package becomes namespace
+external DateTime as DateTimePhp
+// Creates a new instance assigned to variable
+date = DateTimePhp()
+// Call method on the instance
+date.modify('+3 days')
+// Format and assign the result
+result = date.format('d/m/Y H:i')
