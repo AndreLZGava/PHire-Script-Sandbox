@@ -9,9 +9,10 @@
 
 ## Skills
 
-| Skill                                                          | When to use                                              |
-|----------------------------------------------------------------|----------------------------------------------------------|
-| [add-test-case](skills/add-test-case/SKILL.md)                 | Creating a new case_N in success/warning/error           |
+| Skill                                                                                                    | When to use                                                       |
+|----------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------|
+| [implement-phirescript-feature](skills/implement-phirescript-feature/SKILL.md)                          | Designing or implementing any PHireScript language feature        |
+| [add-test-case](skills/add-test-case/SKILL.md)                                                           | Creating a new case_N in success/warning/error                    |
 | [run-orchestrator](skills/run-orchestrator/SKILL.md)           | Running `bin/stretch` with modes and tag filters         |
 | [write-phirescript](skills/write-phirescript/SKILL.md)         | Writing `.ps` source files                               |
 | [validate-compilation](skills/validate-compilation/SKILL.md)   | Writing/fixing `CaseValidation.php` assertion files      |

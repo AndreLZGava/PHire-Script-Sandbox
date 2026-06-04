@@ -142,5 +142,20 @@ PHPUnit is the only dev dependency. The compiler itself comes from `phirescript/
 <!-- SPECKIT START -->
 For additional context about technologies to be used, project structure,
 shell commands, and other important information, read the current plan
-at `specs/002-php-interop-import/plan.md`
+at `specs/003-method-chaining/plan.md`
 <!-- SPECKIT END -->
+
+## PHireScript Feature Development
+
+Whenever a change is made to `phirescript/` or to any part of this sandbox that reflects a new or modified language behavior, use the `implement-phirescript-feature` skill from the knowledge base:
+
+```
+knowledge_base/skills/implement-phirescript-feature/SKILL.md
+```
+
+This skill must be used proactively at three moments:
+1. **Before specifying** any new language feature — design evaluation gate
+2. **Before implementing** — architecture check (token advance rule, trinity completeness, blast radius)
+3. **After implementing** — documentation sync across all affected files
+
+**Critical rule — token advance:** Inside the PHireScript compiler, the only file that may advance the token cursor is `phirescript/src/Compiler/Parser.php` (the `$tokenManager->advance()` call). Resolvers, Contexts, Binders, and Checkers may only use read-only methods (`peek()`, `lookAhead()`, `lookBehind()`, `sequence()`, etc.). Designs that require a Resolver or Context to advance the cursor independently are architectural violations.
