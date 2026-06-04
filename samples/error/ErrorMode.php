@@ -32,14 +32,18 @@ class ErrorMode extends ModeTest
 
     public function execute(AbstractCaseValidation $abstractCase)
     {
+        ob_start();
         try {
             $context = new CompilerContext(CompileMode::BUILD);
-
             $compiler = new Compiler($context);
             $compiler->compile();
+            $output = ob_get_clean();
+            $abstractCase->setOutput($output ?? '');
             $abstractCase->execute();
         } catch (\Exception $e) {
-            throw $e;
+            $output = ob_get_clean();
+            $abstractCase->setOutput(($output ?? '') . $e->getMessage());
+            $abstractCase->execute();
         }
     }
 

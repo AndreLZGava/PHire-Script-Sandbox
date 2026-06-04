@@ -5,16 +5,17 @@ The sandbox validates PHireScript (`.ps`) compilation to PHP using an orchestrat
 
 ## Quick Orientation
 
-| I want to…                                | Go to                                        |
-|-------------------------------------------|----------------------------------------------|
-| Add a new test case                       | `skills/add-test-case/SKILL.md`              |
-| Run the test suite                        | `skills/run-orchestrator/SKILL.md`           |
-| Write PHireScript source files            | `skills/write-phirescript/SKILL.md`          |
-| Write CaseValidation.php assertions       | `skills/validate-compilation/SKILL.md`       |
-| Understand the type system                | `skills/phirescript-types/SKILL.md`          |
-| Debug a compilation failure               | `skills/debug-compiler/SKILL.md`             |
-| Change source/dist paths in config        | `skills/configure-phirescript-json/SKILL.md` |
-| Add or filter by tags                     | `skills/case-metadata/SKILL.md`              |
+| I want to…                                | Go to                                                          |
+|-------------------------------------------|----------------------------------------------------------------|
+| Implement or design a PHireScript feature | `skills/implement-phirescript-feature/SKILL.md`               |
+| Add a new test case                       | `skills/add-test-case/SKILL.md`                               |
+| Run the test suite                        | `skills/run-orchestrator/SKILL.md`                            |
+| Write PHireScript source files            | `skills/write-phirescript/SKILL.md`                           |
+| Write CaseValidation.php assertions       | `skills/validate-compilation/SKILL.md`                        |
+| Understand the type system                | `skills/phirescript-types/SKILL.md`                           |
+| Debug a compilation failure               | `skills/debug-compiler/SKILL.md`                              |
+| Change source/dist paths in config        | `skills/configure-phirescript-json/SKILL.md`                  |
+| Add or filter by tags                     | `skills/case-metadata/SKILL.md`                               |
 
 ## Key Files
 
@@ -22,7 +23,7 @@ The sandbox validates PHireScript (`.ps`) compilation to PHP using an orchestrat
 |-----------------------------|--------------------------------------------------|
 | `bin/stretch`               | Orchestrator CLI entry point                     |
 | `orchestrator/`             | Framework: Orchestrator, AbstractCaseValidation  |
-| `samples/success/case_N/`   | Test cases (34 cases currently)                  |
+| `samples/success/case_N/`   | Test cases (48 cases currently); error cases in `samples/error/` |
 | `PHireScript.json`          | Compiler configuration                           |
 | `composer.json`             | Autoload map, scripts                            |
 | `phpunit.xml`               | PHPUnit config — scans `src/compiled/`           |

@@ -9,7 +9,7 @@ Its sole job: compile `.ps` files and assert the output is correct.
 - The orchestrator (`bin/stretch`) drives compilation and PHPUnit for all cases
 - Cases are tagged with PHP attributes (`#[Tag(...)]`) for selective execution
 - The compiler itself lives in `phirescript/` — a **separate git repo** (git-ignored here)
-- 34 success cases cover: classes, interfaces, traits, types, control flow, super types, magic methods
+- 48 success cases cover: classes, interfaces, traits, types, control flow, super types, magic methods, external PHP interop, method chaining (cases 42–48)
 - Compiled PHP lands in `src/compiled/`; PHPUnit tests scan that directory
 - `PHireScript.json` controls source/dist paths and is backed up/restored per case run
 - Docker + Makefile available for containerized execution; native PHP also supported
