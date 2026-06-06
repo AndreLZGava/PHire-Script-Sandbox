@@ -1,23 +1,22 @@
 <?php
 
-namespace Sandbox\Samples\success\case_27;
+namespace Sandbox\Samples\error\case_50;
 
 use PHireScript\Orchestrator\AbstractCaseValidation;
 use PHireScript\Orchestrator\Attributes\Description;
 use PHireScript\Orchestrator\Attributes\Documentation;
 
-#[Tag('types')]
-#[Tag('snapshot')]
-#[Tag('test')]
+#[Tag('this')]
+#[Tag('checker')]
+#[Tag('error')]
 #[Documentation(true)]
-#[Description('Snapshot and disabled test file for types validation')]
+#[Description("'this' at top level outside any class must produce CheckerException")]
 class CaseValidation extends AbstractCaseValidation
 {
     public function execute()
     {
         $this->assertHasMessage([
-            "[Copied]: src/output/TypesTest.psc → src/compiled/TypesTest.psc",
-            "[Copied]: src/output/TypesTest.psX → src/compiled/TypesTest.psX",
+            "'this' is not valid outside",
         ]);
     }
 }

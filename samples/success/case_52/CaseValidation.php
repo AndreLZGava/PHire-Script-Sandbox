@@ -1,22 +1,22 @@
 <?php
 
-namespace Sandbox\Samples\success\case_10;
+namespace Sandbox\Samples\success\case_52;
 
 use PHireScript\Orchestrator\AbstractCaseValidation;
 use PHireScript\Orchestrator\Attributes\Description;
 use PHireScript\Orchestrator\Attributes\Documentation;
 
-#[Tag('constants')]
-#[Tag('global-constant')]
+#[Tag('this')]
+#[Tag('class')]
+#[Tag('property-assignment')]
 #[Documentation(true)]
-#[Description('This compiles global constant assignment')]
+#[Description('this.property assignment and read across multiple methods in a class')]
 class CaseValidation extends AbstractCaseValidation
 {
     public function execute()
     {
         $this->assertHasMessage([
-            "✔ src/output/Constants.ps → src/compiled/Constants.php",
-            "[Copied]: src/output/Constants.psc → src/compiled/Constants.psc",
+            "✔ src/output/SafeLogger.ps → src/compiled/SafeLogger.php",
         ]);
     }
 }

@@ -142,7 +142,7 @@ PHPUnit is the only dev dependency. The compiler itself comes from `phirescript/
 <!-- SPECKIT START -->
 For additional context about technologies to be used, project structure,
 shell commands, and other important information, read the current plan
-at `specs/003-method-chaining/plan.md`
+at `specs/004-this-keyword-self-return/plan.md`
 <!-- SPECKIT END -->
 
 ## PHireScript Feature Development

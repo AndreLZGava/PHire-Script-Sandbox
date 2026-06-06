@@ -1,0 +1,22 @@
+pkg PHireScript.Samples51
+
+class StatusChecker as scoped {
+    Bool active
+    String status
+
+    toggle(): Void {
+        if (this.active == true) {
+            this.status = "inactive"
+        } else {
+            this.status = "active"
+        }
+    }
+
+    getStatus(): String {
+        return this.status
+    }
+
+    isActive(): Bool {
+        return this.active
+    }
+}
