@@ -2,6 +2,7 @@ subrepo/Laravel/vendor
 subrepo/Symphony/vendor
 phirescript-doc/vendor
 /phirescript/
+/phpscript-vscode/
 /vendor/
 /.cache
 .phpunit.result.cache

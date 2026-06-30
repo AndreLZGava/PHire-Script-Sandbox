@@ -25,7 +25,65 @@ class Orchestrator
         ];
     }
 
-    public function run($mode, $tags = [])
+    public function runSingle($mode, string $case, array $tags = []): void
+    {
+        $basePath = __DIR__ . '/../samples/' . $mode;
+        $modeClass = $this->modeFactory[$mode];
+        $casePath = $basePath . '/' . $case;
+        $caseFile = $casePath . '/CaseValidation.php';
+
+        if (!is_dir($casePath) || !file_exists($caseFile)) {
+            echo "[SKIP] {$case}: CaseValidation.php not found\n";
+            return;
+        }
+
+        $this->files->clearOutput();
+        include_once realpath($caseFile);
+
+        $className = "Sandbox\\Samples\\{$mode}\\{$case}\\CaseValidation";
+        // After include, alias the global CaseValidation to its namespaced name
+        // so the PSR-4 autoloader doesn't try to include the file a second time
+        if (!class_exists($className, false) && class_exists('CaseValidation', false)) {
+            class_alias('CaseValidation', $className);
+        }
+        if (!class_exists($className)) {
+            echo "[SKIP] Class {$className} not found\n";
+            return;
+        }
+
+        $testInstance = new $className($this);
+        $reflection = new \ReflectionClass($testInstance);
+
+        $caseTags = [];
+        foreach ($reflection->getAttributes(\PHireScript\Orchestrator\Attributes\Tag::class) as $attr) {
+            $caseTags[] = $attr->newInstance()->name;
+        }
+
+        if (!empty($tags) && empty(array_intersect($tags, $caseTags))) {
+            echo "[SKIP] {$case} don't match tags\n";
+            return;
+        }
+
+        $descAttrs = $reflection->getAttributes(\PHireScript\Orchestrator\Attributes\Description::class);
+        $description = !empty($descAttrs) ? $descAttrs[0]->newInstance()->text : null;
+
+        echo "[RUN] {$case}" . ($description ? " → {$description}" : '') . "\n";
+
+        $this->files->clearOutput();
+        $this->config->backup();
+        $this->files->copy($casePath, __DIR__ . '/../src/output/');
+
+        $modeClass->before($testInstance);
+        $modeClass->execute($testInstance);
+        $modeClass->rightAfterFirstExecution($testInstance);
+        $modeClass->executeAgain($testInstance);
+        $modeClass->after($testInstance);
+        $modeClass->executeTest($testInstance);
+        $this->config->revert();
+        $this->files->clearOutput();
+    }
+
+    public function run($mode, $tags = [], ?int $from = null, ?int $to = null)
     {
         $basePath = __DIR__ . '/../samples/' . $mode;
         $cases = scandir($basePath);
@@ -40,6 +98,16 @@ class Orchestrator
 
             if (!is_dir($casePath)) {
                 continue;
+            }
+
+            if ($from !== null || $to !== null) {
+                $caseNum = (int) preg_replace('/[^0-9]/', '', $case);
+                if ($from !== null && $caseNum < $from) {
+                    continue;
+                }
+                if ($to !== null && $caseNum > $to) {
+                    continue;
+                }
             }
 
             $caseFile = $casePath . '/CaseValidation.php';

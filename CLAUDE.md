@@ -7,6 +7,7 @@ This is the integration and testing environment for **PHireScript**, a PHP trans
 ```
 PHire-Script-Sandbox/
 ├── phirescript/        # PHireScript compiler (separate git repo, ignored by sandbox git)
+├── phpscript-vscode/   # VS Code extension (separate git repo, ignored by sandbox git)
 ├── orchestrator/       # Test runner framework
 ├── samples/
 │   ├── success/        # Cases expected to compile successfully
@@ -20,6 +21,10 @@ PHire-Script-Sandbox/
 ## Relationship with PHireScript
 
 `phirescript/` is a **separate git repository** living inside this folder for local convenience. It is listed in `.gitignore` — changes there are committed independently to its own repo (`PHPScript.git`). Do not use git subtree or any other mechanism to link the two repos.
+
+## Relationship with the VS Code Extension
+
+`phpscript-vscode/` is a **separate git repository** living inside this folder for convenience — same pattern as `phirescript/`. It is listed in `.gitignore` — changes there are committed independently to its own repo (`PHire-Script-Extension.git`). The sandbox acts as the shell for the extension: it provides full project context (compiler internals, language spec, sandbox cases) that AI agents need when implementing or improving the extension. Do not use git subtree or any other mechanism to link the repos.
 
 ## Running the Orchestrator
 
@@ -142,8 +147,24 @@ PHPUnit is the only dev dependency. The compiler itself comes from `phirescript/
 <!-- SPECKIT START -->
 For additional context about technologies to be used, project structure,
 shell commands, and other important information, read the current plan
-at `specs/004-this-keyword-self-return/plan.md`
+at `specs/007-fix-dot-resolver/plan.md`
 <!-- SPECKIT END -->
+
+## Agentes de IA
+
+O sandbox define papéis de agentes de IA que trabalham em conjunto no projeto. Cada agente tem uma pasta em `agents/` com sua definição (`AGENT.md`) e memória de trabalho.
+
+| Agente | Papel |
+|---|---|
+| `agents/phirescript-architect/` | Design da linguagem, orquestração, AI-first tooling — interface principal com o usuário |
+| `agents/php-architect/` | Qualidade do output PHP, código do transpilador — contrapeso de segurança e performance |
+| `agents/qa/` | Validação de specs, edge cases, testes |
+| `agents/documentador/` | Documentação de features, bugs, linguagem, `phirescript-doc/` |
+| `agents/pm/` | Priorização de backlog, triage features vs bugs |
+| `agents/developer-compiler/` | Implementação no transpilador (`phirescript/`) e sandbox |
+| `agents/developer-extension/` | Implementação na extensão VS Code (`phpscript-vscode/`) |
+
+Ver `agents/README.md` para a estrutura de comunicação entre agentes.
 
 ## PHireScript Feature Development
 

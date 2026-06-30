@@ -3,7 +3,7 @@
 > Registrado após a implementação de method chaining (specs/003-method-chaining).
 > Cada ponto descreve um problema real encontrado durante o desenvolvimento,
 > com contexto técnico e proposta de solução ou melhoria.
-> **Status**: Pontos 1 e 7 implementados em 2026-06-04.
+> **Status**: Pontos 1 e 7 implementados em 2026-06-04. Ponto 9 implementado em 2026-06-06.
 
 ---
 
@@ -45,6 +45,10 @@ Na inicialização do `Compiler`, se qualquer `.php` em `phirescript/src/` for m
 **D. Invalidação automática por mudança no `PHireScript.json`** ✅
 
 Adicionado junto ao item C: se o `PHireScript.json` mudou desde o último build (hash diferente no manifest), o cache inteiro é descartado com aviso. Usa `hasChangedSinceLastBuild()` no `CacheManager` para distinguir "arquivo novo" de "arquivo modificado".
+
+**E. Cache sempre na raiz do pacote phirescript, não no cwd** ✅
+
+`Compiler.php` usava `getcwd()` para determinar o diretório do `.cache/`, o que colocava a pasta dentro do projeto que chama o compilador (ex: sandbox), poluindo repos externos. Corrigido para `dirname(__DIR__)` — o cache fica sempre em `phirescript/.cache/`, independente do diretório de onde o comando é executado. Isso também garante isolamento correto quando o phirescript é instalado como dependência via Composer.
 
 ---
 
@@ -242,6 +246,60 @@ T_EOL           '\n'          L8:30   EndOfLineResolver
 ---
 
 ## 8. Parâmetros de método não são registrados no `variables` scope
+
+---
+
+## 9. `BracketBalanceRule` contando `<`/`>` como colchetes ✅ IMPLEMENTADO
+
+### O que aconteceu (descoberto em 2026-06-06, feature 005-inline-getter-setter)
+
+O `BracketBalanceRule` do Validator contava `<` e `>` como um par de colchetes que precisa estar balanceado, usando `parenDepth === 0` para distinguir do uso dentro de generics como `List<String>`. Ao implementar a sintaxe `< Int id` (getter), o Validator rejeitava o arquivo com:
+
+```
+Amount of < (3) diverge from > (0)
+```
+
+Os marcadores de getter (`<`) e setter (`>`) são assimétricos por design — um property com `<` puro não tem `>` correspondente na mesma linha. O contrato de balanceamento não faz sentido para esse uso.
+
+### Por que é perigoso
+
+Bloqueia a feature inteiramente no Validator, antes mesmo de chegar ao Parser. O erro é enganoso: parece que o arquivo tem sintaxe inválida, mas na verdade é uma regra de validação que não distingue contextos de uso.
+
+A dependência de `parenDepth` para distinguir generics de comparações era frágil: um `<` em comparação como `a < b` fora de parênteses seria contado como "abre generic" e esperaria um `>` para fechar.
+
+### Implementado
+
+**Remoção da checagem de `<`/`>` do `BracketBalanceRule`** ✅
+
+`<` e `>` foram removidos dos arrays `$open` e `$close` do `BracketBalanceRule` e a lógica de `parenDepth` foi eliminada. PHireScript não usa `<`/`>` como delimitadores de escopo obrigatoriamente balanceados — generics são sketch e a validação estrutural de `{}`, `()`, `[]` já cobre os casos reais. O `ForbiddenTokenRule` continua cobrindo misuse do token `<>` combinado.
+
+---
+
+## 10. Operadores aritméticos não suportados em `ReturnContext`
+
+### O que aconteceu (descoberto em 2026-06-06, feature 005-inline-getter-setter)
+
+Ao tentar validar o override de getter com `return this.id * 2` no case_60, o compilador lança:
+
+```
+* is not supported return context!
+```
+
+O `ReturnContext` não tem um resolver para operadores aritméticos (`*`, `/`, `+`, `-`). O `*` é T_SYMBOL e não é reconhecido por nenhum resolver registrado no contexto.
+
+### Por que é perigoso
+
+Qualquer expressão aritmética básica em um return é inválida. `return this.count + 1`, `return price * 1.1`, `return n - 1` — todos falham. É uma lacuna silenciosa que não aparece como erro do compilador (o arquivo compila se o return não tiver aritmética), mas limita muito o que pode ser feito dentro de métodos.
+
+### Proposta
+
+**A. `BinaryExpressionResolver` em `ReturnContext`**
+
+O `BinaryExpressionContext` já tem os operadores aritméticos e de comparação mapeados (`>`, `<`, `==`, etc.). O `ReturnContext` precisaria registrar um `BinaryExpressionResolver` que converte `expressão op expressão` em um `BinaryExpressionNode`, similar ao que acontece no `AssignmentContext`.
+
+**B. Contexto de expressão genérico**
+
+Uma solução mais robusta seria um `ExpressionContext` reutilizável que qualquer outro contexto pode usar para o RHS de uma expressão — `ReturnContext`, `AssignmentContext`, `IfConditionContext` — ao invés de cada um gerenciar seus próprios resolvers de expressão individualmente. Isso elimina a duplicação atual onde `ComparisonExpressionResolver` é registrado em 6+ contextos separados.
 
 ### O que aconteceu (descoberto em 2026-06-04, feature 004-this)
 
