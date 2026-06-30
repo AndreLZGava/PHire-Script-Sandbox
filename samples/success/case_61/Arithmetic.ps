@@ -1,0 +1,38 @@
+pkg PHireScript.Samples61
+
+class Arithmetic as scoped {
+    Float price
+    Float discount
+    Int count
+    Int base
+
+    # getTotal(): Float {
+        total = this.price + this.discount
+        return total
+    }
+
+    # getMultiplied(): Float {
+        result = this.price * 1.1
+        return result
+    }
+
+    # getSubtracted(): Float {
+        diff = this.price - this.discount
+        return diff
+    }
+
+    # getDivided(): Float {
+        half = this.price / 2.0
+        return half
+    }
+
+    # getMod(): Int {
+        rest = this.count % 3
+        return rest
+    }
+
+    # getPower(): Float {
+        squared = this.price ** 2.0
+        return squared
+    }
+}
