@@ -1,0 +1,14 @@
+pkg PHireScript.Samples67
+
+class ChainAssignment as scoped {
+    String label
+
+    processAssignment(): String {
+        result = this.label.toUpperCase().removeSpaces()
+        return result
+    }
+
+    processReturn(): String {
+        return this.label.toUpperCase().removeSpaces()
+    }
+}
