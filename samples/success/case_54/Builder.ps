@@ -1,0 +1,24 @@
+pkg PHireScript.Samples54
+
+class Builder as scoped {
+    String name
+    Int value
+
+    withName(): Self {
+        this.name = "default"
+        return this
+    }
+
+    withValue(): Self {
+        this.value = 42
+        return this
+    }
+
+    getName(): String {
+        return this.name
+    }
+
+    getValue(): Int {
+        return this.value
+    }
+}

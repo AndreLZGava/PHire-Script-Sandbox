@@ -1,0 +1,12 @@
+pkg PHireScript.Samples53
+
+class Mapper as scoped {
+    String prefix
+
+    getTransformer(): Any {
+        transformer = (String item): String => {
+            return this.prefix
+        }
+        return transformer
+    }
+}

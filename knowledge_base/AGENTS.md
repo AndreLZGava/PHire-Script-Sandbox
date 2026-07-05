@@ -3,6 +3,22 @@
 This is the knowledge base for the **PHire-Script-Sandbox** repository.
 The sandbox validates PHireScript (`.ps`) compilation to PHP using an orchestrator framework.
 
+## Agent Roles
+
+The sandbox defines AI agent roles that collaborate on the project. Each agent has a folder under `agents/` with its definition and working memory.
+
+| Agent | Role | Talks to user? |
+|---|---|---|
+| `agents/phirescript-architect/` | Language design, orchestration, AI-first tooling | Primary interface |
+| `agents/php-architect/` | PHP output quality, transpiler code quality — safety/performance counterweight | On disagreements |
+| `agents/qa/` | Spec review, edge cases, test validation | Rarely |
+| `agents/documentador/` | Feature docs, bug docs, language docs, `phirescript-doc/` | When consulted |
+| `agents/pm/` | Backlog prioritization, feature vs bug triage | When consulted |
+| `agents/developer-compiler/` | Implementation in transpiler and sandbox | Never directly |
+| `agents/developer-extension/` | Implementation in VS Code extension | Rarely |
+
+See `agents/README.md` for the full communication structure.
+
 ## Quick Orientation
 
 | I want to…                                | Go to                                                          |
@@ -46,6 +62,20 @@ Its knowledge base is kept here (not inside `phirescript/`) to avoid polluting t
 | Understand tokens and the scanner               | `phirescript/skills/scanner-tokens/SKILL.md`                       |
 
 → Full compiler KB entry point: [phirescript/AGENTS.md](phirescript/AGENTS.md)
+
+## VS Code Extension
+
+The VS Code extension lives at `phpscript-vscode/` — a separate git repo inside the sandbox.
+It provides syntax highlighting, linting, formatting, hover docs, and custom icons for `.ps` and `.pst` files.
+The sandbox is its shell: all language spec, compiler internals, and sandbox cases are available as context when working on the extension.
+
+| I want to…                                      | Go to                                           |
+|-------------------------------------------------|-------------------------------------------------|
+| Understand what the extension does              | `phpscript-vscode/README.md`                    |
+| See the grammar / syntax highlighting rules     | `phpscript-vscode/syntaxes/`                    |
+| See the linting / validation logic              | `phpscript-vscode/src/`                         |
+| Check the extension manifest                   | `phpscript-vscode/package.json`                 |
+| Run or build the extension                     | `phpscript-vscode/` — `npm install && npm run compile` |
 
 ## Read Next
 

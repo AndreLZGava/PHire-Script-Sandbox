@@ -1,9 +1,14 @@
 pkg PHireScript.Samples
 
 class ExampleGetterSetterClass as scoped {
+    // public int id (property) with a public get method
     < Int id
-    > Email email
+    // public Email (type) email (property) with a public set method
+    * > Email email
+    // public String username with both get and set methods
     < > String username
+    // public bool isAdmin with private get and protected set
     # < + > Bool isAdmin
+    // private Array metadata with protected get and private set
     + < # > # Array metadata
 }

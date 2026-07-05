@@ -3,10 +3,11 @@
 > Registrado após a implementação de method chaining (specs/003-method-chaining).
 > Cada ponto descreve um problema real encontrado durante o desenvolvimento,
 > com contexto técnico e proposta de solução ou melhoria.
+> **Status**: Pontos 1 e 7 implementados em 2026-06-04. Ponto 9 implementado em 2026-06-06.
 
 ---
 
-## 1. Cache silencioso mascarando bugs
+## 1. Cache silencioso mascarando bugs ✅ IMPLEMENTADO
 
 ### O que aconteceu
 
@@ -18,30 +19,36 @@ O pior: o compilador rodava sem erro e gerava output — mas o output era do cac
 
 Silêncio. Não há nenhuma indicação visual de que o resultado veio do cache. O developer (humano ou IA) debugga código que não está nem sendo executado.
 
-### Proposta
+### Implementado
 
-**A. Banner visual de cache hit no modo `dev`**
+**A. Banner visual de cache hit no modo `dev`** ✅
 
-Quando um arquivo é compilado a partir do cache (tokens ou AST), emitir uma linha `[CACHE HIT]` no output do compilador no modo `dev: true`. Exemplo:
+Quando um arquivo é compilado a partir do cache (tokens ou AST), emite uma linha `[CACHE HIT]` em STDERR no modo `dev: true`. Usa STDERR para não ser capturado pelo output buffer do orchestrator:
 
 ```
-[CACHE HIT] samples/success/case_42/StringChain.ps → tokens cached
-✔ samples/success/case_42/StringChain.ps → src/compiled/StringChain.php  [3ms]
+[CACHE HIT] StringChain.ps → tokens cached
+[CACHE HIT] StringChain.ps → ast cached
 ```
 
-Isso torna o comportamento observável sem precisar inspecionar os arquivos do cache.
-
-**B. Flag `--no-cache` no `bin/build`**
-
-Adicionar suporte a `--no-cache` que bypassa todos os níveis de cache para uma compilação limpa. Útil durante desenvolvimento ativo de features do compiler.
+**B. Flag `--no-cache` no `bin/build`** ✅
 
 ```bash
 php phirescript/bin/build --no-cache
 ```
 
-**C. Invalidação automática por checksum do compiler**
+Passa `clean: true` para `CompilerContext`. O `Compiler.php` chama `$cache->flush()` antes de compilar.
 
-Se qualquer arquivo em `phirescript/src/` for mais novo que o cache, invalidar o cache inteiro. Hoje só o checksum do arquivo `.ps` é verificado — mudanças no compiler em si não invalidam o cache.
+**C. Invalidação automática por mtime do compiler** ✅
+
+Na inicialização do `Compiler`, se qualquer `.php` em `phirescript/src/` for mais novo que o timestamp em `.cache/config/compiler_mtime.cache`, o cache é descartado automaticamente com aviso. O timestamp é gravado ao final de cada build bem-sucedido via `$cache->touchCompilerTimestamp()`.
+
+**D. Invalidação automática por mudança no `PHireScript.json`** ✅
+
+Adicionado junto ao item C: se o `PHireScript.json` mudou desde o último build (hash diferente no manifest), o cache inteiro é descartado com aviso. Usa `hasChangedSinceLastBuild()` no `CacheManager` para distinguir "arquivo novo" de "arquivo modificado".
+
+**E. Cache sempre na raiz do pacote phirescript, não no cwd** ✅
+
+`Compiler.php` usava `getcwd()` para determinar o diretório do `.cache/`, o que colocava a pasta dentro do projeto que chama o compilador (ex: sandbox), poluindo repos externos. Corrigido para `dirname(__DIR__)` — o cache fica sempre em `phirescript/.cache/`, independente do diretório de onde o comando é executado. Isso também garante isolamento correto quando o phirescript é instalado como dependência via Composer.
 
 ---
 
@@ -57,44 +64,20 @@ Tentativas de usar `file_put_contents('/tmp/debug.log', ...)` dentro de classes 
 
 Impossibilita o ciclo clássico de debug "adicionar print → rodar → ver output". Leva o developer a criar scripts PHP externos complexos só para inspecionar o estado interno, aumentando muito o tempo de ciclo.
 
-### Proposta
+### Implementado parcialmente
 
-**A. `Debug::dump()` que escreve em arquivo dedicado**
+**A. `Debug::dump()` que escreve em arquivo dedicado** ✅
 
-Criar um método `Debug::dump(mixed $value, string $label = '')` em `Helper/Debug/Debug.php` que escreve em `/tmp/phirescript_debug.log` via `file_put_contents(..., FILE_APPEND)`. Não passa pelo output buffer. Pode ser chamado de qualquer ponto do pipeline.
+Método `Debug::dump(mixed $value, string $label = '')` adicionado em `Helper/Debug/Debug.php`. Escreve em `/tmp/phirescript_debug.log` via `file_put_contents(..., FILE_APPEND)`. Não passa pelo output buffer. Pode ser chamado de qualquer ponto do pipeline:
 
 ```php
 Debug::dump($parseContext->variables->getVariableOnFocus(), 'focus after dot');
-// /tmp/phirescript_debug.log: [focus after dot] VariableReferenceNode(mystring)
+// /tmp/phirescript_debug.log: [ThisPropertyAccessResolver.php:22] [focus after dot] VariableReferenceNode(mystring)
 ```
 
-**B. `bin/debug` com saída de AST formatada**
+**B. `bin/debug` com saída de AST formatada** — ver item 7 (implementado via `bin/inspect`)
 
-O `bin/debug` atual apenas re-executa o compilador em modo DEBUG e mostra o PHP gerado. Deveria ter uma flag `--ast` que serializa o `Program` resultante do Parser em uma representação legível:
-
-```bash
-php phirescript/bin/debug samples/test.ps --ast
-```
-
-Output esperado:
-```
-Program
-  PackageNode [PHireScript.Test]
-  AssignmentNode
-    left: VariableDeclarationNode [result] type=null
-    right: FunctionNode [length]
-      variableBase: FunctionNode [replace]
-        variableBase: VariableReferenceNode [mystring] type=String
-        params: ['is', 'is really']
-```
-
-**C. `bin/debug` com saída de tokens**
-
-```bash
-php phirescript/bin/debug samples/test.ps --tokens
-```
-
-Lista cada token com tipo, valor, linha e coluna. Essencial para debugar o Scanner quando um novo token é adicionado (ex: `T_SAFE_NAV`).
+**C. `bin/debug` com saída de tokens** — ver item 7 (implementado via `bin/inspect --phase=tokens`)
 
 ---
 
@@ -211,53 +194,123 @@ O campo `value` em `VariableReferenceNode` sendo `VariableDeclarationNode` é mu
 
 ---
 
-## 7. Falta de uma ferramenta de inspeção de AST integrada
+## 7. Falta de uma ferramenta de inspeção de AST integrada ✅ IMPLEMENTADO
 
 ### O contexto geral
 
 Os problemas 2, 3, 4 e 5 acima foram todos descobertos da mesma forma: criando scripts PHP externos manuais (`/tmp/test_parse.php`, `/tmp/test_emit.php`) que instanciavam manualmente o Parser, Binder e Emitter para inspecionar o estado intermediário do AST. Cada script levava 10-15 minutos para ser escrito e depurado por causa das dependências de construção dos managers.
 
-### Proposta — `bin/inspect` como ferramenta de desenvolvimento
+### Implementado
 
-Criar um novo comando `bin/inspect` que aceita um arquivo `.ps` e mostra o estado do AST em cada fase do pipeline:
+**`bin/inspect` — ferramenta de inspeção de pipeline** ✅
 
 ```bash
+# Todos os passos
 php phirescript/bin/inspect samples/success/case_42/StringChain.ps
+
+# Fase específica
+php phirescript/bin/inspect <file.ps> --phase=tokens
+php phirescript/bin/inspect <file.ps> --phase=parse
+php phirescript/bin/inspect <file.ps> --phase=bind
+php phirescript/bin/inspect <file.ps> --phase=emit
+
+# Tokens pós-parse com a classe do resolver que processou cada um
+php phirescript/bin/inspect <file.ps> --phase=processed
+php phirescript/bin/inspect <file.ps> --processed   # shorthand
+
+# JSON para tooling externo
+php phirescript/bin/inspect <file.ps> --phase=tokens --json
 ```
 
-Output:
+**Flag `--processed` / `--phase=processed`** — inovação além da proposta original:
+
+Mostra todos os tokens depois do parse, anotados com a classe do resolver que os processou (campo `Token::$processedBy`). Tokens com `(implicit)` não foram despachados por nenhum resolver (EOL consumido como fechamento de contexto, delimitadores, etc.). Isso permite inferir a lógica de construção do AST token a token:
+
 ```
-=== TOKENS ===
-T_IDENTIFIER [mystring] L1:1
-T_SYMBOL [=] L1:9
-T_STRING_LIT ['this is a string'] L1:11
-...
-
-=== AST (após Parse) ===
-Program
-  AssignmentNode L1
-    left: VariableDeclarationNode [mystring]
-    right: StringNode ['this is a string']
-  AssignmentNode L2
-    left: VariableDeclarationNode [processed]
-    right: FunctionNode [length] returnType=Int
-      variableBase: FunctionNode [replace] returnType=String
-        variableBase: VariableReferenceNode [mystring] type=String
-
-=== AFTER BIND ===
-[diff: apenas mudanças em relação ao parse]
-
-=== PRE-PHP (antes dos Processors) ===
-$mystring = 'this is a string';
-$processed = \strlen(\str_replace('is', 'is really', $mystring));
-
-=== FINAL PHP ===
-[output após PhpFileGeneratorHandler]
+T_KEYWORD       'this'        L8:9    ThisResolver
+T_SYMBOL        '.'           L8:13   DotResolver
+T_IDENTIFIER    'name'        L8:14   ThisPropertyAccessResolver
+T_SYMBOL        '='           L8:19   (implicit)
+T_STRING_LIT    '"default"'   L8:21   StringLiteralResolver
+T_EOL           '\n'          L8:30   EndOfLineResolver
 ```
 
-Com flags opcionais:
-- `--phase=parse|bind|check|emit` para mostrar apenas uma fase
-- `--diff` para mostrar só o que mudou entre fases
-- `--json` para output em JSON (útil para tooling externo)
+**Sem dependência de `PHireScript.json`** — usa config mínimo inline, funciona com qualquer arquivo `.ps` sem precisar apontar source/dist.
 
-Isso eliminaria a necessidade de scripts externos manuais e reduziria o ciclo de debug de "30 minutos para escrever o script" para "1 comando".
+### O que poderia ser melhor
+
+- **`--diff` entre fases**: mostrar apenas o que mudou no AST entre parse→bind (propriedades resolvidas, tipos inferidos). Útil para entender o que o Binder faz.
+- **`--context-stack`**: mostrar o stack de contextos ativos a cada token (qual `AbstractContext` estava no topo quando o token foi processado). Hoje o `processedBy` diz *qual resolver* — mas não *em qual contexto* o resolver estava registrado.
+- **Colorização por tipo de resolver**: agrupar visualmente resolvers por categoria (Declaration, Expression, Statement, Scope) com cores diferentes para identificar padrões de parsing.
+
+---
+
+## 8. Parâmetros de método não são registrados no `variables` scope
+
+---
+
+## 9. `BracketBalanceRule` contando `<`/`>` como colchetes ✅ IMPLEMENTADO
+
+### O que aconteceu (descoberto em 2026-06-06, feature 005-inline-getter-setter)
+
+O `BracketBalanceRule` do Validator contava `<` e `>` como um par de colchetes que precisa estar balanceado, usando `parenDepth === 0` para distinguir do uso dentro de generics como `List<String>`. Ao implementar a sintaxe `< Int id` (getter), o Validator rejeitava o arquivo com:
+
+```
+Amount of < (3) diverge from > (0)
+```
+
+Os marcadores de getter (`<`) e setter (`>`) são assimétricos por design — um property com `<` puro não tem `>` correspondente na mesma linha. O contrato de balanceamento não faz sentido para esse uso.
+
+### Por que é perigoso
+
+Bloqueia a feature inteiramente no Validator, antes mesmo de chegar ao Parser. O erro é enganoso: parece que o arquivo tem sintaxe inválida, mas na verdade é uma regra de validação que não distingue contextos de uso.
+
+A dependência de `parenDepth` para distinguir generics de comparações era frágil: um `<` em comparação como `a < b` fora de parênteses seria contado como "abre generic" e esperaria um `>` para fechar.
+
+### Implementado
+
+**Remoção da checagem de `<`/`>` do `BracketBalanceRule`** ✅
+
+`<` e `>` foram removidos dos arrays `$open` e `$close` do `BracketBalanceRule` e a lógica de `parenDepth` foi eliminada. PHireScript não usa `<`/`>` como delimitadores de escopo obrigatoriamente balanceados — generics são sketch e a validação estrutural de `{}`, `()`, `[]` já cobre os casos reais. O `ForbiddenTokenRule` continua cobrindo misuse do token `<>` combinado.
+
+---
+
+## 10. Operadores aritméticos não suportados em `ReturnContext`
+
+### O que aconteceu (descoberto em 2026-06-06, feature 005-inline-getter-setter)
+
+Ao tentar validar o override de getter com `return this.id * 2` no case_60, o compilador lança:
+
+```
+* is not supported return context!
+```
+
+O `ReturnContext` não tem um resolver para operadores aritméticos (`*`, `/`, `+`, `-`). O `*` é T_SYMBOL e não é reconhecido por nenhum resolver registrado no contexto.
+
+### Por que é perigoso
+
+Qualquer expressão aritmética básica em um return é inválida. `return this.count + 1`, `return price * 1.1`, `return n - 1` — todos falham. É uma lacuna silenciosa que não aparece como erro do compilador (o arquivo compila se o return não tiver aritmética), mas limita muito o que pode ser feito dentro de métodos.
+
+### Proposta
+
+**A. `BinaryExpressionResolver` em `ReturnContext`**
+
+O `BinaryExpressionContext` já tem os operadores aritméticos e de comparação mapeados (`>`, `<`, `==`, etc.). O `ReturnContext` precisaria registrar um `BinaryExpressionResolver` que converte `expressão op expressão` em um `BinaryExpressionNode`, similar ao que acontece no `AssignmentContext`.
+
+**B. Contexto de expressão genérico**
+
+Uma solução mais robusta seria um `ExpressionContext` reutilizável que qualquer outro contexto pode usar para o RHS de uma expressão — `ReturnContext`, `AssignmentContext`, `IfConditionContext` — ao invés de cada um gerenciar seus próprios resolvers de expressão individualmente. Isso elimina a duplicação atual onde `ComparisonExpressionResolver` é registrado em 6+ contextos separados.
+
+### O que aconteceu (descoberto em 2026-06-04, feature 004-this)
+
+Durante a implementação da feature `this`, ao tentar escrever `this.prop = paramName` dentro de um método de classe, o compilador lança `CompileException: paramName is not supported in assignment context!`. Parâmetros de métodos de classe (ex: `setName(String n)`) não são adicionados ao `VariableManager` do scope do método — eles existem apenas no nó AST `ParamsListNode`.
+
+O `VariableReferenceResolver.isTheCase()` verifica `$parseContext->variables->getVariable($token->value)` — se o parâmetro não está no `variables`, retorna `false` e o token cai no `FunctionCallNotFoundResolver` ou lança exception.
+
+### Por que é perigoso
+
+Impede qualquer lógica útil de método com parâmetros: `this.name = newName` onde `newName` é um parâmetro é o padrão mais básico de setter. Força casos de sandbox a usar apenas literais no RHS de assignments com `this.prop`.
+
+### Proposta
+
+No `MethodScopeResolver.resolve()` (ou no contexto que abre o method scope), após `enterScope()`, iterar sobre os parâmetros do método pai e chamara `$parseContext->variables->addVariable(new VariableDeclarationNode(...))` para cada um. O `ArrowFunctionDeclarationContext` já faz isso para arrow functions (linha 70 do arquivo) — o mesmo padrão deve ser aplicado para métodos de classe.

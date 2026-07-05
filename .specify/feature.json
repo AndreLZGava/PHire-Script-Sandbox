@@ -1,3 +1,3 @@
 {
-  "feature_directory": "specs/003-method-chaining"
+  "feature_directory": "specs/007-fix-dot-resolver"
 }

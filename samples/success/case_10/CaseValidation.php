@@ -16,7 +16,7 @@ class CaseValidation extends AbstractCaseValidation
     {
         $this->assertHasMessage([
             "✔ src/output/Constants.ps → src/compiled/Constants.php",
-            "[Copied]: src/output/Consants.psc → src/compiled/Consants.psc",
+            "[Copied]: src/output/Constants.psc → src/compiled/Constants.psc",
         ]);
     }
 }

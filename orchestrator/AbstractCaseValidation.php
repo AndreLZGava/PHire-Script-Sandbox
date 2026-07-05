@@ -33,6 +33,18 @@ abstract class AbstractCaseValidation
 
 
 
+    public function getOutputPath(string $filename): string
+    {
+        return __DIR__ . '/../src/compiled/' . $filename;
+    }
+
+    public function assertTrue(bool $condition, string $message = ''): void
+    {
+        if (!$condition) {
+            throw new \Exception('Assertion failed' . ($message !== '' ? ': ' . $message : ''));
+        }
+    }
+
     public function assertHasMessage(array $expected)
     {
         $output = $this->getOutput();

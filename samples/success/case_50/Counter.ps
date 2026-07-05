@@ -1,0 +1,25 @@
+pkg PHireScript.Samples50
+
+class Counter as scoped {
+    Int count
+    String label
+
+    getCount(): Int {
+        return this.count
+    }
+
+    getLabel(): String {
+        return this.label
+    }
+
+    hasCount(): Bool {
+        if (this.count == 0) {
+            return false
+        }
+        return true
+    }
+
+    resetCount(): Void {
+        this.count = this.count
+    }
+}

@@ -1,0 +1,28 @@
+pkg PHireScript.Samples52
+
+class SafeLogger as scoped {
+    String log
+    Bool hasError
+
+    markError(): Void {
+        this.log = "error"
+        this.hasError = true
+    }
+
+    clear(): Void {
+        this.log = ""
+        this.hasError = false
+    }
+
+    getLog(): String {
+        return this.log
+    }
+
+    hasErrors(): Bool {
+        return this.hasError
+    }
+
+    copyLog(): Void {
+        this.log = this.log
+    }
+}

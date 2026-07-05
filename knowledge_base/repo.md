@@ -23,7 +23,7 @@ PHire-Script-Sandbox/
 ├── samples/
 │   ├── success/
 │   │   ├── SuccessMode.php  Compiles + captures output, then calls execute()
-│   │   └── case_N/         One dir per test case (N = 1..34)
+│   │   └── case_N/         One dir per test case (N = 1..60)
 │   │       ├── *.ps        PHireScript source files
 │   │       ├── CaseValidation.php
 │   │       └── *Test.php   Optional PHPUnit test on compiled output
@@ -33,6 +33,7 @@ PHire-Script-Sandbox/
 │   ├── output/              Staging area — case files copied here before compile
 │   └── compiled/            Compiler writes .php files here; PHPUnit reads here
 ├── phirescript/             Compiler source (separate git repo, git-ignored)
+├── phpscript-vscode/        VS Code extension (separate git repo, git-ignored)
 ├── PHireScript.json         Compiler config — source/dist/namespace/resolver
 ├── phpunit.xml              Scans src/compiled/ for *Test.php
 ├── composer.json            PSR-4 autoload + path repo for phirescript
@@ -104,4 +105,5 @@ make debug RUN_ARGS=samples/success/case_4/Repository.ps
 
 - `PHireScript.json` `source` must point inside `samples/` when committed
 - `phirescript/` is in `.gitignore` — commit it separately in its own repo
+- `phpscript-vscode/` is in `.gitignore` — commit it separately in its own repo (remote: `PHire-Script-Extension.git`)
 - `src/output/` and `src/compiled/` are transient — do not commit their contents

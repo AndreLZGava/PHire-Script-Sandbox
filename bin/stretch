@@ -1,15 +1,60 @@
 #!/usr/bin/env php
 <?php
 // php bin/stretch --mode=success --tags=tag1,tag2
+// php bin/stretch --mode=success --from=55
+// php bin/stretch --mode=success --from=55 --to=65
 use PHireScript\Helper\Messenger;
 use PHireScript\Orchestrator\Orchestrator;
 
+// Clear src/output before autoload so stale CaseValidation files don't cause class redeclaration
+foreach (glob(__DIR__ . '/../src/output/{*,.*}', GLOB_BRACE) as $f) {
+    if (is_file($f)) unlink($f);
+}
+
 require __DIR__ . '/../vendor/autoload.php';
 
-$options = getopt('m:t:', ['mode:', 'tags:']);
+// Allow cases to use either namespace for AbstractCaseValidation
+if (!class_exists(\PHireScript\Sandbox\Orchestrator\AbstractCaseValidation::class, false)) {
+    class_alias(
+        \PHireScript\Orchestrator\AbstractCaseValidation::class,
+        \PHireScript\Sandbox\Orchestrator\AbstractCaseValidation::class
+    );
+}
+
+$options = getopt('m:t:', ['mode:', 'tags:', 'from:', 'to:', 'case:']);
 
 $modes = isset($options['m']) ? explode(',', $options['m']) : ['success', 'warning', 'error'];
-$tags = isset($options['t']) ? explode(',', $options['t']) : [];
+$tags  = isset($options['t']) ? explode(',', $options['t']) : [];
+$from  = isset($options['from']) ? (int) $options['from'] : null;
+$to    = isset($options['to'])   ? (int) $options['to']   : null;
+
+// --case is an internal flag used when spawning isolated subprocesses per case
+$singleCase = isset($options['case']) ? $options['case'] : null;
+if ($singleCase !== null) {
+    // Clear src/output before the autoloader can pick up a stale CaseValidation from a previous run
+    (new \PHireScript\Orchestrator\FileManager())->clearOutput();
+    $orchestrator = new Orchestrator();
+    $orchestrator->runSingle($modes[0], $singleCase, $tags);
+    exit(0);
+}
+
+// When --from or --to is set, spawn a separate PHP process per case to avoid class name collisions
+if ($from !== null || $to !== null) {
+    $basePath = __DIR__ . '/../samples/';
+    foreach ($modes as $mode) {
+        $caseDirs = array_filter(scandir($basePath . $mode), fn($c) => is_dir($basePath . $mode . '/' . $c) && $c !== '.' && $c !== '..');
+        foreach ($caseDirs as $case) {
+            $caseNum = (int) preg_replace('/[^0-9]/', '', $case);
+            if ($from !== null && $caseNum < $from) continue;
+            if ($to   !== null && $caseNum > $to)   continue;
+            $tagArg = !empty($tags) ? ' --tags=' . implode(',', $tags) : '';
+            $modeArg = '--mode=' . $mode;
+            passthru(PHP_BINARY . ' ' . __FILE__ . " {$modeArg}{$tagArg} --case={$case}");
+        }
+    }
+    Messenger::success('[success] All compilations and tests completed.');
+    exit(0);
+}
 
 $orchestrator = new Orchestrator();
 
