@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 
 if (1 > 2) {
  $result = 'greater';

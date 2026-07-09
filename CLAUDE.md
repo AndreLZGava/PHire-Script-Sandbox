@@ -147,7 +147,7 @@ PHPUnit is the only dev dependency. The compiler itself comes from `phirescript/
 <!-- SPECKIT START -->
 For additional context about technologies to be used, project structure,
 shell commands, and other important information, read the current plan
-at `specs/008-auto-static-arrow/plan.md`
+at `specs/009-refactors-strict-types/plan.md`
 <!-- SPECKIT END -->
 
 ## Agentes de IA

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 
 namespace PHireScript\Sandbox\samples\success\case_28;
 
@@ -27,7 +29,7 @@ return ;
 return null;
 }
 
-    public function authenticate(Null $credentials = null): bool{
+    public function authenticate(Null|UserCredentials $credentials = null): bool{
 return true;
 }
 

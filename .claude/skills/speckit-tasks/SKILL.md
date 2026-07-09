@@ -58,6 +58,8 @@ You **MUST** consider the user input before proceeding (if not empty).
 
 1. **Setup**: Run `.specify/scripts/bash/setup-tasks.sh --json` from repo root and parse FEATURE_DIR, TASKS_TEMPLATE, and AVAILABLE_DOCS list. `FEATURE_DIR` and `TASKS_TEMPLATE` must be absolute paths when provided. `AVAILABLE_DOCS` is a list of document names/relative paths available under `FEATURE_DIR` (for example `research.md` or `contracts/`). For single quotes in args like "I'm Groot", use escape syntax: e.g 'I'\''m Groot' (or double-quote if possible: "I'm Groot").
 
+   **IMPORTANT — branch policy**: Never switch branches or create new branches as part of this command. Work on the current branch as-is, regardless of what branch is currently checked out.
+
 2. **Load design documents**: Read from FEATURE_DIR:
    - **Required**: plan.md (tech stack, libraries, structure), spec.md (user stories with priorities)
    - **Optional**: data-model.md (entities), contracts/ (interface contracts), research.md (decisions), quickstart.md (test scenarios)
@@ -128,6 +130,24 @@ You **MUST** consider the user input before proceeding (if not empty).
 Context for task generation: $ARGUMENTS
 
 The tasks.md should be immediately executable - each task must be specific enough that an LLM can complete it without additional context.
+
+## PHireScript Project Scope Rules
+
+This project spans two implementation repositories. Tasks must be scoped accordingly:
+
+**Include tasks for:**
+- **phirescript/** — compiler changes: Parser, Resolvers, Contexts, Emitters, Checkers, Runtime types, AST nodes. Keep the compiler lean; document blast radius.
+- **PHire-Script-Sandbox** — sandbox cases for every new or modified language behavior. Each case requires:
+  - `.ps` source file(s) in `samples/success/case_N/`
+  - `.psc` snapshot (pre-compiled PHP)
+  - `CaseValidation.php` asserting compiler output
+  - `*Test.php` PHPUnit file validating compiled PHP behavior (maximum coverage; if objects cannot be instantiated, load and validate structure/logic/variables/types)
+  - Package declaration must follow convention: `pkg PHireScript.SamplesN` where N = case folder number
+
+**Do NOT include tasks for:**
+- **phirescript-vscode/** — extension implementation is out of scope for this task list. If a `vscode-extension.md` exists in the feature spec directory, it documents what the extension should eventually do, but no tasks are generated from it here.
+
+If a feature task comes from a backlog (e.g., a spec or checklist), mark that backlog item as done after the task is created — do not leave completed items in the backlog.
 
 ## Task Generation Rules
 

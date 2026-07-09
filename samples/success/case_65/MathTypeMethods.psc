@@ -1,6 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
+
 namespace PHireScript\Sandbox\samples\success\case_65;
+
 
 $myFloat = 27;
 $myInt = 100;

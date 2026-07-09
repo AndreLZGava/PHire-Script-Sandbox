@@ -1,23 +1,24 @@
 <?php
 
+declare(strict_types=1);
 
-namespace PHireScript\Classes;
+
+namespace PHireScript\Sandbox\samples\success\case_4;
 
 
-abstract class Repository {
-    public string $tableName;
+abstract class Repository
+{
 
     public function __construct(
-        
+        string $tableName,
     ) {
+        $this->tableName = $tableName;
         
-        if (!isset($this->tableName)) {
-            throw new \LogicException("Property tableName must be initialized.");
-        }
     }
-    public function methodExample(): null {
-        return Null;
-    }
+    public string $tableName;
+    public function methodExample(): null{
+return null;
+}
 
 }
 

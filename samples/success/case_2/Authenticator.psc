@@ -1,17 +1,19 @@
 <?php
 
+declare(strict_types=1);
 
-namespace PHireScript\Classes;
+
+namespace PHireScript\Sandbox\samples\success\case_2;
 
 
-use PHireScript\Classes\UserCredentials;
-use PHireScript\Classes\Another;
+use PHireScript\Sandbox\samples\success\case_2\UserCredentials;
+use PHireScript\Sandbox\samples\success\case_2\Another;
 
-interface Authenticator extends Another {
-    public function authenticate(UserCredentials $credentials): bool;
+interface Authenticator extends Another
+{
+public function authenticate(UserCredentials $credentials): bool;
 
-    public function logout(): void;
+public function logout(): void;
 
 }
-
 

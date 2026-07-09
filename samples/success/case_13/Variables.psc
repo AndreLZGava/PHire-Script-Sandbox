@@ -1,25 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 
 $user = (object) [];
-
     //user.name = "William"
 
     //echo "Total value for user: " + user.name.toUpperCase() + " is: " + total
 
 $price = 19.9;
-
 $income = 1.05;
+$override = $price;
+    //total = price * income
 
-$override = price;
+    //sub = price - income
 
-$total = price * income;
+    //add = price + income
 
-$sub = price - income;
+    //division = price / income
 
-$add = price + income;
-
-$division = price / income;
-
-$complex = price - income / override;
+    //complex = price - income / override
 

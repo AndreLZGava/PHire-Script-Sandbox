@@ -1,24 +1,22 @@
 <?php
 
+declare(strict_types=1);
 
-namespace PHireScript\Classes;
+
+namespace PHireScript\Sandbox\samples\success\case_6;
 
 
 use PHireScript\Runtime\Types\SuperTypes\Email;
 
-readonly  class UserImmutable {
-    public int $id;
-    public string $username;
-    public string $email;
-    public bool $isAdmin;
-    public null|array $metadata;
+ class UserImmutable
+{
 
     public function __construct(
         int $id,
         string $username,
         string $email,
         bool $isAdmin,
-        null|array $metadata,
+        array|null $metadata,
     ) {
         $this->id = $id;
         $this->username = $username;
@@ -27,5 +25,10 @@ readonly  class UserImmutable {
         $this->metadata = $metadata;
         
     }
+    public int $id;
+    public string $username;
+    public string $email;
+    public bool $isAdmin;
+    public array|null $metadata;
 }
 

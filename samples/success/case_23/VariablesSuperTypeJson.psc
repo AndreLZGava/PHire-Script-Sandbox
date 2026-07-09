@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 
 use PHireScript\Runtime\Types\SuperTypes\Json;
 
@@ -7,15 +9,11 @@ use PHireScript\Runtime\Types\SuperTypes\Json;
 
     // so it has to receive a string or a variable reference
 
-$myArray = ['test' => 'test1'];
-
-$variables = Json::cast(myArray);
-
-$variablesObject = (object) ["test" => "Json"];
-
-$byVariableReference = Json::cast(variablesObject);
-
+$myArray = [
+'test' => 'test1'
+];
+$variables = Json::cast($myArray);
+$variablesObject = (object) ['test' => "Json"];
+$byVariableReference = Json::cast($variablesObject);
 $byString = Json::cast('{"this":1}');
-
-$variablesReference = variables;
-
+$variablesReference = $variables;

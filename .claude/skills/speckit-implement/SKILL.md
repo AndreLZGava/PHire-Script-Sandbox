@@ -58,6 +58,8 @@ You **MUST** consider the user input before proceeding (if not empty).
 
 1. Run `.specify/scripts/bash/check-prerequisites.sh --json --require-tasks --include-tasks` from repo root and parse FEATURE_DIR and AVAILABLE_DOCS list. All paths must be absolute. For single quotes in args like "I'm Groot", use escape syntax: e.g 'I'\''m Groot' (or double-quote if possible: "I'm Groot").
 
+   **IMPORTANT — branch policy**: Never switch branches or create new branches as part of this command. Work on the current branch as-is, regardless of what branch is currently checked out.
+
 2. **Check checklists status** (if FEATURE_DIR/checklists/ exists):
    - Scan all checklist files in the checklists/ directory
    - For each checklist, count:
@@ -169,13 +171,15 @@ You **MUST** consider the user input before proceeding (if not empty).
    - Provide clear error messages with context for debugging
    - Suggest next steps if implementation cannot proceed
    - **IMPORTANT** For completed tasks, make sure to mark the task off as [X] in the tasks file.
+   - **IMPORTANT — backlog cleanup**: When a task being implemented originated from a backlog (a spec, checklist, or any tracked list of pending items), remove that item from the backlog after the task is marked complete. Do not leave completed work in the backlog.
 
-9. Completion validation:
-   - Verify all required tasks are completed
+9. Completion validation — **REQUIRED before reporting done**:
+   - Verify all required tasks are completed and marked `[X]` in tasks.md
    - Check that implemented features match the original specification
-   - Validate that tests pass and coverage meets requirements
+   - **Run `php bin/stretch --mode=success`** and confirm all sandbox cases pass. If any case fails, fix it before proceeding.
+   - **Run `php phirescript/vendor/bin/phpunit`** from the `phirescript/` directory and confirm all compiler unit tests pass. If any test fails, fix it before proceeding.
    - Confirm the implementation follows the technical plan
-   - Report final status with summary of completed work
+   - Report final status with a summary of completed work, stretch result, and phpunit result
 
 Note: This command assumes a complete task breakdown exists in tasks.md. If tasks are incomplete or missing, suggest running `/speckit-tasks` first to regenerate the task list.
 

@@ -1,12 +1,15 @@
 <?php
 
+declare(strict_types=1);
 
-namespace PHireScript\Classes;
+
+namespace PHireScript\Sandbox\samples\success\case_29;
 
 
 trait Logger {
-    public function log( $msg): string {
-    }
+    public function log(String $msg): string{
+return "message";
+}
 
 }
 

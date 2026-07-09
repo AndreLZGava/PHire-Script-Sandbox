@@ -1,7 +1,9 @@
 <?php
 
+declare(strict_types=1);
 
-namespace App;
+
+namespace PHireScript\Sandbox\samples\success\case_42;
 
 
 $mystring = 'this is a string';

@@ -1,16 +1,18 @@
 <?php
 
+declare(strict_types=1);
 
-namespace PHireScript\Classes;
+
+namespace PHireScript\Sandbox\samples\success\case_7;
 
 
-interface UserInterface {
-    public function save(array $data): bool;
+interface UserInterface
+{
+public function save(Array $data): bool;
 
-    public function delete(): void;
+public function delete(): void;
 
-    public function getCompleteUserName(): string|null;
+public function getCompleteUserName(): string|null;
 
 }
-
 

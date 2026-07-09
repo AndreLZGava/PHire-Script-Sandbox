@@ -1,7 +1,9 @@
 <?php
 
+declare(strict_types=1);
 
-namespace PHireScript\Sandbox;
+
+namespace PHireScript\Sandbox\samples\success\case_41;
 
 
     // Alias for external package becomes namespace

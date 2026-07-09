@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 
 $score = 75;
 if ($score >= 90) {
