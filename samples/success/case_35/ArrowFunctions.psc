@@ -1,15 +1,15 @@
 <?php
 
 
-namespace PHireScript\Sandbox;
+namespace PHireScript\Sandbox\samples\success\case_35;
 
 
-$greet =  function(): void{
+$greet =  static function(): void{
 return ;
 }
 
 ;
-$identity =  function(Int $n): int{
+$identity =  static function(Int $n): int{
 return $n;
 }
 

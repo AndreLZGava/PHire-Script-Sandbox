@@ -1,17 +1,22 @@
 <?php
 
-use PHireScript\Orchestrator\Validation\AbstractCaseValidation;
+
+namespace Sandbox\Samples\success\case_66;
+
+use PHireScript\Orchestrator\AbstractCaseValidation;
 
 class CaseValidation extends AbstractCaseValidation
 {
     public function execute(): void
     {
-        $this->assertCompilesSuccessfully();
+        $this->assertHasMessage([
+            '✔ src/output/Person.ps',
+        ]);
     }
 
     public function executeTest(): void
     {
-        $php = file_get_contents($this->getCompiledPath('Person.php'));
+        $php = file_get_contents($this->getOutputPath('Person.php'));
 
         $this->assertTrue(
             str_contains($php, 'public function setName(string $n): void'),

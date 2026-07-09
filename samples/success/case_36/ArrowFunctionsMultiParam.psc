@@ -1,20 +1,20 @@
 <?php
 
 
-namespace PHireScript\Sandbox;
+namespace PHireScript\Sandbox\samples\success\case_36;
 
 
-$add =  function(Int $a, Int $b): int{
+$add =  static function(Int $a, Int $b): int{
 return $a;
 }
 
 ;
-$greetUser =  function(String $name, Int $age): string{
+$greetUser =  static function(String $name, Int $age): string{
 return $name;
 }
 
 ;
-$formatValue =  function(String|Int $value): string|int{
+$formatValue =  static function(String|Int $value): string|int{
 return $value;
 }
 

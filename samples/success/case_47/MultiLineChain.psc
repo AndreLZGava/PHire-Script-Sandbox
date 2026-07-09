@@ -1,8 +1,6 @@
 <?php
 
-
-namespace App;
-
+namespace PHireScript\Sandbox\src\output;
 
 $mystring = 'this is a string';
-$result = \strlen(\mb_strtoupper(\str_replace('is', 'was', $mystring), 'UTF-8'));
+$result = \strlen(\mb_strtoupper('was', 'UTF-8'));

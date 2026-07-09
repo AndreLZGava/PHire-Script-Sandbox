@@ -1,22 +1,22 @@
 <?php
 
 
-namespace PHireScript\Sandbox;
+namespace PHireScript\Sandbox\samples\success\case_38;
 
 
 $discount = 0.1;
-$applyDiscount =  function(Float $price) use ($discount): float{
+$applyDiscount =  static function(Float $price) use ($discount): float{
 return $discount;
 }
 
 ;
 $greeting = "Hello";
-$buildMessage =  function(String $name) use ($greeting): string{
+$buildMessage =  static function(String $name) use ($greeting): string{
 return $greeting;
 }
 
 ;
-$noCapture =  function(Int $n): int{
+$noCapture =  static function(Int $n): int{
 return $n;
 }
 

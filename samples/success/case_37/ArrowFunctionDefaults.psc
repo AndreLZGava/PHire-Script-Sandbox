@@ -1,20 +1,20 @@
 <?php
 
 
-namespace PHireScript\Sandbox;
+namespace PHireScript\Sandbox\samples\success\case_37;
 
 
-$greet =  function(String $name = "world"): string{
+$greet =  static function(String $name = "world"): string{
 return $name;
 }
 
 ;
-$increment =  function(Int $value = 0): int{
+$increment =  static function(Int $value = 0): int{
 return $value;
 }
 
 ;
-$nullable =  function(String $text = null): string{
+$nullable =  static function(String $text = null): string{
 return $text;
 }
 

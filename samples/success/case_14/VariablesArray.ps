@@ -10,11 +10,11 @@
 myTest = 'guess'
 anotherOne = 'another One'
 variables = [
-  true,
-  'another',
-  'test': ['array'],
-  0: 'another test',
-  myTest: anotherOne,
+true,
+'another',
+'test': ['array'],
+0: 'another test',
+myTest: anotherOne,
 ]
 
 // Array cast
@@ -22,23 +22,23 @@ variables2 = Array('test')
 
 
 variables.add('teste', 'MDS')
-.add( ['test': 0], 'omg')
-.destroy!('teste')
+variables.add(['test': 0], 'omg')
+variables.remove('teste')
 
 variables3 = ['test': ['mds']]
 variables3.display!()
 
 variable4 = [
-  0: [
-    '#drupal': [
-      '#shora': 'neee'
-    ]
-  ],
-  1: [
-    '#elements': [
-      '#ttttt': 'Shoke de monstro'
-    ]
-  ]
+0: [
+'#drupal': [
+'#shora': 'neee'
+]
+],
+1: [
+'#elements': [
+'#ttttt': 'Shoke de monstro'
+]
+]
 ]
 // this makes me understand that there is a difference between a Function call
 // resolver for assignment and other situations, because if you are
@@ -47,4 +47,3 @@ newVarBool = variables.contains?('another')
 
 // Variable reference
 variablesReference = variables
-
