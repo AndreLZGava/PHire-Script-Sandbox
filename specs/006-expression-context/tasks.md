@@ -92,8 +92,8 @@
 
 **⚠️ DEPENDENCY**: US5 depends on **BB-3** (DotResolver focus propagation) being resolved. If BB-3 is not resolved, create `case_64` with a `CaseValidation.php` that marks the case as pending/skipped.
 
-- [ ] T019 [P] [US5] Create `samples/success/case_64/MethodCallOperands.ps` — class with `total = this.getBase() * this.getRate()`, `result = price.multipliedBy(rate) + fee`, `grouped = (this.getBase() + offset) * multiplier`; package `pkg PHireScript.Samples64`
-- [ ] T020 [US5] Create `samples/success/case_64/CaseValidation.php` — assert `$this->getBase() * $this->getRate()`, `$fee`, and grouped chain with multiplication appear in compiled PHP; note BB-3 dependency in a comment if case is deferred
+- [x] T019 [P] [US5] Create `samples/success/case_64/MethodCallOperands.ps` — class with `total = this.getBase() * this.getRate()`, `result = price.multipliedBy(rate) + fee`, `grouped = (this.getBase() + offset) * multiplier`; package `pkg PHireScript.Samples64`
+- [x] T020 [US5] Create `samples/success/case_64/CaseValidation.php` — assert `$this->getBase() * $this->getRate()`, `$fee`, and grouped chain with multiplication appear in compiled PHP; note BB-3 dependency in a comment if case is deferred
 
 **Checkpoint**: `php bin/stretch --mode=success` — case_64 passes if BB-3 is resolved; otherwise deferred.
 

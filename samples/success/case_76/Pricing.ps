@@ -1,0 +1,24 @@
+pkg PHireScript.Samples76
+
+class Pricing as scoped {
+    Float price
+    Float taxRate
+
+    # getPrice(): Float {
+        return this.price
+    }
+
+    # getTaxRate(): Float {
+        return this.taxRate
+    }
+
+    # priceWithTax(): Float {
+        result = this.getPrice() * (1 + this.getTaxRate())
+        return result
+    }
+
+    # discount(): Float {
+        result = this.getPrice() - this.getPrice() * this.getTaxRate()
+        return result
+    }
+}

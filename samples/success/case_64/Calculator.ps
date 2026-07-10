@@ -1,0 +1,24 @@
+pkg PHireScript.Samples64
+
+class Calculator as scoped {
+    Int base
+    Float rate
+
+    # getBase(): Int {
+        return this.base
+    }
+
+    # getRate(): Float {
+        return this.rate
+    }
+
+    # total(): Float {
+        result = this.getBase() * this.getRate()
+        return result
+    }
+
+    # withBonus(): Float {
+        result = (this.getBase() + 10) * this.getRate()
+        return result
+    }
+}
