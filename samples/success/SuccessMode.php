@@ -68,6 +68,35 @@ class SuccessMode extends ModeTest
 
     public function executeTest(AbstractCaseValidation $abstractCase)
     {
+        $this->syncInternalsToOutput();
         $abstractCase->executeTest();
+    }
+
+    private function syncInternalsToOutput(): void
+    {
+        $src  = __DIR__ . '/../../src/compiled/Internal';
+        $dest = __DIR__ . '/../../src/output/Internal';
+
+        if (!is_dir($src)) {
+            return;
+        }
+
+        $this->copyDir($src, $dest);
+    }
+
+    private function copyDir(string $from, string $to): void
+    {
+        if (!is_dir($to)) {
+            mkdir($to, 0755, true);
+        }
+
+        foreach (new \FilesystemIterator($from) as $item) {
+            $target = $to . '/' . $item->getFilename();
+            if ($item->isDir()) {
+                $this->copyDir($item->getPathname(), $target);
+            } else {
+                copy($item->getPathname(), $target);
+            }
+        }
     }
 }

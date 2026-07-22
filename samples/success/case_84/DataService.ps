@@ -1,0 +1,18 @@
+pkg PHireScript.Samples84
+
+use PHireScript.Samples84.{AppException}
+use PHireScript.Samples84.{DatabaseException}
+
+class DataService as scoped {
+    #withMessage!(): Void {
+        throw AppException(reason: 'bad input', code: 42, message: 'Explicit message override')
+    }
+
+    #withContext!(): Void {
+        throw AppException(reason: 'timeout', code: 503, context: { service: 'db', retry: 'false' })
+    }
+
+    #withCause!(AppException original): Void {
+        throw DatabaseException(reason: 'wrapped', code: 2, message: 'DB failed', cause: original)
+    }
+}
