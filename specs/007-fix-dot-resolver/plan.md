@@ -63,7 +63,7 @@ This produces clean PHP without closures and avoids the `use` problem completely
 
 ## Technical Context
 
-**Language/Version**: PHP 8.2 (compiler source); PHireScript `.ps` (input language)
+**Language/Version**: PHP 8.2 (compiler source); PHireScript `.phs` (input language)
 
 **Primary Dependencies**: PHireScript compiler internals — `FunctionEmitter`, `FunctionNode`, `AbstractContext`, `ContextManager`, `DotResolver`
 
@@ -116,7 +116,7 @@ phirescript/src/
 
 samples/success/
 └── case_67/
-    ├── ChainAssignment.ps                 ← new sandbox case
+    ├── ChainAssignment.phs                 ← new sandbox case
     └── CaseValidation.php
 ```
 
@@ -203,7 +203,7 @@ private function emitChainedExpression(array $lines, string $self, $node, $ctx):
 
 ### Sandbox case_67
 
-**File**: `samples/success/case_67/ChainAssignment.ps`
+**File**: `samples/success/case_67/ChainAssignment.phs`
 
 ```
 pkg PHireScript.Samples67
@@ -236,4 +236,4 @@ public function processReturn(): string
 }
 ```
 
-**CaseValidation**: asserts `✔ src/output/ChainAssignment.ps → src/compiled/ChainAssignment.php` and verifies output via PHPUnit.
+**CaseValidation**: asserts `✔ src/output/ChainAssignment.phs → src/compiled/ChainAssignment.php` and verifies output via PHPUnit.

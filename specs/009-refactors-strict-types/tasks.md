@@ -51,17 +51,17 @@ No foundational prerequisites beyond Setup. Both user stories touch different fi
 
 **Goal**: Every `.php` file emitted by PHireScript starts with `<?php` + blank line + `declare(strict_types=1);`.
 
-**Independent Test**: Compile any `.ps` file and inspect the output — line 3 must be `declare(strict_types=1);`. All `.psc` snapshots match regenerated output. `php bin/stretch --mode=success` passes.
+**Independent Test**: Compile any `.phs` file and inspect the output — line 3 must be `declare(strict_types=1);`. All `.phc` snapshots match regenerated output. `php bin/stretch --mode=success` passes.
 
 ### Implementation for User Story 2
 
 - [X] T008 [US2] Change `$code['init'] = "<?php\n\n";` to `$code['init'] = "<?php\n\ndeclare(strict_types=1);\n\n";` in `phirescript/src/Compiler/Emitter/Root/ProgramEmitter.php:24`
 - [X] T009 [US2] Point `PHireScript.json` `source` to `samples/success/case_1` (or any single case) and run `php phirescript/bin/build` to visually confirm the output header is correct — do NOT commit the `PHireScript.json` change
 - [X] T010 [US2] Run `php bin/stretch --mode=success` and note any sandbox case failures caused by latent type mismatches surfaced by `strict_types=1`
-- [X] T011 [US2] Fix any sandbox case that fails due to a type mismatch (fix the `.ps` source or the `CaseValidation.php` assertion, not the emitter); repeat for all failing cases (no failures — all cases passed cleanly)
-- [X] T012 [US2] Regenerate all `.psc` snapshot files by running `php phirescript/bin/snapshot samples/success/ src/compiled/` — 80 snapshots updated
-- [X] T013 [US2] Run `php bin/stretch --mode=success` and confirm all cases pass with the new `.psc` snapshots
-- [X] T014 [P] [US2] Create sandbox case `samples/success/case_73/` with `Greeter.ps`, `Greeter.psc`, `CaseValidation.php`, `GreeterTest.php` — validates `strict_types=1` header in generated PHP
+- [X] T011 [US2] Fix any sandbox case that fails due to a type mismatch (fix the `.phs` source or the `CaseValidation.php` assertion, not the emitter); repeat for all failing cases (no failures — all cases passed cleanly)
+- [X] T012 [US2] Regenerate all `.phc` snapshot files by running `php phirescript/bin/snapshot samples/success/ src/compiled/` — 80 snapshots updated
+- [X] T013 [US2] Run `php bin/stretch --mode=success` and confirm all cases pass with the new `.phc` snapshots
+- [X] T014 [P] [US2] Create sandbox case `samples/success/case_73/` with `Greeter.phs`, `Greeter.phc`, `CaseValidation.php`, `GreeterTest.php` — validates `strict_types=1` header in generated PHP
 
 **Checkpoint**: US2 complete. All generated PHP files now include `declare(strict_types=1);`, snapshots updated, new case validates the header.
 
@@ -86,7 +86,7 @@ No foundational prerequisites beyond Setup. Both user stories touch different fi
 ### User Story Dependencies
 
 - **US1 (TD-11)**: Depends on Phase 1 only. Touches `TokenManager.php` exclusively.
-- **US2 (strict_types)**: Depends on Phase 1 only. Touches `ProgramEmitter.php`, `.psc` snapshots, and potentially sandbox case `.ps` files.
+- **US2 (strict_types)**: Depends on Phase 1 only. Touches `ProgramEmitter.php`, `.phc` snapshots, and potentially sandbox case `.phs` files.
 
 ### Parallel Opportunities
 

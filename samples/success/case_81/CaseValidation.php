@@ -11,7 +11,7 @@ class CaseValidation extends AbstractCaseValidation
     public function execute(): void
     {
         $this->assertHasMessage([
-            '✔ src/output/Exceptions.ps → src/compiled/Exceptions.php',
+            '✔ src/output/Exceptions.phs → src/compiled/Exceptions.php',
         ]);
     }
 

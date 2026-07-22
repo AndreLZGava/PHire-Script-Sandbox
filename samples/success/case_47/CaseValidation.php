@@ -16,7 +16,7 @@ class CaseValidation extends AbstractCaseValidation
     public function execute()
     {
         $this->assertHasMessage([
-            "✔ src/output/MultiLineChain.ps → src/compiled/MultiLineChain.php",
+            "✔ src/output/MultiLineChain.phs → src/compiled/MultiLineChain.php",
         ]);
     }
 }

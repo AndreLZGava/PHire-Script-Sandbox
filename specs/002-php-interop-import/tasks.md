@@ -16,11 +16,11 @@
 
 ## Phase 1: Setup — Sandbox Cases
 
-**Purpose**: Criar os arquivos `.ps` adaptados dos cases de feature para os diretórios de sucesso. Remove chamadas `.display()` conforme decidido na spec; case_13 usa chaining via variável intermediária.
+**Purpose**: Criar os arquivos `.phs` adaptados dos cases de feature para os diretórios de sucesso. Remove chamadas `.display()` conforme decidido na spec; case_13 usa chaining via variável intermediária.
 
-- [X] T001 Create `samples/success/case_39/` with `ExternalCallingConstants.ps` — adaptado de `samples/feature/case_5/ExternalCallingConstants.ps` sem `.display()`; pkg PHireScript.Samples39
-- [X] T002 [P] Create `samples/success/case_40/` with `ExternalCallingChainningMethods.ps` — variável intermediária para instanciação; pkg PHireScript.Samples40
-- [X] T003 [P] Create `samples/success/case_41/` with `ExternalCallingStaticMethods.ps` — pkg PHireScript.Samples41; calls `.display()` removidos
+- [X] T001 Create `samples/success/case_39/` with `ExternalCallingConstants.phs` — adaptado de `samples/feature/case_5/ExternalCallingConstants.phs` sem `.display()`; pkg PHireScript.Samples39
+- [X] T002 [P] Create `samples/success/case_40/` with `ExternalCallingChainningMethods.phs` — variável intermediária para instanciação; pkg PHireScript.Samples40
+- [X] T003 [P] Create `samples/success/case_41/` with `ExternalCallingStaticMethods.phs` — pkg PHireScript.Samples41; calls `.display()` removidos
 
 ---
 
@@ -46,7 +46,7 @@
 
 - [X] T007 [US1] Create `phirescript/src/Compiler/Binder/Declaration/ExternalBinder.php` — implementar `Binder` com `#[CompilerPass(order: 3)]`; `mustBind` retorna true para `ExternalNode`; `bind` itera `$node->namespaces`, para cada namespace: verifica `class_exists($fqcn, true)` (lança `CompileException` com mensagem de FR-008 se não existir), usa `ReflectionClass` para construir `ExternalClassDescriptor` com todos os membros públicos, chama `$binder->globalTable->registerExternal($alias, $descriptor)` (que já trata conflito de nome)
 - [X] T008 [P] [US1] Create `phirescript/tests/Compiler/Binder/ExternalBinderTest.php` — testar: registro correto de `DateTime` com alias; erro quando classe não existe no autoloader (FR-008); erro quando alias conflita com classe PHireScript nativa (FR-014); descriptor contém métodos, constantes e informações do construtor corretos para `DateTime`
-- [X] T009 [US1] Create `samples/success/case_39/CaseValidation.php` — esqueleto com `assertHasMessage` verificando que a compilação de case_5 produz `use DateTime as DateTimePhp;` na saída; usar package `PHireScript.Samples5` no arquivo `.ps`
+- [X] T009 [US1] Create `samples/success/case_39/CaseValidation.php` — esqueleto com `assertHasMessage` verificando que a compilação de case_5 produz `use DateTime as DateTimePhp;` na saída; usar package `PHireScript.Samples5` no arquivo `.phs`
 
 **Checkpoint**: US1 completa — `external` declara, inspeciona e valida a classe corretamente.
 
@@ -95,7 +95,7 @@
 - [X] T022 [US4] Register `ExternalCallEmitter` in `phirescript/src/Compiler/Emitter.php` — adicionar `new ExternalCallEmitter()` ao array de emitters (antes do FunctionEmitter para que seja resolvido primeiro)
 - [X] T023 [P] [US4] Create `phirescript/tests/Compiler/Checker/ExternalInstantiationCheckerTest.php` — testar: construtor público sem args passa; construtor público com args obrigatórios ausentes lança CompileException; construtor privado lança CompileException
 - [X] T024 [P] [US4] Create `phirescript/tests/Compiler/Emitter/Declarations/ExternalCallEmitterTest.php` — testar: `DateTimePhp()` emite `new DateTimePhp()`; `DateTimePhp('2023-12-25')` emite `new DateTimePhp('2023-12-25')`
-- [X] T025 [US4] Create `samples/success/case_13/CaseValidation.php` — assertions: `new DateTimePhp()` presente no output; chaining `->modify('+3 days')->modify('+2 hours')->format(...)` presente; output final compatível com `samples/feature/case_13/ExternalCallingChainningMethods.psc` (exceto `.display()`)
+- [X] T025 [US4] Create `samples/success/case_13/CaseValidation.php` — assertions: `new DateTimePhp()` presente no output; chaining `->modify('+3 days')->modify('+2 hours')->format(...)` presente; output final compatível com `samples/feature/case_13/ExternalCallingChainningMethods.phc` (exceto `.display()`)
 
 **Checkpoint**: US4 completa — instanciação e chaining via variável funcionando.
 
@@ -161,9 +161,9 @@
 ### Phase 1 — Setup
 
 ```
-T001 (case_5 .ps) ──┐
-T002 (case_13 .ps) ──┤ todos em paralelo
-T003 (case_15 .ps) ──┘
+T001 (case_5 .phs) ──┐
+T002 (case_13 .phs) ──┤ todos em paralelo
+T003 (case_15 .phs) ──┘
 ```
 
 ### Phase 3 — US1

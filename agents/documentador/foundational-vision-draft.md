@@ -70,8 +70,8 @@ The Maned Wolf's resilience and survival story map to the project's spirit: a la
 
 **Day / Night wolf duality — VS Code extension icons:**
 The VS Code extension uses two variants of the Maned Wolf head icon:
-- **Day wolf** — assigned to `.ps` script files (source code)
-- **Night wolf** — assigned to `.pst` test files (test code)
+- **Day wolf** — assigned to `.phs` script files (source code)
+- **Night wolf** — assigned to `.pht` test files (test code)
 
 The code/test duality is expressed through the same mascot in two states. This is an established part of the brand, not a proposal.
 
@@ -149,7 +149,7 @@ This is acknowledged as not yet fully designed.
 
 ## 8. Native Testing (Planned)
 
-PHireScript aims for a native testing approach using `.pst` files — a dedicated test extension. The design is not yet complete. The goal is that testing is a first-class concern of the language, not an afterthought.
+PHireScript aims for a native testing approach using `.pht` files — a dedicated test extension. The design is not yet complete. The goal is that testing is a first-class concern of the language, not an afterthought.
 
 ---
 
@@ -167,7 +167,7 @@ PHireScript will need types that wrap PHP's native resource types, or subtypes f
 | PHP 8.2 target | Active |
 | Usable in real projects | Not yet |
 | Type system (subtypes, MetaTypes) | Partially designed |
-| Native testing (.pst) | Planned |
+| Native testing (.pht) | Planned |
 | PHP resource types | Planned |
 | Domain-specific string subtypes | Concept stage |
 

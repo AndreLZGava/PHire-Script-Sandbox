@@ -184,11 +184,11 @@ throw new \{FQN}(
 
 ## Sandbox Case Layout
 
-| Case | `.ps` files | CaseValidation assertion | Test assertion |
+| Case | `.phs` files | CaseValidation assertion | Test assertion |
 |------|-------------|--------------------------|----------------|
-| case_80 | `Exceptions.ps` | messages: exception emitted | class extends Exception |
-| case_81 | `Exceptions.ps` | messages: readonly ctor | readonly props on class |
-| case_82 | `Throw.ps` | messages: throw emitted | throw new + named args |
-| case_83 | `Template.ps` | messages: template emitted | sprintf in ctor |
-| case_84 | `Checked.ps` | messages: error on unhandled | N/A (compile error case) |
-| case_85 | `Immutable.ps` | messages: error on mutation | N/A (compile error case) |
+| case_80 | `Exceptions.phs` | messages: exception emitted | class extends Exception |
+| case_81 | `Exceptions.phs` | messages: readonly ctor | readonly props on class |
+| case_82 | `Throw.phs` | messages: throw emitted | throw new + named args |
+| case_83 | `Template.phs` | messages: template emitted | sprintf in ctor |
+| case_84 | `Checked.phs` | messages: error on unhandled | N/A (compile error case) |
+| case_85 | `Immutable.phs` | messages: error on mutation | N/A (compile error case) |

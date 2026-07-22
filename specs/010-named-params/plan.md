@@ -216,7 +216,7 @@ Modify `phirescript/src/Compiler/Emitter/Declarations/FunctionEmitter.php`:
 
 #### `samples/success/case_74/` — Named args, all optional, reordered
 
-`NamedParamsBasic.ps`:
+`NamedParamsBasic.phs`:
 ```
 pkg PHireScript.Samples74
 
@@ -224,13 +224,13 @@ csv = 'hello,world'
 result = csv.getCsv(enclosure: '"', separator: ',')
 ```
 
-`CaseValidation.php`: asserts `✔ ... NamedParamsBasic.ps`
+`CaseValidation.php`: asserts `✔ ... NamedParamsBasic.phs`
 
 `NamedParamsBasicTest.php`: asserts emitted PHP contains `\str_getcsv($csv, ',', '"', ...)` (separator first = declared order).
 
 #### `samples/success/case_75/` — Named args with required param (split)
 
-`NamedParamsSplit.ps`:
+`NamedParamsSplit.phs`:
 ```
 pkg PHireScript.Samples75
 
@@ -238,13 +238,13 @@ text = 'a-b-c'
 parts = text.split(separator: '-')
 ```
 
-`CaseValidation.php`: asserts `✔ ... NamedParamsSplit.ps`
+`CaseValidation.php`: asserts `✔ ... NamedParamsSplit.phs`
 
 `NamedParamsSplitTest.php`: asserts PHP contains `\explode('-', $text, ...)`.
 
 #### `samples/error/case_51/` — Mixed positional + named
 
-`MixedArgs.ps`:
+`MixedArgs.phs`:
 ```
 pkg PHireScript.Samples51
 
@@ -256,7 +256,7 @@ result = csv.getCsv(',', enclosure: '"')
 
 #### `samples/error/case_52/` — Unknown parameter name
 
-`UnknownArgName.ps`:
+`UnknownArgName.phs`:
 ```
 pkg PHireScript.Samples52
 
@@ -268,7 +268,7 @@ result = csv.getCsv(badParam: ',')
 
 #### `samples/error/case_53/` — Missing required named param
 
-`MissingRequiredArg.ps`:
+`MissingRequiredArg.phs`:
 ```
 pkg PHireScript.Samples53
 
@@ -280,7 +280,7 @@ parts = text.split(limit: 3)
 
 #### `samples/error/case_54/` — Duplicate named param
 
-`DuplicateArgName.ps`:
+`DuplicateArgName.phs`:
 ```
 pkg PHireScript.Samples54
 

@@ -10,9 +10,9 @@ class CaseValidation extends AbstractCaseValidation
     public function execute(): void
     {
         $this->assertHasMessage([
-            '✔ src/output/ValueHolder.ps',
-            '✔ src/output/Labeled.ps',
-            '✔ src/output/Counter.ps',
+            '✔ src/output/ValueHolder.phs',
+            '✔ src/output/Labeled.phs',
+            '✔ src/output/Counter.phs',
         ]);
     }
 

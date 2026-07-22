@@ -16,8 +16,8 @@ class CaseValidation extends AbstractCaseValidation
     public function execute()
     {
         $this->assertHasMessage([
-            "✔ src/output/VariablesSuperTypeCron.ps → src/compiled/VariablesSuperTypeCron.php",
-            "[Copied]: src/output/VariablesSuperTypeCron.psc → src/compiled/VariablesSuperTypeCron.psc",
+            "✔ src/output/VariablesSuperTypeCron.phs → src/compiled/VariablesSuperTypeCron.php",
+            "[Copied]: src/output/VariablesSuperTypeCron.phc → src/compiled/VariablesSuperTypeCron.phc",
         ]);
     }
 }

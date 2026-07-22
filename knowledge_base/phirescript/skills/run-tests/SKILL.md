@@ -62,7 +62,7 @@ vendor/bin/phpunit --coverage-html coverage-report/
 
 ```
 tests/
-├── TranspilerTest.php              Integration: full .ps → .php pipeline
+├── TranspilerTest.php              Integration: full .phs → .php pipeline
 ├── Compiler/
 │   ├── BinderTest.php              Binder phase (all binders)
 │   ├── CheckerTest.php             Checker phase (all checkers)
@@ -100,7 +100,7 @@ myconstruct Foo {
 PS;
         $tokens = (new Scanner())->tokenize($source);
         $tokens = (new Validator())->validate($tokens);
-        $program = (new Parser())->parse($tokens, '/test.ps');
+        $program = (new Parser())->parse($tokens, '/test.phs');
 
         // Assert the AST has the expected node
         $this->assertCount(2, $program->statements); // PackageNode + MyConstructNode
@@ -171,7 +171,7 @@ PS;
         $context = new CompilerContext(CompileMode::BUILD, inMemory: true);
         $transpiler = new Transpiler($context, ...);
 
-        $php = $transpiler->compile($source, '/test.ps');
+        $php = $transpiler->compile($source, '/test.phs');
 
         $this->assertStringContainsString('class Foo', $php);
         $this->assertStringContainsString("return 'hello'", $php);

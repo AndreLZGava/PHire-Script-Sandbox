@@ -7,7 +7,7 @@
 > To work on the compiler, open files under `phirescript/` in the sandbox tree.
 
 This is the knowledge base for the **PHireScript compiler** (`phirescript/`).
-PHireScript is a PHP transpiler: `.ps` source files → `.php` output via a multi-phase pipeline.
+PHireScript is a PHP transpiler: `.phs` source files → `.php` output via a multi-phase pipeline.
 
 ## Quick Orientation
 
@@ -51,7 +51,7 @@ run the orchestrator, and interpret compilation output from the *consumer* persp
 This folder documents the compiler's *internals*.
 
 - Sandbox KB root: [`../AGENTS.md`](../AGENTS.md)
-- Consumer skills (`.ps` syntax, CaseValidation, orchestrator): [`../skills/`](../skills/)
+- Consumer skills (`.phs` syntax, CaseValidation, orchestrator): [`../skills/`](../skills/)
 
 ## Read Next
 

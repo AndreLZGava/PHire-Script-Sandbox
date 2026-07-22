@@ -12,7 +12,7 @@ class CaseValidation extends AbstractCaseValidation
     public function execute(): void
     {
         $this->assertHasMessage([
-            '✔ src/output/Arithmetic.ps',
+            '✔ src/output/Arithmetic.phs',
         ]);
     }
 

@@ -17,7 +17,7 @@ class CaseValidation extends AbstractCaseValidation
     {
         $this->stopIfNoTest = false;
         $this->assertHasMessage([
-            "✔ src/output/Comparison.ps → src/compiled/Comparison.php",
+            "✔ src/output/Comparison.phs → src/compiled/Comparison.php",
         ]);
     }
 }

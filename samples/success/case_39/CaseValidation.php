@@ -17,7 +17,7 @@ class CaseValidation extends AbstractCaseValidation
     public function execute()
     {
         $this->assertHasMessage([
-            "✔ src/output/ExternalCallingConstants.ps → src/compiled/ExternalCallingConstants.php",
+            "✔ src/output/ExternalCallingConstants.phs → src/compiled/ExternalCallingConstants.php",
         ]);
     }
 }

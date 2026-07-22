@@ -1,6 +1,6 @@
 ---
 name: compilation-pipeline
-description: The full multi-phase compilation pipeline from .ps source to .php output — dependency graph, binding, checking, emission, post-processing
+description: The full multi-phase compilation pipeline from .phs source to .php output — dependency graph, binding, checking, emission, post-processing
 metadata:
   type: skill
 ---
@@ -10,7 +10,7 @@ metadata:
 ## Triggers
 
 - "how does compilation work", "what happens when I run bin/build"
-- "pipeline overview", "how is .ps compiled to .php"
+- "pipeline overview", "how is .phs compiled to .php"
 - "what order do files compile in", "dependency resolution"
 - Debugging an issue that spans multiple phases
 
@@ -53,7 +53,7 @@ The compiler must know the correct **compilation order** across files to resolve
 
 ```
 TranspilerDependencyTree::build()
-  → light-parse each .ps file (pkg + use only, no full AST)
+  → light-parse each .phs file (pkg + use only, no full AST)
   → collect package declarations and use statements
   → DependencyGraphBuilder::buildGraph()
     → register package → file mappings
@@ -89,7 +89,7 @@ For each file (in topological order):
 ### Full per-file sequence
 
 ```
-Source .ps
+Source .phs
   ↓
 Scanner::tokenize()
   → regex-based; produces Token[] with type, value, line, column
@@ -128,7 +128,7 @@ PhpFileGeneratorHandler::process()
   ↓
 FileManager::persist()
   → write to dist/ directory
-  → print: "✔ src/output/Foo.ps → src/compiled/Foo.php"
+  → print: "✔ src/output/Foo.phs → src/compiled/Foo.php"
 ```
 
 ### Caching
@@ -140,11 +140,11 @@ FileManager::persist()
 
 | Mode       | Behavior                                                      |
 |------------|---------------------------------------------------------------|
-| `BUILD`    | Full pipeline for all `.ps` files                             |
+| `BUILD`    | Full pipeline for all `.phs` files                             |
 | `WATCH`    | File watcher loop; on change: re-run pipeline for changed file|
 | `DEBUG`    | Runs Scanner + dumps tokens and AST for a single file         |
-| `SNAPSHOT` | Stops after Emitter, writes `.psc` (pre-nikic string)         |
-| `TEST`     | Full pipeline for `.pst` test files only                      |
+| `SNAPSHOT` | Stops after Emitter, writes `.phc` (pre-nikic string)         |
+| `TEST`     | Full pipeline for `.pht` test files only                      |
 | `CHECK`    | Parse + Bind + Check only, no emission                        |
 
 ## Critical Rules

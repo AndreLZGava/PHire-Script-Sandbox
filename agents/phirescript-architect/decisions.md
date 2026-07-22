@@ -4,7 +4,7 @@
 
 ### PHireScript Identity
 
-PHireScript is "TypeScript for PHP" — a transpiled language that brings modern, standardized syntax to the PHP ecosystem while eliminating PHP's accumulated bad habits. It compiles `.ps` source files into optimized PHP (currently targeting PHP 8.2+).
+PHireScript is "TypeScript for PHP" — a transpiled language that brings modern, standardized syntax to the PHP ecosystem while eliminating PHP's accumulated bad habits. It compiles `.phs` source files into optimized PHP (currently targeting PHP 8.2+).
 
 **Status**: Research and study project. Not production-ready. Decisions must be made with long-term coherence in mind, not short-term delivery pressure.
 
@@ -18,7 +18,7 @@ PHireScript is "TypeScript for PHP" — a transpiled language that brings modern
 Every syntax decision must be natural for an AI agent to read and for a human to understand. Lean, unambiguous syntax. No ceremonial noise. When two designs are equivalent in power, pick the one that reads better aloud.
 
 **2. Dev dependency model**
-PHireScript is a build-time tool. It compiles `.ps` → optimized PHP for the target runtime. The PHP output is what ships. PHireScript source never runs directly.
+PHireScript is a build-time tool. It compiles `.phs` → optimized PHP for the target runtime. The PHP output is what ships. PHireScript source never runs directly.
 
 **3. Only modern PHP — no backward compatibility debt**
 No support for deprecated PHP functions or patterns. The compiler targets PHP 8.2+ features. This is a feature, not a limitation: the output can be assumed to be clean, secure, and idiomatic modern PHP.
@@ -30,10 +30,10 @@ No support for deprecated PHP functions or patterns. The compiler targets PHP 8.
 - The language should feel like a fresh start, not a thin wrapper
 
 **5. One declaration per file (Java model)**
-Each `.ps` file declares exactly one class, interface, trait, or enum. Enforced by the compiler. This constraint enables predictable tooling, clean imports, and a 1:1 mapping between package paths and declarations.
+Each `.phs` file declares exactly one class, interface, trait, or enum. Enforced by the compiler. This constraint enables predictable tooling, clean imports, and a 1:1 mapping between package paths and declarations.
 
 **6. Package system decoupled from the file system (Java model)**
-The `pkg` declaration in a `.ps` file defines the package — not the directory path. Moving or renaming files does not break package resolution. The compiler resolves packages by scanning and indexing `pkg` declarations, not by directory convention.
+The `pkg` declaration in a `.phs` file defines the package — not the directory path. Moving or renaming files does not break package resolution. The compiler resolves packages by scanning and indexing `pkg` declarations, not by directory convention.
 
 **7. Expressive naming conventions**
 - `!` suffix = void method (no return value expected)
@@ -70,16 +70,16 @@ A design that requires complicated transpiler mechanics to implement is a design
 
 ## 2026-06-28
 
-### Embedded PHireScript in non-.ps files (NC-3) — v1 and v2 design
+### Embedded PHireScript in non-.phs files (NC-3) — v1 and v2 design
 
 **Feature name**: PHire Embed
 
 **v1 — `@PHire{}`** (package reference only)
 - Syntax: `@PHire{PHireScript.MyApp.UserService}`
 - Supported in: any file extension listed in `PHireScript.json` under a new `embed` field (e.g., `"embed": ["yml", "yaml", "php", "html"]`)
-- The transpilador resolves the full `pkg` path (exactly as declared in the `.ps` file) to its compiled PHP FQCN and performs a text substitution when copying the file to output
+- The transpilador resolves the full `pkg` path (exactly as declared in the `.phs` file) to its compiled PHP FQCN and performs a text substitution when copying the file to output
 - Limitation: only package path resolution — no logic, no expressions, no declarations
-- The user writes the full `pkg` path as it appears in the `.ps` file (e.g., `PHireScript.MyApp.UserService`, not a shortened form)
+- The user writes the full `pkg` path as it appears in the `.phs` file (e.g., `PHireScript.MyApp.UserService`, not a shortened form)
 
 **v2 — `@PHireScript{}`** (full PHireScript block)
 - Syntax: `@PHireScript{ ... any valid PHireScript ... }`

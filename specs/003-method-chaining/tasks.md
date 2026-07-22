@@ -38,7 +38,7 @@
 
 **Independent Test**: `php bin/stretch --mode=success --tags=method-chaining` com case_42 passando.
 
-- [x] T007 [US1] Criar `samples/success/case_42/` com arquivo `StringChain.ps` exercitando chain de 2 e 3 métodos String com atribuição, incluindo `pkg PHireScript.Samples42` e `use` statements necessários
+- [x] T007 [US1] Criar `samples/success/case_42/` com arquivo `StringChain.phs` exercitando chain de 2 e 3 métodos String com atribuição, incluindo `pkg PHireScript.Samples42` e `use` statements necessários
 - [x] T008 [US1] Criar `samples/success/case_42/CaseValidation.php` com assertions que verificam: (a) PHP gerado contém inline nested (`strlen(str_replace(...))`), (b) variável de origem não é reatribuída no PHP gerado, (c) tipo da variável de destino é correto
 - [x] T009 [US1] Validar que o `FunctionEmitter` em `phirescript/src/Compiler/Emitter/Declarations/FunctionEmitter.php` emite corretamente `@self` recursivo para chains — se não emitir inline nested, ajustar a lógica de substituição de `@self` para usar `emit(node->variableBase)` ao invés de `$variableBase->name`
 
@@ -52,7 +52,7 @@
 
 **Independent Test**: case_43 passando no orchestrator.
 
-- [x] T010 [US2] Criar `samples/success/case_43/` com arquivo `AutoAssignment.ps` exercitando auto-atribuição com chain — mesma variável no lado esquerdo e direito do `=`, incluindo caso onde o tipo muda (String → Int via `.length()`)
+- [x] T010 [US2] Criar `samples/success/case_43/` com arquivo `AutoAssignment.phs` exercitando auto-atribuição com chain — mesma variável no lado esquerdo e direito do `=`, incluindo caso onde o tipo muda (String → Int via `.length()`)
 - [x] T011 [US2] Criar `samples/success/case_43/CaseValidation.php` com assertions que verificam que a variável é reatribuída com o valor inline e que o PHP gerado é válido
 - [x] T012 [US2] Verificar em `phirescript/src/Compiler/Parser/Ast/Context/Expressions/AssignmentContext.php` que `$this->node->left->type = $this->children[0]` atualiza o tipo corretamente quando o lado direito é uma chain — ajustar se necessário para propagar o tipo de retorno do último elo ao SymbolTable
 
@@ -66,7 +66,7 @@
 
 **Independent Test**: case_44 passando no orchestrator.
 
-- [x] T013 [US3] Criar `samples/success/case_44/` com arquivo `ChainInExpression.ps` exercitando: chain na condição de `if`, chain como argumento de método (`myArray.add(mystring.toUpperCase())`), e chain com `contains?` retornando Bool diretamente para o `if`
+- [x] T013 [US3] Criar `samples/success/case_44/` com arquivo `ChainInExpression.phs` exercitando: chain na condição de `if`, chain como argumento de método (`myArray.add(mystring.toUpperCase())`), e chain com `contains?` retornando Bool diretamente para o `if`
 - [x] T014 [US3] Criar `samples/success/case_44/CaseValidation.php` com assertions verificando o PHP gerado para cada cenário
 - [x] T015 [US3] Verificar se o `DotResolver` em `AssignmentContext` também funciona corretamente para contextos de expressão (IfConditionContext, FunctionCallContext como argumento) — se o foco não for transferido corretamente nesses contextos, adicionar `DotResolver` nas listas de resolvers dos contextos afetados
 
@@ -80,7 +80,7 @@
 
 **Independent Test**: case_45 passando no orchestrator.
 
-- [x] T016 [US4] Criar `samples/success/case_45/` com arquivo `LiteralChain.ps` exercitando: chain sobre string literal com atribuição, chain sobre literal em `if`, chain sobre literal como argumento, e `'my string'.show!()` standalone (void — válido)
+- [x] T016 [US4] Criar `samples/success/case_45/` com arquivo `LiteralChain.phs` exercitando: chain sobre string literal com atribuição, chain sobre literal em `if`, chain sobre literal como argumento, e `'my string'.show!()` standalone (void — válido)
 - [x] T017 [US4] Criar `samples/success/case_45/CaseValidation.php` com assertions
 - [x] T018 [US4] Verificar se `StringLiteralResolver` (ou equivalente) seta o `variableOnFocus` para o `StringNode` quando o próximo token é `.` — se não, adicionar lógica equivalente ao fix T003 para literais. Arquivo: `phirescript/src/Compiler/Parser/Ast/Resolver/Expressions/Types/StringLiteralResolver.php`
 
@@ -96,7 +96,7 @@
 
 - [x] T019 [US5] Investigar o comportamento atual do `EndOfLineResolver` dentro de `FunctionCallContext` — verificar se `afterClose()` em `phirescript/src/Compiler/Parser/Ast/Context/Expressions/FunctionCallContext.php` encerra o contexto pai quando encontra EOL seguido de `.`
 - [x] T020 [US5] Se necessário, adicionar lógica de lookahead no `EndOfLineResolver` dentro de `FunctionCallContext` para não encerrar o contexto se o próximo token não-whitespace for `.` — arquivo: verificar `phirescript/src/Compiler/Parser/Ast/Resolver/Statements/EndOfLineResolver.php` e o `afterClose()` do FunctionCallContext
-- [x] T021 [US5] Criar `samples/success/case_47/` com arquivo `MultiLineChain.ps` exercitando chain em 3+ linhas com `.` no início de cada linha de continuação
+- [x] T021 [US5] Criar `samples/success/case_47/` com arquivo `MultiLineChain.phs` exercitando chain em 3+ linhas com `.` no início de cada linha de continuação
 - [x] T022 [US5] Criar `samples/success/case_47/CaseValidation.php` com assertions que comparam o output com o equivalente inline
 
 **Checkpoint**: case_47 verde. Regressão completa.
@@ -116,7 +116,7 @@
 - [x] T027 [US6] Registrar `SafeNavigationResolver` nos contextos que têm `DotResolver`: `AssignmentContext`, `ProgramContext`, `FunctionCallContext`
 - [x] T028 [US6] Atualizar `FunctionCallContext.canClose()` em `phirescript/src/Compiler/Parser/Ast/Context/Expressions/FunctionCallContext.php` para incluir `|| $token->isSafeNavigation()` na condição de fechamento
 - [x] T029 [US6] Atualizar `FunctionEmitter` em `phirescript/src/Compiler/Emitter/Declarations/FunctionEmitter.php` — quando `$node->safeNavigation === true`, emitir `$__chain_N = {expressão do elo anterior}; {resultado} = $__chain_N !== null ? {expressão do elo atual substituindo @self por $__chain_N} : null`
-- [x] T030 [US6] Criar `samples/success/case_46/` com arquivo `SafeNavigation.ps` exercitando `?.` após método nullable (`between`) e chain de dois `?.` consecutivos
+- [x] T030 [US6] Criar `samples/success/case_46/` com arquivo `SafeNavigation.phs` exercitando `?.` após método nullable (`between`) e chain de dois `?.` consecutivos
 - [x] T031 [US6] Criar `samples/success/case_46/CaseValidation.php` com assertions verificando o PHP gerado com guard de null e executar o PHP para confirmar que retorna `null` ao invés de exceção
 
 **Checkpoint**: case_46 verde. Regressão completa.
@@ -135,8 +135,8 @@
 - [x] T037 Implementar Regra 5 (Mixed bloqueia chain) em `ChainConsistencyChecker`: verificar que `variableBase->method->returnOfPhpExecution = ['Mixed']` não é seguido de chain direta → lançar `CheckerException`
 - [x] T038 Implementar warning de `?.` desnecessário: quando `$safeNavigation = true` mas o elo anterior não tem `Null` em `returnOfPhpExecution` → `Messenger::warning()` (não erro)
 - [x] T039 Registrar `ChainConsistencyChecker` em `phirescript/src/Compiler/Checker.php`
-- [x] T040 Criar `samples/error/case_49/` com 4 arquivos `.ps` separados exercitando cada violação: dead chain, chain após void, nullable sem `?.`, e Mixed direto
-- [x] T041 Criar `samples/error/case_49/CaseValidation.php` com assertions que verificam que cada arquivo `.ps` produz a `CheckerException` correta com a mensagem esperada
+- [x] T040 Criar `samples/error/case_49/` com 4 arquivos `.phs` separados exercitando cada violação: dead chain, chain após void, nullable sem `?.`, e Mixed direto
+- [x] T041 Criar `samples/error/case_49/CaseValidation.php` com assertions que verificam que cada arquivo `.phs` produz a `CheckerException` correta com a mensagem esperada
 - [x] T042 Adicionar campo `public bool $isChainLink = false` em `phirescript/src/Compiler/Parser/Ast/Nodes/Declarations/FunctionNode.php` e setar para `true` no `FunctionCallResolver.resolve()` quando `variableOnFocus` é um FunctionNode (ou seja, o elo anterior já é uma chain)
 
 ---
@@ -145,7 +145,7 @@
 
 **Purpose**: Casos de sucesso restantes (case_43 revisitado se necessário, case_48).
 
-- [x] T043 Criar `samples/success/case_48/` com arquivo `CrossTypeChain.ps` exercitando chain que cruza tipos: `String → Array` via `split()`, depois `Array → Int` via `length()`, com atribuição em cada passo
+- [x] T043 Criar `samples/success/case_48/` com arquivo `CrossTypeChain.phs` exercitando chain que cruza tipos: `String → Array` via `split()`, depois `Array → Int` via `length()`, com atribuição em cada passo
 - [x] T044 Criar `samples/success/case_48/CaseValidation.php` com assertions verificando os tipos em cada passo e o PHP gerado
 
 ---
@@ -158,7 +158,7 @@
 - [x] T046 [P] Atualizar `phirescript/architecture.md` — adicionar `SafeNavigationResolver` na Source Tree, adicionar `ChainConsistencyChecker` na tabela de Checkers, adicionar token `?.` nos tipos de token
 - [x] T047 [P] Atualizar `knowledge_base/AGENTS.md` — atualizar contagem de cases (adicionar 42–49 = 8 novos cases)
 - [x] T048 [P] Atualizar `knowledge_base/brief.md` — atualizar contagem de cases
-- [x] T049 [P] Atualizar `knowledge_base/skills/write-phirescript/SKILL.md` — documentar sintaxe de method chaining disponível para uso em `.ps`
+- [x] T049 [P] Atualizar `knowledge_base/skills/write-phirescript/SKILL.md` — documentar sintaxe de method chaining disponível para uso em `.phs`
 - [x] T050 Rodar `composer quality` dentro de `phirescript/` e corrigir qualquer violação de PHPStan nível 9, Rector, ou php-cs-fixer introduzida pelos novos arquivos
 - [x] T051 Rodar `vendor/bin/phpunit` dentro de `phirescript/` e verificar que não há regressões nos testes unitários existentes
 - [x] T052 Rodar `php bin/stretch --mode=success` completo e `php bin/stretch --mode=error` para validação final de regressão
@@ -188,7 +188,7 @@
 ### Parallel Opportunities
 
 - T003, T004, T005 podem ser implementados em paralelo (arquivos diferentes)
-- T007, T008 (case_42 .ps e CaseValidation.php) podem ser criados em paralelo
+- T007, T008 (case_42 .phs e CaseValidation.php) podem ser criados em paralelo
 - T045, T046, T047, T048, T049 (documentação Phase 11) são todos independentes
 
 ---

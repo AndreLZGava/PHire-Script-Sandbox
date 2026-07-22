@@ -1,6 +1,6 @@
 # Brief — PHireScript Compiler
 
-PHireScript is a **PHP transpiler**: it reads `.ps` source files and emits valid `.php` output.
+PHireScript is a **PHP transpiler**: it reads `.phs` source files and emits valid `.php` output.
 
 - **Pipeline:** Scanner → Validator → Parser → Binder → Checker → Emitter → Processors → File write
 - **Parser model:** context-based recursive descent — each construct has a `Context` + `Resolver` + `Node` trio

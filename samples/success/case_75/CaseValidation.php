@@ -9,7 +9,7 @@ class CaseValidation extends AbstractCaseValidation
     public function execute(): void
     {
         $this->assertHasMessage([
-            '✔ src/output/NamedParamsSplit.ps',
+            '✔ src/output/NamedParamsSplit.phs',
         ]);
     }
 }

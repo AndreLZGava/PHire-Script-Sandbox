@@ -69,11 +69,11 @@ A PHireScript developer accidentally uses `this` at the top level or inside a fr
 
 **Why this priority**: Incorrect use of `this` in PHP outside an object context causes fatal runtime errors; the compiler must catch it early.
 
-**Independent Test**: Can be tested by compiling a `.ps` file that uses `this` at the top level and verifying a `CompileException` (or equivalent checker error) is thrown with a meaningful message.
+**Independent Test**: Can be tested by compiling a `.phs` file that uses `this` at the top level and verifying a `CompileException` (or equivalent checker error) is thrown with a meaningful message.
 
 **Acceptance Scenarios**:
 
-1. **Given** a `.ps` file that uses `this` outside any class/type/immutable declaration, **When** compiled, **Then** the compiler throws a `CheckerException` with a message indicating `this` is not valid outside a class context
+1. **Given** a `.phs` file that uses `this` outside any class/type/immutable declaration, **When** compiled, **Then** the compiler throws a `CheckerException` with a message indicating `this` is not valid outside a class context
 2. **Given** a free function (not inside a class) that uses `this`, **When** compiled, **Then** the compiler rejects it with an error
 
 ---

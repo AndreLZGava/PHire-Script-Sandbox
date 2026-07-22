@@ -16,12 +16,12 @@ metadata:
 
 ## When to Use
 
-Use when writing `.ps` files and you need to know what types are valid and how they compile to PHP.
+Use when writing `.phs` files and you need to know what types are valid and how they compile to PHP.
 
 ## Repository Context
 
-- Type examples: `samples/success/case_28/UserCredentials.ps`, `samples/success/case_28/AuthenticatorClass.ps`
-- Interface examples: `samples/success/case_7/UserInterface.ps`
+- Type examples: `samples/success/case_28/UserCredentials.phs`, `samples/success/case_28/AuthenticatorClass.phs`
+- Interface examples: `samples/success/case_7/UserInterface.phs`
 - Type-focused cases: tags `types`, `type`, `super-types`, `super-type`, `primitives`
 
 ## Key Patterns
@@ -58,7 +58,7 @@ Super types compile to PHP classes with built-in validation. They are strings un
 | `Date`      | Date/DateTime          |
 | `Slug`      | URL-safe slug          |
 
-Usage in `.ps`:
+Usage in `.phs`:
 
 ```
 type UserCredentials as scoped {

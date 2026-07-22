@@ -32,6 +32,6 @@ Confirmar estado do case_60: a spec original tinha 'getId()' retornando 'this.id
 
 Regra de token advance não é enforced por automação: a regra de que somente Parser.php pode chamar $tokenManager->advance() é puramente convencional, não há regra PHPStan ou outro mecanismo estático que impeça violações; avaliar criar uma regra de análise estática para isso
 
-Features em Sketch com parser mas sem output correto (Enum, Foreach, Loop, Switch): código .ps usando essas construções pode parsear sem erro e gerar PHP inválido silenciosamente — Checker não valida, Emitter pode emitir parcial; área de risco para usuários desavisados
+Features em Sketch com parser mas sem output correto (Enum, Foreach, Loop, Switch): código .phs usando essas construções pode parsear sem erro e gerar PHP inválido silenciosamente — Checker não valida, Emitter pode emitir parcial; área de risco para usuários desavisados
 
 Backlog informal em points.md sem prioridade nem owner: formalizar os itens mais próximos de virar feature (static em métodos, named attributes, BinaryExpression em ReturnContext) como specs ou pelo menos como próximos candidatos com contexto técnico

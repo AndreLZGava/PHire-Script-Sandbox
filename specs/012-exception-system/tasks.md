@@ -53,17 +53,17 @@
 
 ### Sandbox — case_80 (bare + inheritance)
 
-- [X] T012 [P] [US1] Create `samples/success/case_80/Exceptions.ps` with `pkg PHireScript.Samples80`; declare `exception AppException` (bare) and `exception NotFoundException extends AppException` — `samples/success/case_80/Exceptions.ps`
+- [X] T012 [P] [US1] Create `samples/success/case_80/Exceptions.phs` with `pkg PHireScript.Samples80`; declare `exception AppException` (bare) and `exception NotFoundException extends AppException` — `samples/success/case_80/Exceptions.phs`
 - [X] T013 [P] [US1] Create `samples/success/case_80/CaseValidation.php` asserting the compiler emits both exception classes without errors — `samples/success/case_80/CaseValidation.php`
-- [X] T014 [US1] Run `php phirescript/bin/snapshot` with source pointing to case_80 to generate the `.psc` file — `samples/success/case_80/Exceptions.psc`
+- [X] T014 [US1] Run `php phirescript/bin/snapshot` with source pointing to case_80 to generate the `.phc` file — `samples/success/case_80/Exceptions.phc`
 - [X] T015 [P] [US1] `executeTest` in CaseValidation asserts class structure (no separate Test file needed; assertions cover instantiation and extends chain)
 - [X] T016 [US1] Run `php bin/stretch --mode=success` and confirm case_80 passes all assertions
 
 ### Sandbox — case_81 (properties + auto-constructor)
 
-- [X] T017 [P] [US1] Create `samples/success/case_81/Exceptions.ps` with `pkg PHireScript.Samples81`; declare `exception ValidationException { String field; String reason }` — `samples/success/case_81/Exceptions.ps`
+- [X] T017 [P] [US1] Create `samples/success/case_81/Exceptions.phs` with `pkg PHireScript.Samples81`; declare `exception ValidationException { String field; String reason }` — `samples/success/case_81/Exceptions.phs`
 - [X] T018 [P] [US1] Create `samples/success/case_81/CaseValidation.php` asserting the compiler emits a class with a `readonly` promoted constructor — `samples/success/case_81/CaseValidation.php`
-- [X] T019 [US1] Run `php phirescript/bin/snapshot` with source pointing to case_81 — `samples/success/case_81/Exceptions.psc`
+- [X] T019 [US1] Run `php phirescript/bin/snapshot` with source pointing to case_81 — `samples/success/case_81/Exceptions.phc`
 - [X] T020 [P] [US1] `executeTest` in CaseValidation asserts readonly string properties exist and extends \Exception
 - [X] T021 [US1] Run `php bin/stretch --mode=success` and confirm case_81 passes
 
@@ -86,17 +86,17 @@
 
 ### Sandbox — case_82 (throw + named args)
 
-- [X] T026 [P] [US2] Create `samples/success/case_82/ValidationException.ps` + `samples/success/case_82/UserService.ps` — throw with named arg `field:`
+- [X] T026 [P] [US2] Create `samples/success/case_82/ValidationException.phs` + `samples/success/case_82/UserService.phs` — throw with named arg `field:`
 - [X] T027 [P] [US2] Create `samples/success/case_82/CaseValidation.php` asserting `throw new ValidationException(field: $field)` — `samples/success/case_82/CaseValidation.php`
-- [X] T028 [US2] Run `php phirescript/bin/snapshot` for case_82 — `samples/success/case_82/UserService.psc` and `ValidationException.psc`
+- [X] T028 [US2] Run `php phirescript/bin/snapshot` for case_82 — `samples/success/case_82/UserService.phc` and `ValidationException.phc`
 - [X] T029 [P] [US2] `executeTest` in CaseValidation asserts throw+named arg output (no separate test file needed)
 - [X] T030 [US2] Run `php bin/stretch --mode=success` and confirm case_82 passes
 
 ### Sandbox — case_83 (message template)
 
-- [X] T031 [P] [US2] Create `samples/success/case_83/FieldException.ps` with `pkg PHireScript.Samples83`; declare `exception FieldException { String field; message: 'Invalid field: {field}' }` — `samples/success/case_83/FieldException.ps`
+- [X] T031 [P] [US2] Create `samples/success/case_83/FieldException.phs` with `pkg PHireScript.Samples83`; declare `exception FieldException { String field; message: 'Invalid field: {field}' }` — `samples/success/case_83/FieldException.phs`
 - [X] T032 [P] [US2] Create `samples/success/case_83/CaseValidation.php` asserting compile-time `sprintf` interpolation — `samples/success/case_83/CaseValidation.php`
-- [X] T033 [US2] Run `php phirescript/bin/snapshot` for case_83 — `samples/success/case_83/FieldException.psc`
+- [X] T033 [US2] Run `php phirescript/bin/snapshot` for case_83 — `samples/success/case_83/FieldException.phc`
 - [X] T034 [P] [US2] `executeTest` in CaseValidation asserts `sprintf('Invalid field: %s', $field)` in constructor output
 - [X] T035 [US2] Run `php bin/stretch --mode=success` and confirm case_83 passes
 
@@ -138,9 +138,9 @@
 
 ### Sandbox — case_84
 
-- [ ] T046 [P] [US4] Create `samples/success/case_84/Checked.ps` with `pkg PHireScript.Samples84`; include a function declared `throws UserNotFoundException`, a caller that handles it (valid), and a caller that doesn't (expects compile error) — `samples/success/case_84/Checked.ps`
+- [ ] T046 [P] [US4] Create `samples/success/case_84/Checked.phs` with `pkg PHireScript.Samples84`; include a function declared `throws UserNotFoundException`, a caller that handles it (valid), and a caller that doesn't (expects compile error) — `samples/success/case_84/Checked.phs`
 - [ ] T047 [P] [US4] Create `samples/success/case_84/CaseValidation.php` asserting the expected `CompileException` message for the unhandled call, and no error for the handled call — `samples/success/case_84/CaseValidation.php`
-- [ ] T048 [US4] Run `php phirescript/bin/snapshot` with source pointing to case_84 — `samples/success/case_84/Checked.psc`
+- [ ] T048 [US4] Run `php phirescript/bin/snapshot` with source pointing to case_84 — `samples/success/case_84/Checked.phc`
 - [ ] T049 [P] [US4] Create `samples/success/case_84/CheckedTest.php` loading the compiled file and asserting the valid handler path executes without runtime error — `samples/success/case_84/CheckedTest.php`
 - [ ] T050 [US4] Run `php bin/stretch --mode=success` and confirm case_84 passes
 
@@ -161,9 +161,9 @@
 
 ### Sandbox — case_85 (immutability)
 
-- [ ] T053 [P] [US5] Create `samples/success/case_85/Immutable.ps` with `pkg PHireScript.Samples85`; declare `exception PayloadException { String field }`, catch one and attempt `e.field = 'other'` — `samples/success/case_85/Immutable.ps`
+- [ ] T053 [P] [US5] Create `samples/success/case_85/Immutable.phs` with `pkg PHireScript.Samples85`; declare `exception PayloadException { String field }`, catch one and attempt `e.field = 'other'` — `samples/success/case_85/Immutable.phs`
 - [ ] T054 [P] [US5] Create `samples/success/case_85/CaseValidation.php` asserting the expected immutability `CompileException` message — `samples/success/case_85/CaseValidation.php`
-- [ ] T055 [US5] Run `php phirescript/bin/snapshot` with source pointing to case_85 — `samples/success/case_85/Immutable.psc`
+- [ ] T055 [US5] Run `php phirescript/bin/snapshot` with source pointing to case_85 — `samples/success/case_85/Immutable.phc`
 - [ ] T056 [US5] Run `php bin/stretch --mode=success` and confirm case_85 immutability assertion passes
 
 ---
@@ -181,7 +181,7 @@
 
 ### Sandbox — case_85 (instantiation restriction)
 
-- [ ] T059 [P] [US6] Add `Instantiation.ps` to `samples/success/case_85/` with `pkg PHireScript.Samples85`; attempt `error = PayloadException(field: 'x')` to trigger the restriction — `samples/success/case_85/Instantiation.ps`
+- [ ] T059 [P] [US6] Add `Instantiation.phs` to `samples/success/case_85/` with `pkg PHireScript.Samples85`; attempt `error = PayloadException(field: 'x')` to trigger the restriction — `samples/success/case_85/Instantiation.phs`
 - [ ] T060 [US6] Extend `samples/success/case_85/CaseValidation.php` to assert the expected instantiation `CompileException` message — `samples/success/case_85/CaseValidation.php`
 - [ ] T061 [US6] Run `php bin/stretch --mode=success` and confirm full case_85 passes
 
@@ -192,7 +192,7 @@
 ## Phase 9: Polish & Cross-Cutting Concerns
 
 - [X] T062 [P] Run `php bin/stretch --mode=success` across ALL existing cases to confirm no regressions — all success/warning/error modes pass
-- [X] T063 [P] `.psc` snapshots generated for case_80, case_81, case_82, case_83 via `php phirescript/bin/snapshot`
+- [X] T063 [P] `.phc` snapshots generated for case_80, case_81, case_82, case_83 via `php phirescript/bin/snapshot`
 - [ ] T064 Update `specs/012-exception-system/vscode-extension.md` if any grammar or token details changed during implementation
 
 ---
@@ -258,7 +258,7 @@ Sequential:
   T011 — Emitter.php (register ExceptionEmitter, depends on T010)
 
 Parallel batch 3 (case_80 sandbox, require T011):
-  T012 — Exceptions.ps
+  T012 — Exceptions.phs
   T013 — CaseValidation.php
   T015 — ExceptionsTest.php
 
@@ -294,7 +294,7 @@ Sequential:
 
 - `[P]` tasks touch different files and have no shared in-flight dependencies — safe to parallelize
 - `[Story]` label maps every task to a user story for traceability
-- Each sandbox case must include `.ps`, `.psc` snapshot, `CaseValidation.php`, and `*Test.php`
+- Each sandbox case must include `.phs`, `.phc` snapshot, `CaseValidation.php`, and `*Test.php`
 - Package convention: `pkg PHireScript.SamplesN` where N matches the case folder number
-- `php phirescript/bin/snapshot` must be run after each `.ps` file is written and before stretch
+- `php phirescript/bin/snapshot` must be run after each `.phs` file is written and before stretch
 - Token advance rule: only `Parser.php` (`$tokenManager->advance()`) may advance the cursor — all new Resolvers and Contexts must be read-only

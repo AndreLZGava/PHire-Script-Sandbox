@@ -61,7 +61,7 @@ O `MethodScopeNode` (corpo) contém a árvore de statements. Cada referência a 
 
 ### Alternativas consideradas
 - Análise de escopo no binder — rejeitado: o binder existe para symbol binding/type resolution; injetar lógica de captura de closure aqui acoplaria o binder a um detalhe de emissão PHP
-- Exigir anotação manual no `.ps` — rejeitado: a spec define que o desenvolvedor não escreve `use` manualmente
+- Exigir anotação manual no `.phs` — rejeitado: a spec define que o desenvolvedor não escreve `use` manualmente
 
 ---
 

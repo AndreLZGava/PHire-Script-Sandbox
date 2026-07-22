@@ -24,7 +24,7 @@ PHire-Script-Sandbox/
 │   ├── success/
 │   │   ├── SuccessMode.php  Compiles + captures output, then calls execute()
 │   │   └── case_N/         One dir per test case (N = 1..60)
-│   │       ├── *.ps        PHireScript source files
+│   │       ├── *.phs        PHireScript source files
 │   │       ├── CaseValidation.php
 │   │       └── *Test.php   Optional PHPUnit test on compiled output
 │   ├── warning/             Warning-mode cases (case_1 exists, no assertions yet)
@@ -90,15 +90,15 @@ php phirescript/bin/build
 php phirescript/bin/watch
 
 # Inspect tokens/AST
-php phirescript/bin/debug samples/success/case_28/AuthenticatorClass.ps
+php phirescript/bin/debug samples/success/case_28/AuthenticatorClass.phs
 
-# Generate .psc snapshots
+# Generate .phc snapshots
 php phirescript/bin/snapshot
 
 # Docker equivalents
 make build
 make watch
-make debug RUN_ARGS=samples/success/case_4/Repository.ps
+make debug RUN_ARGS=samples/success/case_4/Repository.phs
 ```
 
 ## Committed State Invariants

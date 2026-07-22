@@ -16,7 +16,7 @@ A developer calls a method using the existing positional syntax, exactly as toda
 
 **Why this priority**: Backward compatibility is non-negotiable. Any regression here breaks the entire user base.
 
-**Independent Test**: Compile any existing `.ps` file that contains positional method calls and verify the PHP output is identical to the current output.
+**Independent Test**: Compile any existing `.phs` file that contains positional method calls and verify the PHP output is identical to the current output.
 
 **Acceptance Scenarios**:
 
@@ -31,7 +31,7 @@ A developer uses named parameter syntax to pass arguments in an order that diffe
 
 **Why this priority**: This is the core new capability. Without it the feature has no value.
 
-**Independent Test**: Write a `.ps` file that calls a method using named params in reverse declaration order. Verify the compiled PHP emits arguments mapped to the correct positions (or uses PHP 8 named arguments syntax).
+**Independent Test**: Write a `.phs` file that calls a method using named params in reverse declaration order. Verify the compiled PHP emits arguments mapped to the correct positions (or uses PHP 8 named arguments syntax).
 
 **Acceptance Scenarios**:
 
@@ -47,7 +47,7 @@ A developer mistakenly mixes positional and named arguments in the same call, e.
 
 **Why this priority**: Allowing mixed syntax would produce silently incorrect PHP. A hard error is the only safe behaviour.
 
-**Independent Test**: Write a `.ps` file with a mixed call and run the compiler. Verify that compilation fails with a clear error message referencing the mixed-style problem.
+**Independent Test**: Write a `.phs` file with a mixed call and run the compiler. Verify that compilation fails with a clear error message referencing the mixed-style problem.
 
 **Acceptance Scenarios**:
 
@@ -63,7 +63,7 @@ A developer uses named syntax but omits a required parameter. The compiler must 
 
 **Why this priority**: Silently emitting PHP with missing required arguments would produce a runtime error in PHP, which PHireScript's "compile-time safety" principle must prevent.
 
-**Independent Test**: Write a `.ps` file that names only some required params. Verify a compile error identifies which required parameter is missing.
+**Independent Test**: Write a `.phs` file that names only some required params. Verify a compile error identifies which required parameter is missing.
 
 **Acceptance Scenarios**:
 

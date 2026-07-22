@@ -17,7 +17,7 @@ class CaseValidation extends AbstractCaseValidation
     {
         $this->stopIfNoTest = false;
         $this->assertHasMessage([
-            "✔ src/output/ElseIf.ps → src/compiled/ElseIf.php",
+            "✔ src/output/ElseIf.phs → src/compiled/ElseIf.php",
         ]);
     }
 }

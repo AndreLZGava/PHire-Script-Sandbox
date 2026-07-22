@@ -40,7 +40,7 @@
 
 - [x] T00x Modificar `FunctionCallResolver.resolve()` em `phirescript/src/Compiler/Parser/Ast/Resolver/Expressions/FunctionCallResolver.php` para adicionar, **antes** do código de resolução via `SymbolTableManager`, o seguinte branch: `if ($focus instanceof ThisExpressionNode && $parseContext->currentClassName !== null) { $returnType = $this->resolveFromClassHierarchy($token->value, $parseContext); if ($returnType !== null) { $function = new FunctionNode(token: $token); $function->variableBase = $focus; $virtualVar = $this->getNewVirtualVariable($token, $returnType); $parseContext->variables->setVirtualVariable($virtualVar); $parseContext->contextManager->enter(new FunctionCallContext($function)); $context->addChild($function); return; } }` — depende de T007
 
-**Checkpoint**: Compilar um arquivo `.ps` com `result = this.getBase() * 10` deve compilar sem exception. Executar `php phirescript/bin/build` com um caso temporário para verificar.
+**Checkpoint**: Compilar um arquivo `.phs` com `result = this.getBase() * 10` deve compilar sem exception. Executar `php phirescript/bin/build` com um caso temporário para verificar.
 
 ---
 
@@ -50,13 +50,13 @@
 
 **Independent Test**: Compilar `samples/success/case_64/` com `php phirescript/bin/build` e verificar que o PHP gerado contém `$result = $this->getBase() * $this->getRate()`.
 
-- [x] T00x [P] [US1] Criar `samples/success/case_64/Calculator.ps` com package `pkg PHireScript.Samples64` — classe `Calculator as scoped` com propriedades `Int base` e `Float rate`; métodos `# getBase(): Int { return this.base }`, `# getRate(): Float { return this.rate }`, `# total(): Float { result = this.getBase() * this.getRate() \n return result }`, `# withBonus(): Float { return (this.getBase() + 10) * this.getRate() }`
+- [x] T00x [P] [US1] Criar `samples/success/case_64/Calculator.phs` com package `pkg PHireScript.Samples64` — classe `Calculator as scoped` com propriedades `Int base` e `Float rate`; métodos `# getBase(): Int { return this.base }`, `# getRate(): Float { return this.rate }`, `# total(): Float { result = this.getBase() * this.getRate() \n return result }`, `# withBonus(): Float { return (this.getBase() + 10) * this.getRate() }`
 
 - [x] T01x [P] [US1] Criar `samples/success/case_64/CalculatorTest.php` com namespace `PHireScript\Sandbox\src\output` — PHPUnit test que instancia `Calculator` e valida: `getBase()` retorna `int`, `getRate()` retorna `float`, `total()` retorna `getBase() * getRate()`, `withBonus()` retorna `(getBase() + 10) * getRate()`
 
-- [x] T01x [US1] Criar `samples/success/case_64/CaseValidation.php` com namespace `Sandbox\Samples\success\case_64` — `execute()` asserta `✔ src/output/Calculator.ps`; `executeTest()` asserta: `str_contains($output, '$result = $this->getBase() * $this->getRate()')`, `str_contains($output, 'return ($this->getBase() + 10) * $this->getRate()')` — depende de T009
+- [x] T01x [US1] Criar `samples/success/case_64/CaseValidation.php` com namespace `Sandbox\Samples\success\case_64` — `execute()` asserta `✔ src/output/Calculator.phs`; `executeTest()` asserta: `str_contains($output, '$result = $this->getBase() * $this->getRate()')`, `str_contains($output, 'return ($this->getBase() + 10) * $this->getRate()')` — depende de T009
 
-- [x] T01x [US1] Gerar snapshot `samples/success/case_64/Calculator.psc` executando `php phirescript/bin/snapshot` com `source` apontando para `samples/success/case_64` no `PHireScript.json` — depende de T009, T008
+- [x] T01x [US1] Gerar snapshot `samples/success/case_64/Calculator.phc` executando `php phirescript/bin/snapshot` com `source` apontando para `samples/success/case_64` no `PHireScript.json` — depende de T009, T008
 
 **Checkpoint**: `php bin/stretch --mode=success --from=64 --to=64` deve passar.
 
@@ -80,15 +80,15 @@
 
 **Independent Test**: Compilar `samples/success/case_76/` onde `Child extends Base` e `Child.doubled()` chama `this.getValue()` declarado em `Base`. PHP gerado: `return $this->getValue() * 2`.
 
-- [x] T01x [P] [US3] Criar `samples/success/case_76/Base.ps` com `pkg PHireScript.Samples76` — `class Base as scoped` com `Int value` e `# getValue(): Int { return this.value }`
+- [x] T01x [P] [US3] Criar `samples/success/case_76/Base.phs` com `pkg PHireScript.Samples76` — `class Base as scoped` com `Int value` e `# getValue(): Int { return this.value }`
 
-- [x] T01x [P] [US3] Criar `samples/success/case_76/Child.ps` com `pkg PHireScript.Samples76` — `class Child extends Base { # doubled(): Int { return this.getValue() * 2 } }` — usa `use PHireScript.Samples76.{Base}`
+- [x] T01x [P] [US3] Criar `samples/success/case_76/Child.phs` com `pkg PHireScript.Samples76` — `class Child extends Base { # doubled(): Int { return this.getValue() * 2 } }` — usa `use PHireScript.Samples76.{Base}`
 
 - [x] T01x [P] [US3] Criar `samples/success/case_76/Case76Test.php` com namespace `PHireScript\Sandbox\src\output` — PHPUnit test que carrega `Child.php`, instancia com `value = 5`, asserta `doubled()` retorna `10`
 
-- [x] T01x [US3] Criar `samples/success/case_76/CaseValidation.php` com namespace `Sandbox\Samples\success\case_76` — `execute()` asserta `✔ src/output/Base.ps` e `✔ src/output/Child.ps`; `executeTest()` asserta que `Child.php` contém `return $this->getValue() * 2` — depende de T014, T015
+- [x] T01x [US3] Criar `samples/success/case_76/CaseValidation.php` com namespace `Sandbox\Samples\success\case_76` — `execute()` asserta `✔ src/output/Base.phs` e `✔ src/output/Child.phs`; `executeTest()` asserta que `Child.php` contém `return $this->getValue() * 2` — depende de T014, T015
 
-- [x] T01x [US3] Gerar snapshots `samples/success/case_76/Base.psc` e `samples/success/case_76/Child.psc` — depende de T014, T015, T008
+- [x] T01x [US3] Gerar snapshots `samples/success/case_76/Base.phc` e `samples/success/case_76/Child.phc` — depende de T014, T015, T008
 
 **Checkpoint**: `php bin/stretch --mode=success --from=76 --to=76` deve passar.
 
@@ -132,12 +132,12 @@ T003 → T004 → T005  # ClassBodyResolver + ClassBodyContext (sequencial)
 T007 → T008  # FunctionCallResolver.isTheCase + resolve (sequencial)
 
 # Phase 3 — rodar em paralelo após T008:
-T009  # Calculator.ps
+T009  # Calculator.phs
 T010  # CalculatorTest.php
 
 # Phase 5 — rodar em paralelo após Phase 2:
-T014  # Base.ps
-T015  # Child.ps
+T014  # Base.phs
+T015  # Child.phs
 T016  # Case76Test.php
 ```
 

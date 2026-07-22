@@ -1,0 +1,23 @@
+pkg PHireScript.Database
+
+use PHireScript.Database.Repository
+
+external Symfony\Component\HttpClient\HttpClient
+
+class UserApi as scoped {
+    getUser(Int id): Array {
+        try {
+            client = HttpClient.create()
+
+            response = client.request(
+            method: 'GET',
+            host: 'https://api.example.com/users'
+            user: id
+            )
+
+            response.toArray()
+        } handle (Exception e) {
+            return []
+        }
+    }
+}

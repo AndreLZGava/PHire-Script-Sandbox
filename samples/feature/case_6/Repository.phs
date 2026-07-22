@@ -1,0 +1,5 @@
+pkg PHireScript.Database
+
+abstract class Repository as scoped {
+    abstract String tableName
+}

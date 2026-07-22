@@ -73,7 +73,7 @@ O `CacheManager` existe e o `SymbolTableManager` já usa para cachear type metho
 1. Parse parcial de todos os arquivos via `load()` para construir o grafo
 2. Parse + bind + check + emit completo via `loadAndCompile()`
 
-Cada arquivo `.ps` é escaneado e parseado **duas vezes** em cada build.
+Cada arquivo `.phs` é escaneado e parseado **duas vezes** em cada build.
 
 **Fix:** Reusar as ASTs do passo 1 no passo 2. O `Transpiler` já tem `parseOnly()` (Phase 0) — basta armazenar os resultados e passá-los para as fases seguintes ao invés de reler os arquivos do disco.
 
@@ -205,7 +205,7 @@ O scanner reconhece `async` e `spawn` mas não há: rastreamento de funções as
 
 ### 4.4 Source maps ausentes
 
-Não há mapeamento entre posições no `.ps` e posições no `.php` gerado. Necessário para debugging útil conforme a linguagem se torna mais complexa.
+Não há mapeamento entre posições no `.phs` e posições no `.php` gerado. Necessário para debugging útil conforme a linguagem se torna mais complexa.
 
 ---
 

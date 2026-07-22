@@ -131,7 +131,7 @@ Quando `isExternalInstantiation = true`:
 ## Fluxo de Dados — Case 15 (PDO)
 
 ```
-.ps source                          AST / SymbolTable state
+.phs source                          AST / SymbolTable state
 ─────────────────────────────────   ──────────────────────────────────────────────────
 external PDO                     →  ExternalNode{alias:'PDO'}
                                     Binder: ExternalClassDescriptor{

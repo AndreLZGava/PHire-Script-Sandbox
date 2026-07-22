@@ -48,7 +48,7 @@ description: "Task list for 007-fix-dot-resolver implementation"
 
 ### Implementation for User Story 1
 
-- [X] T007 [P] [US1] Create `samples/success/case_67/ChainAssignment.ps` — declare `pkg PHireScript.Samples67`, class `ChainAssignment as scoped` with `String label` property and method `processAssignment(): String` that assigns `this.label.toUpperCase().removeSpaces()` to `result` and returns it
+- [X] T007 [P] [US1] Create `samples/success/case_67/ChainAssignment.phs` — declare `pkg PHireScript.Samples67`, class `ChainAssignment as scoped` with `String label` property and method `processAssignment(): String` that assigns `this.label.toUpperCase().removeSpaces()` to `result` and returns it
 - [X] T008 [P] [US1] Add `private function emitChainedExpression(array $lines, string $self, $node, $ctx): string` to `phirescript/src/Compiler/Emitter/Declarations/FunctionEmitter.php` — for single-element arrays starting with `return `, extract and inline the expression replacing `@self` with `$self`; for multi-statement arrays, materialise `$self` into a `$__chain_N` temp var
 - [X] T009 [US1] Update `overrideSelf()` in `phirescript/src/Compiler/Emitter/Declarations/FunctionEmitter.php` — when `$method` is array, call `$this->emitChainedExpression($method, $variable, $node, $ctx)` instead of passing to `wrapAsIIFE()`
 - [X] T010 [US1] Create `samples/success/case_67/CaseValidation.php` extending `AbstractCaseValidation` — assert compilation success message and add a PHPUnit test that instantiates `ChainAssignment`, sets `label` to `'  hello  '`, calls `processAssignment()`, and asserts the result equals `'HELLO'`
@@ -66,7 +66,7 @@ description: "Task list for 007-fix-dot-resolver implementation"
 
 ### Implementation for User Story 2
 
-- [X] T012 [US2] Add `processReturn(): String { return this.label.toUpperCase().removeSpaces() }` to `samples/success/case_67/ChainAssignment.ps`
+- [X] T012 [US2] Add `processReturn(): String { return this.label.toUpperCase().removeSpaces() }` to `samples/success/case_67/ChainAssignment.phs`
 - [X] T013 [US2] Update `samples/success/case_67/CaseValidation.php` — extend the PHPUnit test to also call `processReturn()` and assert it returns the same trimmed uppercase value
 - [X] T014 [US2] Run `php bin/stretch --mode=success` and confirm case_67 still passes with the return scenario covered, and that the emitted PHP is `return \trim(\mb_strtoupper(...))` (not a closure)
 
@@ -107,7 +107,7 @@ description: "Task list for 007-fix-dot-resolver implementation"
 
 ### Within Each User Story
 
-- T007 (create `.ps`) and T008 (add emitter helper) can run in parallel — different files
+- T007 (create `.phs`) and T008 (add emitter helper) can run in parallel — different files
 - T009 (update `overrideSelf`) depends on T008 being complete
 - T010 (CaseValidation) depends on T007 being complete
 - T011 (run orchestrator) depends on T009 and T010
@@ -125,7 +125,7 @@ description: "Task list for 007-fix-dot-resolver implementation"
 
 ```bash
 # Can launch in parallel:
-Task T007: Create samples/success/case_67/ChainAssignment.ps
+Task T007: Create samples/success/case_67/ChainAssignment.phs
 Task T008: Add emitChainedExpression() to FunctionEmitter.php
 
 # Then sequentially:

@@ -138,8 +138,8 @@ This project spans two implementation repositories. Tasks must be scoped accordi
 **Include tasks for:**
 - **phirescript/** — compiler changes: Parser, Resolvers, Contexts, Emitters, Checkers, Runtime types, AST nodes. Keep the compiler lean; document blast radius.
 - **PHire-Script-Sandbox** — sandbox cases for every new or modified language behavior. Each case requires:
-  - `.ps` source file(s) in `samples/success/case_N/`
-  - `.psc` snapshot (pre-compiled PHP)
+  - `.phs` source file(s) in `samples/success/case_N/`
+  - `.phc` snapshot (pre-compiled PHP)
   - `CaseValidation.php` asserting compiler output
   - `*Test.php` PHPUnit file validating compiled PHP behavior (maximum coverage; if objects cannot be instantiated, load and validate structure/logic/variables/types)
   - Package declaration must follow convention: `pkg PHireScript.SamplesN` where N = case folder number

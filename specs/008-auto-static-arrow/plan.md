@@ -10,7 +10,7 @@ At emit time, inspect every `ArrowFunctionNode`'s body AST for the presence of `
 
 ## Technical Context
 
-**Language/Version**: PHP 8.1+ (compiler source); PHireScript `.ps` (language under test)
+**Language/Version**: PHP 8.1+ (compiler source); PHireScript `.phs` (language under test)
 
 **Primary Dependencies**: PHireScript compiler at `phirescript/` — specifically:
 - `phirescript/src/Compiler/Emitter/Declarations/ArrowFunctionEmitter.php` (only file changed)
@@ -20,7 +20,7 @@ At emit time, inspect every `ArrowFunctionNode`'s body AST for the presence of `
 
 **Storage**: N/A
 
-**Testing**: PHPUnit via `php bin/stretch`; snapshot files (`.psc`) for output regression
+**Testing**: PHPUnit via `php bin/stretch`; snapshot files (`.phc`) for output regression
 
 **Target Platform**: PHP 8.1+ server
 
@@ -65,12 +65,12 @@ specs/008-auto-static-arrow/
 phirescript/src/Compiler/Emitter/Declarations/
 └── ArrowFunctionEmitter.php        # ONLY file modified
 
-samples/success/case_68/            # Existing case: update .psc snapshot + test
+samples/success/case_68/            # Existing case: update .phc snapshot + test
 samples/success/case_69/            # New case: arrow without this  → static function
 samples/success/case_70/            # New case: arrow with this     → plain function
 ```
 
-**Structure Decision**: Single-file emit change. New sandbox cases follow the established pattern: `.ps` source + `.psc` snapshot + `*Test.php` + `CaseValidation.php`.
+**Structure Decision**: Single-file emit change. New sandbox cases follow the established pattern: `.phs` source + `.phc` snapshot + `*Test.php` + `CaseValidation.php`.
 
 ## Complexity Tracking
 
@@ -91,7 +91,7 @@ No constitution violations. No complexity justification required.
 | Walk depth | Recursive within `MethodScopeNode.children`, stopping at `ArrowFunctionNode` boundaries | Mirrors `collectRefs` pattern already in the emitter |
 | Existing `collectRefs` reuse | Write a separate private method `containsThisExpression()` | `collectRefs` is purpose-built for variable capture names; a clean boolean method is clearer and avoids coupling |
 | `static` placement in PHP | `static function(...)` — before `function` keyword | PHP spec: `static` must precede `function` for static closures |
-| `.psc` snapshots | Update `case_68` snapshot; add new snapshots for cases 69 and 70 | Snapshots are the canonical regression baseline for output correctness |
+| `.phc` snapshots | Update `case_68` snapshot; add new snapshots for cases 69 and 70 | Snapshots are the canonical regression baseline for output correctness |
 
 ### Resolved Unknowns
 
@@ -179,18 +179,18 @@ private function containsThisExpression(array $nodes): bool
 
 ### Sandbox Cases
 
-**case_68** (existing) — update `.psc` snapshot to reflect `static function`:
+**case_68** (existing) — update `.phc` snapshot to reflect `static function`:
 - Current snapshot: `$calcTotal = function (float $price, float $rate): float {`
 - New snapshot: `$calcTotal = static function (float $price, float $rate): float {`
 
 **case_69** (new) — Arrow function without `this`: verifies `static function` emission
-- `.ps` source: standalone arrow function referencing only a parameter
-- `.psc` snapshot: `static function`
+- `.phs` source: standalone arrow function referencing only a parameter
+- `.phc` snapshot: `static function`
 - `CaseValidation.php`: asserts success + snapshot matches
 
 **case_70** (new) — Arrow function with `this` inside a class method: verifies plain `function` emission
-- `.ps` source: class with method containing an arrow function that reads `this.someField`
-- `.psc` snapshot: plain `function` (no `static`)
+- `.phs` source: class with method containing an arrow function that reads `this.someField`
+- `.phc` snapshot: plain `function` (no `static`)
 - `CaseValidation.php`: asserts success + snapshot matches
 
 ### Contracts
@@ -207,7 +207,7 @@ No external interfaces are changed. The PHireScript language surface is unchange
    - Add `containsThisExpression(array $nodes): bool` private method
    - Update `emit()` to compute `$hasThis` before building `$signature`
 
-2. Update snapshot `samples/success/case_68/ArrowFunctionFloat.psc` — change `function` to `static function`
+2. Update snapshot `samples/success/case_68/ArrowFunctionFloat.phc` — change `function` to `static function`
 
 3. Update `samples/success/case_68/ArrowFunctionFloatTest.php` if it asserts the exact closure string
 

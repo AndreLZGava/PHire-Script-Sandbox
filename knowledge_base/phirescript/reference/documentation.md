@@ -37,6 +37,6 @@
 > `phirescript/` — to keep the compiler repo free of documentation files.
 
 - **Sandbox KB root**: [`../AGENTS.md`](../AGENTS.md) — sibling folder, consumer perspective
-  - Covers: CaseValidation patterns, assertHasMessage, orchestrator, `.ps` syntax
+  - Covers: CaseValidation patterns, assertHasMessage, orchestrator, `.phs` syntax
 - **Sandbox test cases**: `samples/success/case_N/` (sandbox root) — 34 cases
 - **Running sandbox tests**: `php bin/stretch --mode=success` (from sandbox root)

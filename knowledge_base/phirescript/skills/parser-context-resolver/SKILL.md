@@ -203,7 +203,7 @@ Nodes are plain data bags — no methods. All logic lives in Contexts, Resolvers
 - [ ] Context `canClose()` fires on the correct closing delimiter
 - [ ] Extra tokens consumed in `resolve()` are walked over with `$tokenManager->walk(N)`
 - [ ] `onClose()` / `afterClose()` used to wire Node into parent Node's data
-- [ ] `php bin/debug <file.ps>` shows the new construct in the AST dump
+- [ ] `php bin/debug <file.phs>` shows the new construct in the AST dump
 
 ## Examples
 

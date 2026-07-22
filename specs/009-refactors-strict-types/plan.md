@@ -20,7 +20,7 @@ Three coordinated improvements to the PHireScript compiler:
 
 **Storage**: N/A (compiler, no persistent storage)
 
-**Testing**: PHPUnit via `php bin/stretch`, sandbox cases with `.psc` snapshot verification
+**Testing**: PHPUnit via `php bin/stretch`, sandbox cases with `.phc` snapshot verification
 
 **Target Platform**: Linux/CLI (compiler), PHP runtime (generated output)
 
@@ -28,9 +28,9 @@ Three coordinated improvements to the PHireScript compiler:
 
 **Performance Goals**: No measurable impact; both changes are cosmetic/trivial
 
-**Constraints**: `declare(strict_types=1)` must appear before any namespace or use statement in the generated PHP (PHP requirement). All existing `.psc` snapshots will need regeneration. All existing test cases must still pass.
+**Constraints**: `declare(strict_types=1)` must appear before any namespace or use statement in the generated PHP (PHP requirement). All existing `.phc` snapshots will need regeneration. All existing test cases must still pass.
 
-**Scale/Scope**: 2 files in `phirescript/`, 1 file in `phirescript/` (constant + emitter), all `.psc` snapshot files in `samples/`.
+**Scale/Scope**: 2 files in `phirescript/`, 1 file in `phirescript/` (constant + emitter), all `.phc` snapshot files in `samples/`.
 
 ## Constitution Check
 
@@ -40,7 +40,7 @@ Three coordinated improvements to the PHireScript compiler:
 |------|--------|-------|
 | Token advance rule | PASS | No cursor advance introduced |
 | Trinity completeness (Parser/Resolver/Emitter) | PASS | Emitter change only; no new parse/bind pass |
-| Blast radius | LOW | `ProgramEmitter` touches every generated file — all `.psc` snapshots become stale and must be regenerated |
+| Blast radius | LOW | `ProgramEmitter` touches every generated file — all `.phc` snapshots become stale and must be regenerated |
 | Backwards compatibility | N/A | `strict_types=1` is additive for well-typed code; callers that pass wrong types will get `TypeError` at runtime (desirable) |
 
 ## Project Structure
@@ -65,11 +65,11 @@ phirescript/src/Compiler/Parser/Managers/TokenManager.php
 phirescript/src/Compiler/Emitter/Root/ProgramEmitter.php
   → Change $code['init'] from "<?php\n\n" to "<?php\n\ndeclare(strict_types=1);\n\n"
 
-samples/success/case_N/*.psc   (all snapshot files)
+samples/success/case_N/*.phc   (all snapshot files)
   → Regenerate via: php phirescript/bin/snapshot
 ```
 
-**Structure Decision**: Both changes touch exactly one compiler file each. No new files, no new classes, no new directories. The only cascade effect is `.psc` snapshot regeneration.
+**Structure Decision**: Both changes touch exactly one compiler file each. No new files, no new classes, no new directories. The only cascade effect is `.phc` snapshot regeneration.
 
 ## Phase 0: Research
 
@@ -93,7 +93,7 @@ samples/success/case_N/*.psc   (all snapshot files)
 
 **Alternatives considered**: Adding it in `FileCompiler::compileFile()` post-processing — rejected because the emitter is the canonical place for PHP output structure.
 
-**Blast radius**: All `.psc` snapshot files become stale. Must run `php phirescript/bin/snapshot` after the change to regenerate them. Test cases that assert exact PHP output in `CaseValidation.php` may need updating if they match `<?php` without `declare`.
+**Blast radius**: All `.phc` snapshot files become stale. Must run `php phirescript/bin/snapshot` after the change to regenerate them. Test cases that assert exact PHP output in `CaseValidation.php` may need updating if they match `<?php` without `declare`.
 
 **Validation impact**: Generated PHP files currently pass `php -l` lint check in `FileCompiler`. With `declare(strict_types=1)` added, the lint check still passes (valid PHP). Runtime behavior of test PHPUnit cases may surface latent type mismatches in sandbox cases — those should be fixed, not suppressed.
 
@@ -132,7 +132,7 @@ $code['init'] = "<?php\n\ndeclare(strict_types=1);\n\n";
 
 ### Snapshot regeneration
 
-After both code changes: run `php phirescript/bin/snapshot` targeting all sample cases to update `.psc` files. Then run `php bin/stretch --mode=success` to confirm all cases still pass.
+After both code changes: run `php phirescript/bin/snapshot` targeting all sample cases to update `.phc` files. Then run `php bin/stretch --mode=success` to confirm all cases still pass.
 
 ## Complexity Tracking
 

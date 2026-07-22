@@ -16,7 +16,7 @@ A PHireScript developer writes an arrow function that captures external variable
 
 **Why this priority**: This is the core behaviour of the feature. Every arrow function that does not touch `this` should be emitted as `static function`. The developer writes no extra syntax — the compiler decides transparently.
 
-**Independent Test**: Compile a `.ps` file with one arrow function whose body references an external variable but never uses `this`. Verify the emitted PHP reads `static function` at the start of the closure.
+**Independent Test**: Compile a `.phs` file with one arrow function whose body references an external variable but never uses `this`. Verify the emitted PHP reads `static function` at the start of the closure.
 
 **Acceptance Scenarios**:
 
@@ -32,7 +32,7 @@ A developer writes an arrow function inside a class method that accesses instanc
 
 **Why this priority**: Incorrectly marking a `$this`-using closure as `static` produces a fatal PHP runtime error. This correctness gate is as important as the optimisation itself.
 
-**Independent Test**: Compile a `.ps` file with an arrow function whose body contains `this.someProperty`. Verify the emitted PHP reads `function(` without the `static` prefix.
+**Independent Test**: Compile a `.phs` file with an arrow function whose body contains `this.someProperty`. Verify the emitted PHP reads `function(` without the `static` prefix.
 
 **Acceptance Scenarios**:
 
@@ -43,15 +43,15 @@ A developer writes an arrow function inside a class method that accesses instanc
 
 ### User Story 3 — No PHireScript syntax change required (Priority: P2)
 
-A developer who has existing `.ps` files with arrow functions makes no changes to their code. After upgrading to a compiler version that includes this feature, all arrow functions that never reference `this` automatically gain `static` in the emitted PHP.
+A developer who has existing `.phs` files with arrow functions makes no changes to their code. After upgrading to a compiler version that includes this feature, all arrow functions that never reference `this` automatically gain `static` in the emitted PHP.
 
 **Why this priority**: Zero developer friction is the design goal — the optimisation is invisible. This story validates backward compatibility.
 
-**Independent Test**: Take any existing passing case that contains arrow functions without `this`, recompile it, and verify the output now contains `static function` without any `.ps` file modification.
+**Independent Test**: Take any existing passing case that contains arrow functions without `this`, recompile it, and verify the output now contains `static function` without any `.phs` file modification.
 
 **Acceptance Scenarios**:
 
-1. **Given** an existing `.ps` file that compiles successfully today, **When** recompiled after this feature lands, **Then** compilation still succeeds and the output is identical except for the added `static` prefix where applicable.
+1. **Given** an existing `.phs` file that compiles successfully today, **When** recompiled after this feature lands, **Then** compilation still succeeds and the output is identical except for the added `static` prefix where applicable.
 
 ---
 
@@ -69,7 +69,7 @@ A developer who has existing `.ps` files with arrow functions makes no changes t
 - **FR-001**: The compiler MUST inspect the AST of each arrow function body at emit time to determine whether any `ThisExpressionNode` is present as a direct child of that function's scope.
 - **FR-002**: If no `ThisExpressionNode` is found in the arrow function's own scope, the compiler MUST prefix the emitted PHP closure with `static`.
 - **FR-003**: If a `ThisExpressionNode` is found anywhere in the arrow function's own scope, the compiler MUST emit the closure without the `static` prefix.
-- **FR-004**: The PHireScript syntax (`.ps` source files) MUST NOT require any new keyword, annotation, or modifier — `static` inference is entirely automatic.
+- **FR-004**: The PHireScript syntax (`.phs` source files) MUST NOT require any new keyword, annotation, or modifier — `static` inference is entirely automatic.
 - **FR-005**: The change MUST be confined to the emit phase; no scanner, parser, resolver, context, or checker modifications are required or permitted.
 - **FR-006**: Nested arrow functions MUST be evaluated independently: the presence of `this` inside an inner arrow function MUST NOT influence whether the outer arrow function receives `static`.
 

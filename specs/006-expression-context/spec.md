@@ -16,7 +16,7 @@ A developer writing PHireScript can use arithmetic operators (`+`, `-`, `*`, `/`
 
 **Why this priority**: The most fundamental use of expressions — setting a variable to a computed value. Every other user story builds on this foundation.
 
-**Independent Test**: Compile a `.ps` file with `result = price * 1.1`, `tax = base ** 2`, `rest = total % 3` and verify the PHP output contains `$result = $price * 1.1`, `$tax = $base ** 2`, `$rest = $total % 3`.
+**Independent Test**: Compile a `.phs` file with `result = price * 1.1`, `tax = base ** 2`, `rest = total % 3` and verify the PHP output contains `$result = $price * 1.1`, `$tax = $base ** 2`, `$rest = $total % 3`.
 
 **Acceptance Scenarios**:
 
@@ -173,6 +173,6 @@ A developer can call `.root(n)`, `.log()`, `.log(base)` on Float and Int values,
 - Bitwise operators (`&`, `|`, `^`, `~`, `<<`, `>>`) are out of scope for this feature (v0.1).
 - Keyword aliases (`and`, `or`, `not`) are out of scope — only symbol operators are supported.
 - User Story 5 (method calls inside expressions) depends on BB-3 (DotResolver focus propagation) being resolved first; if BB-3 is not resolved, US5 sandbox cases will be deferred.
-- The `**` scanner token change is backward-compatible: no existing `.ps` syntax uses `**`.
+- The `**` scanner token change is backward-compatible: no existing `.phs` syntax uses `**`.
 - `root(0)` and division by zero in expressions are not caught at compile time; PHP raises the error at runtime.
 - The refactor of `AssignmentContext` and `IfConditionContext` to use the shared `ExpressionContext` is in scope and does not change visible language behaviour — only the internal parser structure changes.

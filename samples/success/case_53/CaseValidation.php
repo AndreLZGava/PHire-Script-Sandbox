@@ -16,7 +16,7 @@ class CaseValidation extends AbstractCaseValidation
     public function execute()
     {
         $this->assertHasMessage([
-            "✔ src/output/Mapper.ps → src/compiled/Mapper.php",
+            "✔ src/output/Mapper.phs → src/compiled/Mapper.php",
         ]);
     }
 }

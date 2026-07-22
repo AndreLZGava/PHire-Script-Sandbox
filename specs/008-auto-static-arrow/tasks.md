@@ -4,7 +4,7 @@
 
 **Prerequisites**: plan.md, spec.md, research.md, data-model.md
 
-**Tests**: Included — sandbox `CaseValidation.php` + `.psc` snapshot files are the test mechanism for this project.
+**Tests**: Included — sandbox `CaseValidation.php` + `.phc` snapshot files are the test mechanism for this project.
 
 **Organization**: Tasks grouped by user story to enable independent implementation and testing.
 
@@ -47,10 +47,10 @@
 
 ### Implementation for User Story 1
 
-- [x] T004 [US1] Update snapshot `samples/success/case_68/ArrowFunctionFloat.psc` — change `function (float $price, float $rate): float {` to `static function (float $price, float $rate): float {`
+- [x] T004 [US1] Update snapshot `samples/success/case_68/ArrowFunctionFloat.phc` — change `function (float $price, float $rate): float {` to `static function (float $price, float $rate): float {`
 - [x] T005 [US1] Review `samples/success/case_68/ArrowFunctionFloatTest.php` — update any assertion strings that contain the literal `function` (without `static`) to include `static function`
-- [x] T006 [US1] Create `samples/success/case_69/ArrowFunctionNoThis.ps` — package `PHireScript.Samples69`; declare one arrow function (e.g., `double = (Int n): Int => { return n }`) with no `this` reference
-- [x] T007 [US1] Run `php phirescript/bin/snapshot` (with `PHireScript.json` source pointing to `samples/success/case_69`) to generate `samples/success/case_69/ArrowFunctionNoThis.psc`; verify snapshot contains `static function`
+- [x] T006 [US1] Create `samples/success/case_69/ArrowFunctionNoThis.phs` — package `PHireScript.Samples69`; declare one arrow function (e.g., `double = (Int n): Int => { return n }`) with no `this` reference
+- [x] T007 [US1] Run `php phirescript/bin/snapshot` (with `PHireScript.json` source pointing to `samples/success/case_69`) to generate `samples/success/case_69/ArrowFunctionNoThis.phc`; verify snapshot contains `static function`
 - [x] T008 [US1] Create `samples/success/case_69/ArrowFunctionNoThisTest.php` — `namespace PHireScript\Sandbox\src\output;` PHPUnit test asserting the compiled output is callable and returns correct values
 - [x] T009 [US1] Create `samples/success/case_69/CaseValidation.php` — extend `AbstractCaseValidation`; assert compilation succeeds; use snapshot comparison
 
@@ -66,8 +66,8 @@
 
 ### Implementation for User Story 2
 
-- [x] T010 [US2] Create `samples/success/case_70/ArrowFunctionWithThis.ps` — package `PHireScript.Samples70`; declare a class with a method containing an arrow function that reads `this.someField` (e.g., a `Formatter` class with a `getFormatter()` method returning an arrow function that reads `this.prefix`)
-- [x] T011 [US2] Run `php phirescript/bin/snapshot` (source pointing to `samples/success/case_70`) to generate `samples/success/case_70/ArrowFunctionWithThis.psc`; verify snapshot contains plain `function` (no `static` prefix)
+- [x] T010 [US2] Create `samples/success/case_70/ArrowFunctionWithThis.phs` — package `PHireScript.Samples70`; declare a class with a method containing an arrow function that reads `this.someField` (e.g., a `Formatter` class with a `getFormatter()` method returning an arrow function that reads `this.prefix`)
+- [x] T011 [US2] Run `php phirescript/bin/snapshot` (source pointing to `samples/success/case_70`) to generate `samples/success/case_70/ArrowFunctionWithThis.phc`; verify snapshot contains plain `function` (no `static` prefix)
 - [x] T012 [US2] Create `samples/success/case_70/ArrowFunctionWithThisTest.php` — PHPUnit test asserting the class compiles and the method returns a callable
 - [x] T013 [US2] Create `samples/success/case_70/CaseValidation.php` — extend `AbstractCaseValidation`; assert compilation succeeds; snapshot comparison confirms no `static`
 - [x] T014 [P] [US2] Run `php bin/stretch --mode=success` and confirm case_53 (Mapper with `this.prefix`) still passes unchanged — this is the existing regression guard for the non-static path
@@ -78,14 +78,14 @@
 
 ## Phase 5: User Story 3 — Backward Compatibility (Priority: P2)
 
-**Goal**: Confirm every previously passing sandbox case still passes after the feature lands, with no `.ps` file changes required.
+**Goal**: Confirm every previously passing sandbox case still passes after the feature lands, with no `.phs` file changes required.
 
 **Independent Test**: `php bin/stretch --mode=success` passes for all cases, including all arrow function cases (35, 36, 37, 38, 68, 69, 70).
 
 ### Implementation for User Story 3
 
 - [x] T015 [US3] Run full `php bin/stretch --mode=success` and confirm zero regressions across all cases
-- [x] T016 [P] [US3] For each arrow-function case that now emits `static function` (35, 36, 37, 38), verify or update their `.psc` snapshot files to include `static function` — run `php phirescript/bin/snapshot` per case as needed and update snapshots
+- [x] T016 [P] [US3] For each arrow-function case that now emits `static function` (35, 36, 37, 38), verify or update their `.phc` snapshot files to include `static function` — run `php phirescript/bin/snapshot` per case as needed and update snapshots
 - [x] T017 [P] [US3] For each snapshot-based `*Test.php` in cases 35–38, update any assertion strings that contained literal `function` to `static function` (same pattern as T005)
 
 **Checkpoint**: `php bin/stretch --mode=success` green across all cases — full backward compatibility confirmed.
@@ -127,7 +127,7 @@
 
 ### Parallel Opportunities
 
-- T006 and T010 (create `.ps` files for case_69 and case_70) — different files, parallel
+- T006 and T010 (create `.phs` files for case_69 and case_70) — different files, parallel
 - T007 and T011 (generate snapshots) — sequential per case, but cases are parallel
 - T014 and T015 (regression guards) — parallel read-only checks
 - T016 and T017 (snapshot/test updates for cases 35–38) — parallel across cases
@@ -141,13 +141,13 @@
 
 # US1 track:
 Task T004: Update case_68 snapshot
-Task T006: Create case_69 .ps source
+Task T006: Create case_69 .phs source
 Task T007: Generate case_69 snapshot
 Task T008: Create case_69 Test
 Task T009: Create case_69 CaseValidation
 
 # US2 track (simultaneously):
-Task T010: Create case_70 .ps source
+Task T010: Create case_70 .phs source
 Task T011: Generate case_70 snapshot
 Task T012: Create case_70 Test
 Task T013: Create case_70 CaseValidation
@@ -179,7 +179,7 @@ Task T014: Verify case_53 regression
 ## Notes
 
 - [P] tasks = different files, no dependencies on each other
-- Snapshot files (`.psc`) are the canonical output contract — update them whenever emitter output changes
+- Snapshot files (`.phc`) are the canonical output contract — update them whenever emitter output changes
 - `PHireScript.json` source must point at the correct case folder before running `bin/snapshot`; restore to `samples` afterwards
 - case_53 is the critical regression guard for the non-static path — it must never gain `static`
-- Do not modify any `.ps` source files in existing cases — backward compatibility means zero `.ps` changes required
+- Do not modify any `.phs` source files in existing cases — backward compatibility means zero `.phs` changes required

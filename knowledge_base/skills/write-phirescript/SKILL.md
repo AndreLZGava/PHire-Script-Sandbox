@@ -1,6 +1,6 @@
 ---
 name: write-phirescript
-description: Write syntactically correct PHireScript (.ps) source files including classes, interfaces, traits, types, imports, and control flow
+description: Write syntactically correct PHireScript (.phs) source files including classes, interfaces, traits, types, imports, and control flow
 metadata:
   type: skill
 ---
@@ -9,18 +9,18 @@ metadata:
 
 ## Triggers
 
-- "write a .ps file", "create PHireScript source", "add a class in PHireScript"
+- "write a .phs file", "create PHireScript source", "add a class in PHireScript"
 - "how do I declare a trait / interface / type in PHireScript"
 - "what's the syntax for imports / methods / conditionals"
 
 ## When to Use
 
-Use when creating or editing `.ps` source files in any case directory.
+Use when creating or editing `.phs` source files in any case directory.
 
 ## Repository Context
 
-- Source files: `samples/success/case_N/*.ps`
-- Real examples: `samples/success/case_28/AuthenticatorClass.ps`, `samples/success/case_3/MagicMethods.ps`
+- Source files: `samples/success/case_N/*.phs`
+- Real examples: `samples/success/case_28/AuthenticatorClass.phs`, `samples/success/case_3/MagicMethods.phs`
 - Compiled output: `src/compiled/*.php`
 - Compiler: `phirescript/bin/build`
 

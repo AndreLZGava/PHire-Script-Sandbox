@@ -31,7 +31,7 @@ Two targeted compiler improvements bundled into a single delivery:
 
 **Acceptance criteria**:
 - `ProgramEmitter` emits `declare(strict_types=1);` on line 3 of every generated PHP file (after `<?php` + blank line)
-- All `.psc` snapshot files are regenerated to reflect the new header
+- All `.phc` snapshot files are regenerated to reflect the new header
 - All sandbox cases still pass `php bin/stretch --mode=success`
 - Any sandbox case that surfaces a latent type mismatch must be fixed (not suppressed)
 - A new sandbox case (or updated existing case) validates the output header

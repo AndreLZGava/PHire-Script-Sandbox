@@ -11,7 +11,7 @@ class CaseValidation extends AbstractCaseValidation
     public function execute()
     {
         $this->assertHasMessage([
-            "✔ src/output/ArrowFunctionFloat.ps → src/compiled/ArrowFunctionFloat.php",
+            "✔ src/output/ArrowFunctionFloat.phs → src/compiled/ArrowFunctionFloat.php",
         ]);
     }
 }

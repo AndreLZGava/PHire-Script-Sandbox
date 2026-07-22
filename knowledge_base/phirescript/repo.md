@@ -15,11 +15,11 @@
 ```
 phirescript/
 ├── bin/                          CLI entry points
-│   ├── build                     Compile .ps → .php (BUILD mode)
+│   ├── build                     Compile .phs → .php (BUILD mode)
 │   ├── watch                     File watcher — hot reload (WATCH mode)
 │   ├── debug                     Token/AST inspection for one file (DEBUG mode)
-│   ├── snapshot                  Generate .psc intermediates (SNAPSHOT mode)
-│   ├── validate                  Compile .pst test files (TEST mode)
+│   ├── snapshot                  Generate .phc intermediates (SNAPSHOT mode)
+│   ├── validate                  Compile .pht test files (TEST mode)
 │   ├── validateCompiled          php -l + PHPUnit on compiled output
 │   └── init                      Interactive setup — create PHireScript.json
 ├── src/
@@ -91,7 +91,7 @@ phirescript/
 ## Compilation Pipeline (Overview)
 
 ```
-.ps file
+.phs file
   ↓ Scanner.tokenize()              Token[]
   ↓ Validator.validate()            Token[] (pre-parse check + modifier transform)
   ↓ Parser.parse()                  Program AST
@@ -107,7 +107,7 @@ Across files: dependency graph → topological sort → above pipeline in correc
 ## Key Commands
 
 ```bash
-# Compile all .ps files (reads PHireScript.json for paths)
+# Compile all .phs files (reads PHireScript.json for paths)
 php bin/build
 
 # Compile specific dirs
@@ -117,12 +117,12 @@ php bin/build src/ps dist/php
 php bin/watch
 
 # Inspect tokens + AST for one file
-php bin/debug path/to/file.ps
+php bin/debug path/to/file.phs
 
-# Generate .psc snapshots
+# Generate .phc snapshots
 php bin/snapshot
 
-# Compile .pst test files
+# Compile .pht test files
 php bin/validate
 
 # Run unit tests

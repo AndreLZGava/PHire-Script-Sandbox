@@ -254,9 +254,9 @@ MetaTypes são objetos que encapsulam um valor (implementam `Stringable`). O run
 
 ---
 
-## 16. Testes (`.pst`)
+## 16. Testes (`.pht`)
 
-| PHPUnit | PHireScript (`.pst`) | Status |
+| PHPUnit | PHireScript (`.pht`) | Status |
 |---------|----------------------|--------|
 | `class FooTest extends TestCase` | `validate Foo { }` | ⚠️ |
 | `public function testX(): void` | `test "descrição" { }` | ⚠️ |
@@ -264,7 +264,7 @@ MetaTypes são objetos que encapsulam um valor (implementam `Stringable`). O run
 | `setUpBeforeClass` / `tearDownAfterClass` | `beforeAll` / `afterAll` | ⚠️ |
 | `$this->markTestSkipped(...)` | `skip test "..." { }` | ⚠️ |
 
-> Arquivos `.pst` compilam para `*Test.php` compatíveis com PHPUnit. Funciona em casos básicos, mas tem limitações conhecidas — não há cases no sandbox validando todos os cenários.
+> Arquivos `.pht` compilam para `*Test.php` compatíveis com PHPUnit. Funciona em casos básicos, mas tem limitações conhecidas — não há cases no sandbox validando todos os cenários.
 
 ---
 
@@ -296,5 +296,5 @@ MetaTypes são objetos que encapsulam um valor (implementam `Stringable`). O run
 | Operadores | 9 | 1 | — | 3 |
 | Async | — | — | 1 | — |
 | Decoradores | — | — | 2 | — |
-| Testes (.pst) | — | 1 | — | — |
+| Testes (.pht) | — | 1 | — | — |
 | Pattern matching | — | — | — | 2 |

@@ -104,7 +104,7 @@ O `FunctionEmitter` já emite `$this->methodName()` quando `variableBase instanc
 ## Fluxo completo após implementação
 
 ```
-Input .ps:
+Input .phs:
   result = this.getBase() * this.getRate()
 
 Tokens: 'result' '=' 'this' '.' 'getBase' '(' ')' '*' 'this' '.' 'getRate' '(' ')'

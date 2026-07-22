@@ -104,7 +104,7 @@ $psFiles = findPsFiles($baseDir);
 
 <body>
 
-    <h1>Files .ps found</h1>
+    <h1>Files .phs found</h1>
 
     <ul>
         <?php foreach ($psFiles as $file) : ?>
@@ -117,7 +117,7 @@ $psFiles = findPsFiles($baseDir);
     </ul>
 
     <?php if (empty($psFiles)) : ?>
-        <p>No .ps File found!</p>
+        <p>No .phs File found!</p>
     <?php endif; ?>
 
 </body>

@@ -49,7 +49,7 @@
 
 - [x] T011 Simplify `AssignmentContext` in `phirescript/src/Compiler/Parser/Ast/Context/Expressions/AssignmentContext.php` — after `=` is consumed, enter `ExpressionContext` for the RHS; set `node->right` from `ExpressionContext.afterClose()` result; remove arithmetic resolver duplication — depends on T009
 - [x] T012 Simplify `ReturnContext` in `phirescript/src/Compiler/Parser/Ast/Context/Statements/ReturnContext.php` — retain only `EndOfLineResolver` and `CommentResolver` for structural close; after `return` keyword, delegate to `ExpressionContext`; set the return expression from `ExpressionContext.afterClose()` — depends on T009
-- [x] T013 [P] [US1] Create `samples/success/case_61/Arithmetic.ps` — a class with methods exercising all arithmetic operators in assignments (`+`, `-`, `*`, `/`, `%`, `**`) and in return statements; package `pkg PHireScript.Samples61`
+- [x] T013 [P] [US1] Create `samples/success/case_61/Arithmetic.phs` — a class with methods exercising all arithmetic operators in assignments (`+`, `-`, `*`, `/`, `%`, `**`) and in return statements; package `pkg PHireScript.Samples61`
 - [x] T014 [US1] Create `samples/success/case_61/CaseValidation.php` — assert each arithmetic operator appears correctly in the compiled PHP for both assignment and return contexts
 
 **Checkpoint**: `php bin/stretch --mode=success` — case_61 must pass.
@@ -64,7 +64,7 @@
 
 *No new compiler code needed — `ExpressionContext` paren-depth logic (T009) and `ParenGroupResolver` (T008) already cover this. Phase is sandbox validation only.*
 
-- [x] T015 [P] [US3] Create `samples/success/case_62/GroupedExpressions.ps` — class with assignments using `(a + b) * c`, deeply nested parens `((a * b) + (c / d))`, and a multi-line expression spanning 3+ lines wrapped in outer `(`...`)`; package `pkg PHireScript.Samples62`
+- [x] T015 [P] [US3] Create `samples/success/case_62/GroupedExpressions.phs` — class with assignments using `(a + b) * c`, deeply nested parens `((a * b) + (c / d))`, and a multi-line expression spanning 3+ lines wrapped in outer `(`...`)`; package `pkg PHireScript.Samples62`
 - [x] T016 [US3] Create `samples/success/case_62/CaseValidation.php` — assert grouped sub-expressions preserve parens in output and multi-line expression emits as a single PHP statement
 
 **Checkpoint**: `php bin/stretch --mode=success` — case_62 must pass.
@@ -79,7 +79,7 @@
 
 *No new compiler code needed — `UnaryNegationResolver` (T007), `UnaryExpressionNode` (T005), and `UnaryExpressionEmitter` (T006) already cover this. Phase is sandbox validation only.*
 
-- [x] T017 [P] [US4] Create `samples/success/case_63/UnaryNegation.ps` — class exercising `!flag`, `-count`, `!this.isActive()`, and `-(price * 2)`; package `pkg PHireScript.Samples63`
+- [x] T017 [P] [US4] Create `samples/success/case_63/UnaryNegation.phs` — class exercising `!flag`, `-count`, `!this.isActive()`, and `-(price * 2)`; package `pkg PHireScript.Samples63`
 - [x] T018 [US4] Create `samples/success/case_63/CaseValidation.php` — assert `!$flag`, `-$count`, `!$this->isActive()`, and `-($price * 2)` appear in compiled PHP
 
 **Checkpoint**: `php bin/stretch --mode=success` — case_63 must pass.
@@ -92,7 +92,7 @@
 
 **⚠️ DEPENDENCY**: US5 depends on **BB-3** (DotResolver focus propagation) being resolved. If BB-3 is not resolved, create `case_64` with a `CaseValidation.php` that marks the case as pending/skipped.
 
-- [x] T019 [P] [US5] Create `samples/success/case_64/MethodCallOperands.ps` — class with `total = this.getBase() * this.getRate()`, `result = price.multipliedBy(rate) + fee`, `grouped = (this.getBase() + offset) * multiplier`; package `pkg PHireScript.Samples64`
+- [x] T019 [P] [US5] Create `samples/success/case_64/MethodCallOperands.phs` — class with `total = this.getBase() * this.getRate()`, `result = price.multipliedBy(rate) + fee`, `grouped = (this.getBase() + offset) * multiplier`; package `pkg PHireScript.Samples64`
 - [x] T020 [US5] Create `samples/success/case_64/CaseValidation.php` — assert `$this->getBase() * $this->getRate()`, `$fee`, and grouped chain with multiplication appear in compiled PHP; note BB-3 dependency in a comment if case is deferred
 
 **Checkpoint**: `php bin/stretch --mode=success` — case_64 passes if BB-3 is resolved; otherwise deferred.
@@ -107,7 +107,7 @@
 
 - [x] T021 [P] [US6] Add `root(n)`, `log()`, `log(base)` methods to `FloatMethods` in `phirescript/src/Runtime/DefaultOverrideMethods/Types/FloatMethods.php` — `root`: `@self ** (1.0 / @n)` → Float; `log`: `\log(@self)` → Float; `log(base)`: `\log(@self, @base)` → Float (optional `@base` param pattern)
 - [x] T022 [P] [US6] Add `root(n)`, `log()`, `log(base)`, `round()`, `floor()`, `ceil()` to `IntMethods` in `phirescript/src/Runtime/DefaultOverrideMethods/Types/IntMethods.php` — same `root`/`log` as Float; `round`: `\round(@self)` → Int; `floor`: `\floor(@self)` → Int; `ceil`: `\ceil(@self)` → Int
-- [x] T023 [P] [US6] Create `samples/success/case_65/MathTypeMethods.ps` — exercises `x.root(3)`, `value.log()`, `value.log(2)`, `count.round()`, `count.floor()`, `count.ceil()` on typed Float and Int variables; package `pkg PHireScript.Samples65`
+- [x] T023 [P] [US6] Create `samples/success/case_65/MathTypeMethods.phs` — exercises `x.root(3)`, `value.log()`, `value.log(2)`, `count.round()`, `count.floor()`, `count.ceil()` on typed Float and Int variables; package `pkg PHireScript.Samples65`
 - [x] T024 [US6] Create `samples/success/case_65/CaseValidation.php` — assert each PHP expansion appears in compiled output
 
 **Checkpoint**: `php bin/stretch --mode=success` — case_65 must pass.
@@ -171,11 +171,11 @@ T009  # ExpressionContext (depends on all above)
 # Phase 3 — run in parallel after T009:
 T011  # AssignmentContext delegation
 T012  # ReturnContext delegation
-T013  # case_61 .ps file
+T013  # case_61 .phs file
 
 # Phases 4, 5, 7 — run in parallel after Phase 2:
-T015  # case_62 .ps
-T017  # case_63 .ps
+T015  # case_62 .phs
+T017  # case_63 .phs
 T021  # FloatMethods
 T022  # IntMethods
 ```

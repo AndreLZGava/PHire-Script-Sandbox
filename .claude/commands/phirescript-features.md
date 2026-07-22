@@ -1,6 +1,6 @@
 # PHireScript — Language Feature Reference
 
-> Use this skill to understand what PHireScript features are currently implemented before proposing new syntax, designing new constructs, or reviewing AI-generated `.ps` code.
+> Use this skill to understand what PHireScript features are currently implemented before proposing new syntax, designing new constructs, or reviewing AI-generated `.phs` code.
 > When new features are implemented and validated (passing `php bin/stretch`), update this file.
 
 > Related: [`compiler-update`](./compiler-update.md) — how to implement features in the compiler pipeline.
@@ -12,7 +12,7 @@
 ## 1. Package System
 
 ### Package declaration
-Every `.ps` file that defines a named construct must declare its package:
+Every `.phs` file that defines a named construct must declare its package:
 ```
 pkg PHireScript.SamplesN
 ```

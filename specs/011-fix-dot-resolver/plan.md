@@ -19,7 +19,7 @@ O `FunctionCallResolver` só resolve métodos que estão no `SymbolTableManager`
 
 ## Technical Context
 
-**Language/Version**: PHP 8.3 (compilador); PHireScript `.ps` (linguagem de entrada)
+**Language/Version**: PHP 8.3 (compilador); PHireScript `.phs` (linguagem de entrada)
 
 **Primary Dependencies**: Compiler internals — `FunctionCallResolver`, `ParseContext`, `ClassBodyResolver`, `Compiler.php` (orchestration), `SymbolTable`
 
@@ -156,8 +156,8 @@ phirescript/src/
 
 samples/success/
 └── case_64/          ← NEW: T019/T020 da spec 006 — method calls as operands
-    ├── Calculator.ps
-    ├── Calculator.psc
+    ├── Calculator.phs
+    ├── Calculator.phc
     ├── CalculatorTest.php
     └── CaseValidation.php
 ```
@@ -364,7 +364,7 @@ class Child extends Base {
 2. ClassBodyResolver.php  — lookAhead + registro; limpar ao fechar ClassBodyContext
 3. ClassBodyContext.php   — afterClose() ou canClose() limpa parseContext.currentClassName
 4. FunctionCallResolver.php — caminho extra para ThisExpressionNode + resolveFromClassHierarchy()
-5. Sandbox case_64        — Calculator.ps + CaseValidation + CalculatorTest
+5. Sandbox case_64        — Calculator.phs + CaseValidation + CalculatorTest
 6. Sandbox case herança   — Base + Child + CaseValidation
 7. php bin/stretch        — validar sem regressões
 ```

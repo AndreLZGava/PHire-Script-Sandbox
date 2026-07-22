@@ -12,7 +12,7 @@
 
 Arrow functions no PHireScript são funções anônimas de primeira classe, análogas às arrow functions do JavaScript/TypeScript. Elas permitem declarar lógica inline de forma concisa, com parâmetros tipados e corpo delimitado por `{}`. Atualmente a funcionalidade existe parcialmente no compilador — o caso de uso básico compila, mas há limitações e bugs em cenários com múltiplos parâmetros e valores default nos parâmetros.
 
-> **Nota sobre `use` e `external`**: No PHireScript, `use` é exclusivamente a instrução de importação de pacotes do projeto (análogo ao `import` do TypeScript). `external` é a forma de declarar dependência de uma biblioteca PHP já pronta. O `use ($variavel)` que o PHP exige em closures para capturar variáveis do escopo externo **não existe na sintaxe PHireScript** — é um detalhe de implementação gerado automaticamente pelo compilador, invisível para quem escreve `.ps`.
+> **Nota sobre `use` e `external`**: No PHireScript, `use` é exclusivamente a instrução de importação de pacotes do projeto (análogo ao `import` do TypeScript). `external` é a forma de declarar dependência de uma biblioteca PHP já pronta. O `use ($variavel)` que o PHP exige em closures para capturar variáveis do escopo externo **não existe na sintaxe PHireScript** — é um detalhe de implementação gerado automaticamente pelo compilador, invisível para quem escreve `.phs`.
 
 ### Sintaxe PHireScript
 
@@ -57,7 +57,7 @@ $calcTotal = function(float $preco, float $taxa): float {
 
 **Formato 2 — Função anônima com `use` gerado automaticamente** (quando o compilador detecta referências a variáveis do escopo externo no corpo):
 ```php
-// PHireScript (.ps) — sem nenhuma instrução use especial:
+// PHireScript (.phs) — sem nenhuma instrução use especial:
 //   aplicarDesconto = (Float preco): Float => { return preco * desconto }
 //
 // PHP gerado pelo compilador (use ($desconto) inserido automaticamente):
@@ -80,7 +80,7 @@ Um desenvolvedor declara uma arrow function que não recebe argumentos e retorna
 
 **Cenários de Aceitação**:
 
-1. **Dado** um arquivo `.ps` com `obterPi = (): Float => { return 3.14 }`, **Quando** compilado, **Então** o PHP gerado deve conter `$obterPi = function(): float {` sem parâmetros na lista.
+1. **Dado** um arquivo `.phs` com `obterPi = (): Float => { return 3.14 }`, **Quando** compilado, **Então** o PHP gerado deve conter `$obterPi = function(): float {` sem parâmetros na lista.
 2. **Dado** uma arrow function sem parâmetros com tipo de retorno `Void`, **Quando** compilada, **Então** deve gerar `function(): void {`.
 3. **Dado** uma arrow function sem parâmetros que captura uma variável externa `$base`, **Quando** compilada, **Então** deve gerar `function() use ($base)`.
 
@@ -139,18 +139,18 @@ Um desenvolvedor declara uma arrow function onde um ou mais parâmetros possuem 
 
 ### Cenário 5 — Arrow function que referencia variáveis do escopo externo (Prioridade: P2)
 
-Quando uma arrow function usa variáveis declaradas no escopo onde ela está inserida, o compilador precisa detectar essas referências e gerar automaticamente a cláusula `use (...)` no PHP. O desenvolvedor PHireScript **não escreve nada diferente** — o código `.ps` é idêntico ao de uma arrow function que não captura nada; é o compilador que resolve a necessidade de captura.
+Quando uma arrow function usa variáveis declaradas no escopo onde ela está inserida, o compilador precisa detectar essas referências e gerar automaticamente a cláusula `use (...)` no PHP. O desenvolvedor PHireScript **não escreve nada diferente** — o código `.phs` é idêntico ao de uma arrow function que não captura nada; é o compilador que resolve a necessidade de captura.
 
 **Por que esta prioridade**: Fundamental para o uso real de arrow functions dentro de métodos de classe ou funções, onde o acesso a variáveis locais do escopo externo é comum. Sem isso, referenciar `desconto` dentro da arrow function geraria PHP inválido (variável indefinida).
 
-**Teste independente**: Um caso onde `desconto = 0.1` é declarado antes da arrow function e referenciado dentro do corpo dela. O PHP gerado deve incluir `use ($desconto)` — sem nenhuma instrução `use` no código `.ps`.
+**Teste independente**: Um caso onde `desconto = 0.1` é declarado antes da arrow function e referenciado dentro do corpo dela. O PHP gerado deve incluir `use ($desconto)` — sem nenhuma instrução `use` no código `.phs`.
 
 **Cenários de Aceitação**:
 
-1. **Dado** `desconto = 0.1` declarado antes, e `aplicar = (Float preco): Float => { return preco * desconto }` em `.ps`, **Quando** compilado, **Então** gera `function(float $preco) use ($desconto): float` — sem qualquer `use` na sintaxe PHireScript.
+1. **Dado** `desconto = 0.1` declarado antes, e `aplicar = (Float preco): Float => { return preco * desconto }` em `.phs`, **Quando** compilado, **Então** gera `function(float $preco) use ($desconto): float` — sem qualquer `use` na sintaxe PHireScript.
 2. **Dado** múltiplas variáveis do escopo externo referenciadas no corpo, **Quando** compilado, **Então** todas aparecem na cláusula `use` do PHP gerado, separadas por vírgula.
 3. **Dado** uma arrow function que não referencia nenhuma variável do escopo externo, **Quando** compilada, **Então** nenhuma cláusula `use` é emitida no PHP.
-4. **Dado** uma arrow function dentro de um método de classe que referencia `this`, **Quando** compilada, **Então** `$this` é incluído automaticamente na cláusula `use` do PHP — sem sintaxe especial no `.ps`.
+4. **Dado** uma arrow function dentro de um método de classe que referencia `this`, **Quando** compilada, **Então** `$this` é incluído automaticamente na cláusula `use` do PHP — sem sintaxe especial no `.phs`.
 
 ---
 
@@ -210,7 +210,7 @@ Um desenvolvedor passa uma arrow function diretamente como argumento em uma cham
 - **RF-004**: O compilador DEVE aceitar valores default nos parâmetros para: literais primitivos (string, inteiro, float, booleano, null), SuperTypes (Email, Uuid, Ipv4, etc.), MetaTypes, e objetos de tipos importados via `use` ou `external`.
 - **RF-005**: Parâmetros com valor default DEVEM ser posicionados após os parâmetros obrigatórios; violações devem resultar em erro de compilação.
 - **RF-006**: O compilador DEVE emitir uma função anônima PHP (`function(...) { ... }`) para arrow functions com corpo de múltiplas linhas.
-- **RF-007**: O compilador DEVE detectar automaticamente quais variáveis do escopo externo são referenciadas dentro do corpo da arrow function e incluir a cláusula `use (...)` no PHP gerado — sem nenhuma instrução adicional na sintaxe `.ps`.
+- **RF-007**: O compilador DEVE detectar automaticamente quais variáveis do escopo externo são referenciadas dentro do corpo da arrow function e incluir a cláusula `use (...)` no PHP gerado — sem nenhuma instrução adicional na sintaxe `.phs`.
 - **RF-008**: O compilador NÃO DEVE incluir a cláusula `use` quando a arrow function não referenciar nenhuma variável do escopo externo.
 - **RF-009-b**: A instrução `use` do PHireScript (importação de pacotes) e a cláusula `use ($var)` do PHP (captura de closure) são conceitos distintos e não devem se misturar — o desenvolvedor PHireScript nunca escreve `use ($var)` manualmente.
 - **RF-009**: Os tipos PHireScript dos parâmetros DEVEM ser convertidos para os type hints PHP correspondentes (`String` → `string`, `Int` → `int`, `Float` → `float`, `Bool` → `bool`); tipos union como `String|Int` devem compilar para `string|int`.
@@ -233,7 +233,7 @@ Um desenvolvedor passa uma arrow function diretamente como argumento em uma cham
 ### Resultados Mensuráveis
 
 - **CS-001**: Todos os casos de compilação dos Cenários 1, 2 e 3 passam sem erros após a implementação.
-- **CS-002**: O caso de compilação existente em `samples/feature/case_12` compila sem erros; o PHP gerado deve ser validado contra o comportamento esperado definido nesta spec (o `.psc` existente é apenas referência histórica e pode estar incorreto).
+- **CS-002**: O caso de compilação existente em `samples/feature/case_12` compila sem erros; o PHP gerado deve ser validado contra o comportamento esperado definido nesta spec (o `.phc` existente é apenas referência histórica e pode estar incorreto).
 - **CS-003**: Cada cenário desta spec possui ao menos um caso de integração (`CaseValidation.php`) no sandbox com asserções verificando o PHP gerado.
 - **CS-004**: Nenhuma regressão é introduzida nos 34 casos de sucesso existentes — `php bin/stretch --mode=success` continua passando 100%.
 - **CS-005**: Os testes unitários do compilador (`vendor/bin/phpunit` dentro de `phirescript/`) continuam passando sem falhas.

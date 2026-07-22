@@ -45,7 +45,7 @@
 - [ ] T009 [P] [US1] Add `ThisResolver` and `ThisPropertyAccessResolver` to `HandleScopeContext` in `phirescript/src/Compiler/Parser/Ast/Context/Scopes/HandleScopeContext.php`
 - [ ] T010 [P] [US1] Add `ThisResolver` and `ThisPropertyAccessResolver` to `AlwaysScopeContext` in `phirescript/src/Compiler/Parser/Ast/Context/Scopes/AlwaysScopeContext.php`
 - [ ] T011 [US1] Create sandbox case `samples/success/case_50/` — a class with a String property `name`, a method `getName()` that returns `this.name`, and a method `reset()` that calls `this.setName('default')` inside an `if` block. `CaseValidation.php` asserts compilation success and generated PHP contains `$this->name` and `$this->setName`
-- [ ] T012 [US1] Generate snapshot for case_50: `php phirescript/bin/snapshot samples/success/case_50/<MainFile>.ps`
+- [ ] T012 [US1] Generate snapshot for case_50: `php phirescript/bin/snapshot samples/success/case_50/<MainFile>.phs`
 - [ ] T013 [US1] Run `php bin/stretch --mode=success` and confirm case_50 passes with zero PHP warnings
 
 **Checkpoint**: case_50 passes. `this.property` and `this.method()` verified in plain method body, if/else blocks, try/handle/always blocks.
@@ -64,7 +64,7 @@
 - [ ] T015 [US2] Extend `ReturnTypeContext` to accept `Self` keyword in `phirescript/src/Compiler/Parser/Ast/Context/Signatures/ReturnTypeContext.php` — add a resolver (or extend the existing handle) that matches `$token->isKeyword() && $token->value === 'Self'` and adds `'Self'` to context children (same as `TypeResolver` does for primitives)
 - [ ] T016 [US2] Update `ReturnTypeEmitter` in `phirescript/src/Compiler/Emitter/OOP/ReturnTypeEmitter.php` — before the `mb_strtolower` loop, check: `if ($type === 'Self') { $types[] = 'static'; continue; }` to avoid lowercasing to `self` instead of `static`
 - [ ] T017 [US2] Create sandbox case `samples/success/case_54/` — a class `Builder` with a String property `name`, a method `setName(name: String): Self` that sets `this.name` and returns `this`, and a method `build(): String` that returns `this.name`. `CaseValidation.php` asserts compilation success and generated PHP contains `: static` and `return $this`
-- [ ] T018 [US2] Generate snapshot for case_54: `php phirescript/bin/snapshot samples/success/case_54/<MainFile>.ps`
+- [ ] T018 [US2] Generate snapshot for case_54: `php phirescript/bin/snapshot samples/success/case_54/<MainFile>.phs`
 - [ ] T019 [US2] Run `php bin/stretch --mode=success` and confirm case_54 passes; verify generated PHP passes `php -l`
 
 **Checkpoint**: case_54 passes. Fluent builder pattern with `Self` and `return this` is functional.
@@ -81,7 +81,7 @@
 
 - [ ] T020 [US3] Add `ThisResolver` and `ThisPropertyAccessResolver` to `ArrowFunctionDeclarationContext` in `phirescript/src/Compiler/Parser/Ast/Context/Declarations/ArrowFunctionDeclarationContext.php`
 - [ ] T021 [US3] Create sandbox case `samples/success/case_53/` — a class with a `List<String>` property, a method `getFiltered(prefix: String)` that uses an arrow function `(item: String): Bool => item.startsWith(prefix)` AND references `this.items` inside the arrow body; also a doubly-nested arrow (arrow inside arrow) that references `this.name`. `CaseValidation.php` asserts compilation success and generated PHP contains `$this->` inside the arrow function body
-- [ ] T022 [US3] Generate snapshot for case_53: `php phirescript/bin/snapshot samples/success/case_53/<MainFile>.ps`
+- [ ] T022 [US3] Generate snapshot for case_53: `php phirescript/bin/snapshot samples/success/case_53/<MainFile>.phs`
 - [ ] T023 [US3] Run `php bin/stretch --mode=success` and confirm case_53 passes with zero PHP warnings
 
 **Checkpoint**: case_53 passes. `this` inside arrow functions (including nested arrows) works correctly.
@@ -96,7 +96,7 @@
 
 ### Implementation for User Story 4
 
-- [ ] T024 [US4] Create sandbox error case `samples/error/case_X/` (use next available number) — a `.ps` file with a top-level `this.name` statement and no class declaration. `CaseValidation.php` asserts the compiler throws with a message matching `"'this' is not valid outside"` (or equivalent)
+- [ ] T024 [US4] Create sandbox error case `samples/error/case_X/` (use next available number) — a `.phs` file with a top-level `this.name` statement and no class declaration. `CaseValidation.php` asserts the compiler throws with a message matching `"'this' is not valid outside"` (or equivalent)
 - [ ] T025 [US4] Run `php bin/stretch --mode=error` and confirm the error case is caught with the expected message; verify no false positives in success cases
 
 **Checkpoint**: Error case passes. `this` outside class scope is reliably rejected.
@@ -109,7 +109,7 @@
 
 - [ ] T026 [P] Create sandbox case `samples/success/case_51/` — focused on `this` inside `if/elseif/else` blocks: a class `StatusChecker` with a Bool property `active`, a method `toggle()` that uses `if this.active { ... } else { ... }` and assigns `this.active` in each branch. `CaseValidation.php` asserts compilation success
 - [ ] T027 [P] Create sandbox case `samples/success/case_52/` — focused on `this` inside `try/handle/always` blocks: a class `SafeLogger` with a String property `log`, a method `record(msg: String)` that has a `try { this.log = msg } handle (e: Exception) { this.log = 'error' } always { this.flush() }`. `CaseValidation.php` asserts compilation success
-- [ ] T028 Generate snapshots for case_51 and case_52: `php phirescript/bin/snapshot samples/success/case_51/<File>.ps` and `case_52/<File>.ps`
+- [ ] T028 Generate snapshots for case_51 and case_52: `php phirescript/bin/snapshot samples/success/case_51/<File>.phs` and `case_52/<File>.phs`
 - [ ] T029 Run `composer quality` inside `phirescript/` and fix any PHPStan level 9 violations introduced by new files (`ThisResolver`, `ThisPropertyAccessResolver`, `ThisScopeChecker`)
 - [ ] T030 Run full `php bin/stretch --mode=success` and confirm all existing cases still pass (regression check)
 - [ ] T031 Run full `php bin/stretch --mode=error` and confirm all error cases pass

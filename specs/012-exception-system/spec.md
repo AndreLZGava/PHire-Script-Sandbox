@@ -20,7 +20,7 @@ A developer declares a new exception type using the `exception` keyword, with or
 
 **Acceptance Scenarios**:
 
-1. **Given** a `.ps` file with `exception ValidationException`, **When** compiled, **Then** the output is `class ValidationException extends Exception {}`.
+1. **Given** a `.phs` file with `exception ValidationException`, **When** compiled, **Then** the output is `class ValidationException extends Exception {}`.
 2. **Given** `exception InvalidEmailException extends ValidationException`, **When** compiled, **Then** the output is `class InvalidEmailException extends ValidationException {}`.
 3. **Given** an exception with typed properties (`String field`, `String reason`), **When** compiled, **Then** a `public readonly` constructor is generated automatically.
 4. **Given** an exception with both properties and a custom `constructor`, **When** compiled, **Then** no auto-generated constructor is emitted.

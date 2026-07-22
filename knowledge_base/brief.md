@@ -1,11 +1,11 @@
 # Brief — PHire-Script-Sandbox
 
 PHire-Script-Sandbox is the **integration and regression testing environment** for PHireScript, a PHP transpiler.
-Its sole job: compile `.ps` files and assert the output is correct.
+Its sole job: compile `.phs` files and assert the output is correct.
 
 - Language under test: **PHireScript** — a custom language that transpiles to PHP
 - Test cases live in `samples/success/case_N/`, `samples/warning/`, `samples/error/`
-- Each case has `.ps` source files + `CaseValidation.php` (lifecycle hooks + assertions)
+- Each case has `.phs` source files + `CaseValidation.php` (lifecycle hooks + assertions)
 - The orchestrator (`bin/stretch`) drives compilation and PHPUnit for all cases
 - Cases are tagged with PHP attributes (`#[Tag(...)]`) for selective execution
 - The compiler lives in `phirescript/` — a **separate git repo** (git-ignored here)

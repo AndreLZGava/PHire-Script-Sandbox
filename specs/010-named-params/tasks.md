@@ -53,13 +53,13 @@
   3. **Named path**: build `$sentMap = ['separator' => NamedArgNode, ...]` from sent params keyed by `paramName`; detect duplicates — if `count(unique keys) < count($sentMap)` → `CompileException("Duplicate named argument: {name}")`; iterate `$expected` in declaration order: strip `@` from `BaseParams::name` → lookup in `$sentMap`; if found → emit `$namedArgNode->value`; if not found + required → `CompileException("Missing required named argument: {normalizedName}")`; if not found + optional → `processDefaultValue($expected)`; after loop, check for unknown names (keys in `$sentMap` not matched) → `CompileException("Unknown named argument: {name}")`
   4. **Positional path**: unchanged (runs when `$hasNamed` is false)
 - [X] T00X [P] [US2] Create sandbox case `samples/success/case_74/` — named args, all optional params, reordered:
-  - `NamedParamsBasic.ps`: `pkg PHireScript.Samples74` + `csv = 'hello,world'` + `result = csv.getCsv(enclosure: '"', separator: ',')`
-  - `CaseValidation.php`: `assertHasMessage(['✔ src/output/NamedParamsBasic.ps'])` in `execute()`; `executeTest()` loads compiled file and asserts output contains `\str_getcsv($csv, ',', '"'` (separator first = declaration order)
-- [X] T00X [P] [US2] Generate `.psc` snapshot for case_74: set `PHireScript.json` source to `samples/success/case_74`, run `php phirescript/bin/snapshot`, restore `PHireScript.json` source to `samples`
+  - `NamedParamsBasic.phs`: `pkg PHireScript.Samples74` + `csv = 'hello,world'` + `result = csv.getCsv(enclosure: '"', separator: ',')`
+  - `CaseValidation.php`: `assertHasMessage(['✔ src/output/NamedParamsBasic.phs'])` in `execute()`; `executeTest()` loads compiled file and asserts output contains `\str_getcsv($csv, ',', '"'` (separator first = declaration order)
+- [X] T00X [P] [US2] Generate `.phc` snapshot for case_74: set `PHireScript.json` source to `samples/success/case_74`, run `php phirescript/bin/snapshot`, restore `PHireScript.json` source to `samples`
 - [X] T00X [P] [US2] Create sandbox case `samples/success/case_75/` — named arg for required param (`split`):
-  - `NamedParamsSplit.ps`: `pkg PHireScript.Samples75` + `text = 'a-b-c'` + `parts = text.split(separator: '-')`
-  - `CaseValidation.php`: asserts `✔ src/output/NamedParamsSplit.ps`; `executeTest()` asserts compiled PHP contains `\explode('-', $text`
-- [X] T01X [P] [US2] Generate `.psc` snapshot for case_75 (same steps as T008, source = `samples/success/case_75`)
+  - `NamedParamsSplit.phs`: `pkg PHireScript.Samples75` + `text = 'a-b-c'` + `parts = text.split(separator: '-')`
+  - `CaseValidation.php`: asserts `✔ src/output/NamedParamsSplit.phs`; `executeTest()` asserts compiled PHP contains `\explode('-', $text`
+- [X] T01X [P] [US2] Generate `.phc` snapshot for case_75 (same steps as T008, source = `samples/success/case_75`)
 
 **Checkpoint**: `php bin/stretch --mode=success --from=74 --to=75` passes. Emitted PHP has args in declaration order regardless of written order.
 
@@ -72,7 +72,7 @@
 **Independent Test**: `php bin/stretch --mode=error` includes `case_51` and it passes.
 
 - [X] T01X [US3] Create sandbox case `samples/error/case_51/` — mixed positional + named:
-  - `MixedArgs.ps`: `pkg PHireScript.Samples51` + `csv = 'hello,world'` + `result = csv.getCsv(',', enclosure: '"')`
+  - `MixedArgs.phs`: `pkg PHireScript.Samples51` + `csv = 'hello,world'` + `result = csv.getCsv(',', enclosure: '"')`
   - `CaseValidation.php`: `assertHasMessage(['Cannot mix positional and named arguments'])`
 
 **Checkpoint**: `php bin/stretch --mode=error` passes for case_51.
@@ -86,13 +86,13 @@
 **Independent Test**: `php bin/stretch --mode=error` passes for cases 52, 53, 54.
 
 - [X] T01X [P] [US4] Create sandbox case `samples/error/case_52/` — unknown parameter name:
-  - `UnknownArgName.ps`: `pkg PHireScript.Samples52` + `csv = 'hello,world'` + `result = csv.getCsv(badParam: ',')`
+  - `UnknownArgName.phs`: `pkg PHireScript.Samples52` + `csv = 'hello,world'` + `result = csv.getCsv(badParam: ',')`
   - `CaseValidation.php`: `assertHasMessage(['Unknown named argument'])`
 - [X] T01X [P] [US4] Create sandbox case `samples/error/case_53/` — missing required param (`split` requires `separator`):
-  - `MissingRequiredArg.ps`: `pkg PHireScript.Samples53` + `text = 'a-b-c'` + `parts = text.split(limit: 3)`
+  - `MissingRequiredArg.phs`: `pkg PHireScript.Samples53` + `text = 'a-b-c'` + `parts = text.split(limit: 3)`
   - `CaseValidation.php`: `assertHasMessage(['Missing required named argument'])`
 - [X] T01X [P] [US4] Create sandbox case `samples/error/case_54/` — duplicate param name:
-  - `DuplicateArgName.ps`: `pkg PHireScript.Samples54` + `csv = 'hello,world'` + `result = csv.getCsv(separator: ',', separator: ';')`
+  - `DuplicateArgName.phs`: `pkg PHireScript.Samples54` + `csv = 'hello,world'` + `result = csv.getCsv(separator: ',', separator: ';')`
   - `CaseValidation.php`: `assertHasMessage(['Duplicate named argument'])`
 
 **Checkpoint**: `php bin/stretch --mode=error` passes for cases 51–54.
@@ -139,10 +139,10 @@ Task T002: "Create NamedArgContext in phirescript/.../Context/Declarations/Named
 Task T003: "Create NamedArgResolver in phirescript/.../Resolver/Expressions/NamedArgResolver.php"
 
 # Phase 3 after T006 — run in parallel:
-Task T007: "Create samples/success/case_74/ with NamedParamsBasic.ps"
-Task T008: "Generate .psc snapshot for case_74"
-Task T009: "Create samples/success/case_75/ with NamedParamsSplit.ps"
-Task T010: "Generate .psc snapshot for case_75"
+Task T007: "Create samples/success/case_74/ with NamedParamsBasic.phs"
+Task T008: "Generate .phc snapshot for case_74"
+Task T009: "Create samples/success/case_75/ with NamedParamsSplit.phs"
+Task T010: "Generate .phc snapshot for case_75"
 
 # Phase 5 — run all three in parallel:
 Task T012: "Create samples/error/case_52/"

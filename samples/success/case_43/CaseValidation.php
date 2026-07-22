@@ -16,7 +16,7 @@ class CaseValidation extends AbstractCaseValidation
     public function execute()
     {
         $this->assertHasMessage([
-            "✔ src/output/AutoAssignment.ps → src/compiled/AutoAssignment.php",
+            "✔ src/output/AutoAssignment.phs → src/compiled/AutoAssignment.php",
         ]);
     }
 }
