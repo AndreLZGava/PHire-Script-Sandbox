@@ -1,0 +1,5 @@
+pkg PHireScript.Samples78
+
+attribute Auditable {
+    String reason
+}

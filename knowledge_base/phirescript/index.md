@@ -11,7 +11,7 @@
 
 | Skill                                                                          | When to use                                          |
 |--------------------------------------------------------------------------------|------------------------------------------------------|
-| [compilation-pipeline](skills/compilation-pipeline/SKILL.md)                   | Understanding the full .ps → .php flow               |
+| [compilation-pipeline](skills/compilation-pipeline/SKILL.md)                   | Understanding the full .phs → .php flow               |
 | [add-language-feature](skills/add-language-feature/SKILL.md)                   | Adding a new language construct end-to-end           |
 | [parser-context-resolver](skills/parser-context-resolver/SKILL.md)             | Working inside the parser (Context + Resolver + Node)|
 | [write-emitter](skills/write-emitter/SKILL.md)                                 | Writing a new NodeEmitter                            |

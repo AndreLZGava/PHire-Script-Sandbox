@@ -38,7 +38,7 @@
 
 3. **Two-phase compilation** — all files are parsed+bound before any file is checked+emitted. This is required for cross-file type resolution and is easy to violate when adding a feature.
 
-4. **Emitter output is pre-PHP** — nikic/php-parser transforms it; errors from nikic are NOT PHireScript errors. The `.psc` snapshot separates Emitter bugs from Processor bugs.
+4. **Emitter output is pre-PHP** — nikic/php-parser transforms it; errors from nikic are NOT PHireScript errors. The `.phc` snapshot separates Emitter bugs from Processor bugs.
 
 5. **464 source files** — the compiler is large. The `PassDiscovery` + auto-loading patterns are what make it extensible without manual registration.
 
@@ -61,7 +61,7 @@
 
 2. **Document Sketch vs Partial vs Functional feature status** — `architecture.md` has this table; it should be mirrored in the KB as a reference matrix.
 
-3. **Document the `.pst` test file pipeline separately** — the `validate` mode / TEST mode has its own resolvers and contexts for `test`, `skip`, `validate`, `beforeAll` keywords; currently undocumented in the KB.
+3. **Document the `.pht` test file pipeline separately** — the `validate` mode / TEST mode has its own resolvers and contexts for `test`, `skip`, `validate`, `beforeAll` keywords; currently undocumented in the KB.
 
 4. **Document the DI resolver system** — `resolver: laravel|symfony|custom` in PHireScript.json controls DI behavior; this is currently in "sketch" phase but would benefit from documenting the intended design.
 

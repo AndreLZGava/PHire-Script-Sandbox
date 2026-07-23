@@ -16,7 +16,7 @@ metadata:
 
 ## When to Use
 
-Use when a case fails in `bin/stretch`, when the compiler emits an unexpected message, or when you want to inspect what the compiler is doing with a `.ps` file.
+Use when a case fails in `bin/stretch`, when the compiler emits an unexpected message, or when you want to inspect what the compiler is doing with a `.phs` file.
 
 ## Repository Context
 
@@ -51,18 +51,18 @@ Check what messages the compiler actually emits. Compare against what `assertHas
 ### Step 3 — Inspect tokens
 
 ```bash
-php phirescript/bin/debug samples/success/case_28/AuthenticatorClass.ps
+php phirescript/bin/debug samples/success/case_28/AuthenticatorClass.phs
 ```
 
 Shows tokenization — useful when the compiler silently ignores a construct.
 
-### Step 4 — Generate a snapshot (.psc)
+### Step 4 — Generate a snapshot (.phc)
 
 ```bash
 php phirescript/bin/snapshot
 ```
 
-Generates `.psc` files in the source directory showing the intermediate parsed form.
+Generates `.phc` files in the source directory showing the intermediate parsed form.
 
 ### Step 5 — Read compiled PHP
 
@@ -72,7 +72,7 @@ After `php phirescript/bin/build`, inspect `src/output/` (or `src/compiled/` if 
 cat src/output/FileName.php
 ```
 
-Verify the compiled PHP matches what the `.ps` file was supposed to produce.
+Verify the compiled PHP matches what the `.phs` file was supposed to produce.
 
 ### Step 6 — Run PHPUnit directly
 
@@ -86,30 +86,30 @@ If a `*Test.php` test is failing, this isolates it from the orchestrator noise.
 
 **Pattern 1: assertHasMessage fails — wrong characters**
 ```
-Expected: "✔ src/output/Foo.ps → src/compiled/Foo.php"
-Got: "✓ src/output/Foo.ps -> src/compiled/Foo.php"
+Expected: "✔ src/output/Foo.phs → src/compiled/Foo.php"
+Got: "✓ src/output/Foo.phs -> src/compiled/Foo.php"
 ```
 Fix: The `✔` is U+2714 (not U+2713), `→` is U+2192 (not ASCII `->`). Copy from a passing case.
 
 **Pattern 2: assertHasMessage fails — wrong prefix**
 ```
-Expected: "✔ samples/success/case_28/Foo.ps → ..."
-Got: "✔ src/output/Foo.ps → ..."
+Expected: "✔ samples/success/case_28/Foo.phs → ..."
+Got: "✔ src/output/Foo.phs → ..."
 ```
 Fix: Assertion must use `src/output/` prefix, not the original case path.
 
 **Pattern 3: Compiler doesn't emit success line — compile error**
 ```
-✘ src/output/Foo.ps → Unexpected token 'X' at line N
+✘ src/output/Foo.phs → Unexpected token 'X' at line N
 ```
-Fix: Check `.ps` syntax. Use `php phirescript/bin/debug` to inspect tokens at the failing line.
+Fix: Check `.phs` syntax. Use `php phirescript/bin/debug` to inspect tokens at the failing line.
 
 **Pattern 4: Case passes but PHPUnit test fails**
 ```
 FAILURES!
 Tests: 1, Assertions: 1, Failures: 1.
 ```
-Fix: The compiled PHP runs but produces wrong output. Read `src/compiled/FooTest.php` and `src/compiled/Foo.php`. The issue is in the compiled PHP logic, not the `.ps` syntax.
+Fix: The compiled PHP runs but produces wrong output. Read `src/compiled/FooTest.php` and `src/compiled/Foo.php`. The issue is in the compiled PHP logic, not the `.phs` syntax.
 
 **Pattern 5: Namespace conflict — class not found**
 ```
@@ -131,7 +131,7 @@ php phirescript/bin/watch
 make watch
 ```
 
-Hot-reloads compilation every time a `.ps` file changes. Useful when iteratively fixing syntax.
+Hot-reloads compilation every time a `.phs` file changes. Useful when iteratively fixing syntax.
 
 ## Critical Rules
 
@@ -144,7 +144,7 @@ Hot-reloads compilation every time a `.ps` file changes. Useful when iteratively
 - [ ] `PHireScript.json` restored to `samples/` source after manual debugging
 - [ ] Assertion strings use correct UTF-8 characters (`✔` U+2714, `→` U+2192)
 - [ ] Assertion uses `src/output/` prefix (not case path)
-- [ ] `.ps` file has correct `pkg` declaration
+- [ ] `.phs` file has correct `pkg` declaration
 - [ ] Compiled PHP in `src/compiled/` matches expected structure
 
 ## Examples

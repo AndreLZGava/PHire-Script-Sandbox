@@ -73,9 +73,9 @@ Or more specifically for a single case (DO NOT COMMIT):
 | `namespace`        | PHP namespace prefix for compiled output classes                             | e.g., `PHireScript\\Sandbox`  |
 | `currency`         | Default currency for money super types                                      | e.g., `USD`, `BRL`            |
 | `resolver`         | DI container adapter strategy                                               | `custom`, `laravel`, `symfony`|
-| `paths.source`     | Directory the compiler reads `.ps` files from                               | Relative path from root       |
+| `paths.source`     | Directory the compiler reads `.phs` files from                               | Relative path from root       |
 | `paths.dist`       | Directory the compiler writes `.php` files to                               | Relative path from root       |
-| `paths.test`       | Directory for compiled test files (`.pst` → `.php`)                        | Relative path from root       |
+| `paths.test`       | Directory for compiled test files (`.pht` → `.php`)                        | Relative path from root       |
 | `generated_at`     | Timestamp of last config generation (informational)                         | ISO datetime string           |
 
 ### Pointing compiler at a specific case (for development)

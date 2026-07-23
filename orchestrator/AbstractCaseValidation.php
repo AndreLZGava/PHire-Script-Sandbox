@@ -45,6 +45,24 @@ abstract class AbstractCaseValidation
         }
     }
 
+    public function assertFalse(bool $condition, string $message = ''): void
+    {
+        if ($condition) {
+            throw new \Exception('Assertion failed (expected false)' . ($message !== '' ? ': ' . $message : ''));
+        }
+    }
+
+    public function assertSame(mixed $expected, mixed $actual, string $message = ''): void
+    {
+        if ($expected !== $actual) {
+            throw new \Exception(
+                'Assertion failed: expected ' . var_export($expected, true) .
+                ', got ' . var_export($actual, true) .
+                ($message !== '' ? ' — ' . $message : '')
+            );
+        }
+    }
+
     public function assertHasMessage(array $expected)
     {
         $output = $this->getOutput();
@@ -86,7 +104,7 @@ abstract class AbstractCaseValidation
 
     public function executeTest()
     {
-        $command = 'vendor/bin/phpunit --colors=never';
+        $command = 'vendor/bin/phpunit --colors=never --do-not-cache-result';
 
         exec($command, $output, $exitCode);
 

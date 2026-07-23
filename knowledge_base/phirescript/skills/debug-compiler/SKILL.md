@@ -34,10 +34,10 @@ For sandbox-level debugging (assertHasMessage failing, etc.), see the sandbox's 
 
 ```bash
 # From the sandbox root (phirescript/ is mounted):
-php phirescript/bin/debug samples/success/case_N/MyFile.ps
+php phirescript/bin/debug samples/success/case_N/MyFile.phs
 
 # Or from inside phirescript/:
-php bin/debug ../samples/success/case_N/MyFile.ps
+php bin/debug ../samples/success/case_N/MyFile.phs
 ```
 
 `DEBUG` mode:
@@ -67,7 +67,7 @@ If a token is classified wrong or missing:
 ```bash
 # Check Scanner regex patterns in src/Compiler/Scanner.php
 # Run debug and look at the raw Token[] output
-php bin/debug file.ps 2>&1 | grep "T_*"
+php bin/debug file.phs 2>&1 | grep "T_*"
 ```
 
 Common scanner problems:
@@ -80,7 +80,7 @@ Common scanner problems:
 If the AST is wrong or parse stops early:
 
 ```
-php bin/debug file.ps
+php bin/debug file.phs
 ```
 
 Look at:
@@ -127,13 +127,13 @@ Generate a snapshot to see what the Emitter produces before nikic post-processin
 # Set PHireScript.json source to the failing case, then:
 php bin/snapshot
 
-# Read the .psc file produced:
-cat src/output/MyFile.psc
+# Read the .phc file produced:
+cat src/output/MyFile.phc
 ```
 
-If the `.psc` content looks correct but the final `.php` is wrong, the issue is in a Processor (nikic visitor). Read `src/Processors/`.
+If the `.phc` content looks correct but the final `.php` is wrong, the issue is in a Processor (nikic visitor). Read `src/Processors/`.
 
-If the `.psc` content is wrong, the issue is in a `NodeEmitter`.
+If the `.phc` content is wrong, the issue is in a `NodeEmitter`.
 
 Add a test to `tests/Compiler/Emitter/` that directly emits the failing node:
 
@@ -147,7 +147,7 @@ $this->assertSame('expected PHP', $emitter->emit($node, $ctx));
 
 ### Step 7 — nikic/php-parser post-processor issues
 
-If the `.psc` is correct but the `.php` is wrong:
+If the `.phc` is correct but the `.php` is wrong:
 
 ```php
 // In PhpFileGeneratorHandler, the processor chain is:
@@ -196,20 +196,20 @@ Level 9 catches type errors that wouldn't surface at runtime. If a Binder/Checke
 1. **Remove `dump()` calls before committing** — they interfere with the output capture in the sandbox.
 2. **FatalErrorException wraps all unhandled exceptions** — to get a raw stack trace, temporarily catch before FatalErrorException in `Compiler.php`.
 3. **PHPStan level 9 must pass** — it's a hard gate. Do not suppress errors with ignoreErrors unless truly unavoidable.
-4. **`.psc` snapshot shows pre-nikic output** — use it to separate Emitter bugs from Processor bugs.
+4. **`.phc` snapshot shows pre-nikic output** — use it to separate Emitter bugs from Processor bugs.
 5. **`processedBy` field on Token** — after parsing, each Token has a `processedBy` string set by the last Resolver that handled it. Inspect this when tracking parse flow.
 
 ## Common Mistakes
 
 - Debugging in the sandbox instead of in the compiler → wrong layer, wrong tools
 - Not checking `#[CompilerPass(order: N)]` first when a Binder/Checker seems to not run
-- Assuming nikic error is a PHireScript bug → read the `.psc` file first
+- Assuming nikic error is a PHireScript bug → read the `.phc` file first
 - Leaving `dump()` in the code → sandbox output capture breaks, assertHasMessage fails
 
 ## Validation Checklist
 
-- [ ] `php bin/debug <file.ps>` shows expected Token[] and AST structure
-- [ ] Snapshot (`.psc`) shows correct pre-PHP emission
+- [ ] `php bin/debug <file.phs>` shows expected Token[] and AST structure
+- [ ] Snapshot (`.phc`) shows correct pre-PHP emission
 - [ ] Final `.php` file is valid PHP (`php -l compiled.php`)
 - [ ] All `dump()` calls removed
 - [ ] `composer test` passes

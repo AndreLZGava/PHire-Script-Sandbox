@@ -5,4 +5,4 @@ repos:
 
   - path: phirescript
     name: PHireScript
-    description: PHireScript compiler — transpiles .ps source files to PHP
+    description: PHireScript compiler — transpiles .phs source files to PHP

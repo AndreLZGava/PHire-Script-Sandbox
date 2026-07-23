@@ -58,7 +58,7 @@ Do not assume. Ask until every point is clear. Ambiguity in language design casc
 ## 0. Understand the pipeline first
 
 ```
-.ps source
+.phs source
   → Scanner       tokenizes into Token objects (regex-based, in order)
   → Validator     rejects forbidden keywords, checks bracket balance
   → Parser        drives a context stack; each token is handled by the active context
@@ -75,7 +75,7 @@ The Parser is the most complex phase. Key mental model:
 - A context can `enter` a child context (push) or signal that it `canClose`, which pops it and calls `afterClose`.
 
 The **Sandbox** (`PHire-Script-Sandbox/`) is the integration harness that drives PHireScript. It owns:
-- Sample `.ps` files and their expected compiled `.php` output
+- Sample `.phs` files and their expected compiled `.php` output
 - `CaseValidation.php` per case asserting compiler messages
 - `*Test.php` per case asserting runtime behavior of compiled PHP
 - The orchestrator (`php bin/stretch`) that runs all cases end-to-end
@@ -452,13 +452,13 @@ Verify in `phirescript/src/Compiler/Emitter.php` how emitters are registered and
 Directory: `PHire-Script-Sandbox/samples/success/case_N/`
 
 1. Create the directory `case_N` (next sequential number — `ls samples/success/ | sort -V | tail -1`).
-2. Write a `.ps` source file exercising the new construct with realistic, varied inputs.
+2. Write a `.phs` source file exercising the new construct with realistic, varied inputs.
 3. Write `CaseValidation.php`:
    ```php
    class CaseValidation extends AbstractCaseValidation {
        public function execute() {
            $this->stopIfNoTest = false;
-           $this->assertHasMessage(["✔ src/output/Foo.ps → src/compiled/Foo.php"]);
+           $this->assertHasMessage(["✔ src/output/Foo.phs → src/compiled/Foo.php"]);
        }
    }
    ```
@@ -467,7 +467,7 @@ Directory: `PHire-Script-Sandbox/samples/success/case_N/`
 6. Inspect `src/compiled/Foo.php` to confirm the generated PHP is correct.
 7. Run: `php bin/stretch --mode=success`
 
-**Package naming:** `.ps` files that define a class/type/interface/trait must declare `pkg PHireScript.SamplesN` matching the case number exactly.
+**Package naming:** `.phs` files that define a class/type/interface/trait must declare `pkg PHireScript.SamplesN` matching the case number exactly.
 
 ---
 

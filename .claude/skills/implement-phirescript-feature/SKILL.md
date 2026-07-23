@@ -111,7 +111,7 @@ Follow the pipeline order from `phirescript/knowledge_base/skills/add-language-f
 3. Binder — register types, attach metadata
 4. Checker — validate semantics
 5. Emitter — generate PHP output
-6. Sandbox case — add `samples/success/case_N/` with `.ps` file + `CaseValidation.php`
+6. Sandbox case — add `samples/success/case_N/` with `.phs` file + `CaseValidation.php`
 
 Quality gates after implementation:
 ```bash
@@ -158,7 +158,7 @@ Update whichever of these is affected:
 
 - `knowledge_base/AGENTS.md` — update case count ("41 cases currently" → new number) if cases were added
 - `knowledge_base/brief.md` — update case count if cases were added
-- `knowledge_base/skills/write-phirescript/SKILL.md` — if new syntax is available to write in `.ps` files
+- `knowledge_base/skills/write-phirescript/SKILL.md` — if new syntax is available to write in `.phs` files
 - `knowledge_base/glossary.md` — if new PHireScript language terms appear
 
 ### 5. `prompts/architecture_review.md`

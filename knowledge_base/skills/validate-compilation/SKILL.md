@@ -47,7 +47,7 @@ class CaseValidation extends AbstractCaseValidation
     public function execute()
     {
         $this->assertHasMessage([
-            "✔ src/output/FileName.ps → src/compiled/FileName.php",
+            "✔ src/output/FileName.phs → src/compiled/FileName.php",
         ]);
     }
 }
@@ -59,9 +59,9 @@ class CaseValidation extends AbstractCaseValidation
 public function execute()
 {
     $this->assertHasMessage([
-        "✔ src/output/Logger.ps → src/compiled/Logger.php",
-        "✔ src/output/User.ps → src/compiled/User.php",
-        "✔ src/output/AuthenticatorClass.ps → src/compiled/AuthenticatorClass.php",
+        "✔ src/output/Logger.phs → src/compiled/Logger.php",
+        "✔ src/output/User.phs → src/compiled/User.php",
+        "✔ src/output/AuthenticatorClass.phs → src/compiled/AuthenticatorClass.php",
     ]);
 }
 ```
@@ -73,7 +73,7 @@ public function execute()
 {
     $this->stopIfNoTest = true;     // case fails if *Test.php is absent in compiled output
     $this->assertHasMessage([
-        "✔ src/output/Repository.ps → src/compiled/Repository.php",
+        "✔ src/output/Repository.phs → src/compiled/Repository.php",
     ]);
 }
 ```
@@ -123,7 +123,7 @@ The assertion is substring-based — the expected string just needs to appear so
 
 The compiler emits exactly:
 ```
-✔ src/output/{FileName}.ps → src/compiled/{FileName}.php
+✔ src/output/{FileName}.phs → src/compiled/{FileName}.php
 ```
 
 - The `✔` character is a UTF-8 checkmark (U+2714)
@@ -144,7 +144,7 @@ The compiler emits exactly:
 - Using `✓` (U+2713) instead of `✔` (U+2714) → assertion never matches
 - Wrong namespace (e.g., `case_29` when in `case_28/` folder)
 - Missing `use` imports for attribute classes → PHP 8 attribute reflection fails
-- Asserting the wrong filename (e.g., `Authenticator.ps` when file is `AuthenticatorClass.ps`)
+- Asserting the wrong filename (e.g., `Authenticator.phs` when file is `AuthenticatorClass.phs`)
 
 ## Validation Checklist
 
@@ -152,7 +152,7 @@ The compiler emits exactly:
 - [ ] All four `use` imports present
 - [ ] At least one `#[Tag(...)]` attribute
 - [ ] `assertHasMessage` uses `✔` (U+2714) and `→` (U+2192)
-- [ ] Filename in assertion matches `.ps` filename exactly
+- [ ] Filename in assertion matches `.phs` filename exactly
 - [ ] `php bin/stretch --mode=success --tags=your-tag` passes without exceptions
 
 ## Examples

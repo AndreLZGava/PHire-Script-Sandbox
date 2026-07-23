@@ -114,7 +114,7 @@ PHire-Script-Sandbox/samples/success/
 
 **Rationale**: Único mecanismo confiável. Qualquer heurística (ALL_CAPS = constante, etc.) cria regras implícitas de linguagem que conflitam com código PHP real.
 
-**Alternativas descartadas**: Convenção de nomes (frágil); anotação manual no `.ps` (verboso, contradiz o princípio de transparência da linguagem).
+**Alternativas descartadas**: Convenção de nomes (frágil); anotação manual no `.phs` (verboso, contradiz o princípio de transparência da linguagem).
 
 ---
 

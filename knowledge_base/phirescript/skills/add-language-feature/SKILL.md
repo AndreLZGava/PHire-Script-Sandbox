@@ -11,7 +11,7 @@ metadata:
 
 - "add a new keyword", "implement a new construct", "add support for X in PHireScript"
 - "how do I add a feature to the compiler", "new syntax"
-- User wants to compile a `.ps` construct that currently produces an error or is silently ignored
+- User wants to compile a `.phs` construct that currently produces an error or is silently ignored
 
 ## When to Use
 
@@ -214,7 +214,7 @@ Register in `src/Emitter.php` (where `EmitterDispatcher` is built with all emitt
 
 ### Step 7 — Add a sandbox test case
 
-Create `samples/success/case_N/` with a `.ps` file using the new construct, add `CaseValidation.php`, and run:
+Create `samples/success/case_N/` with a `.phs` file using the new construct, add `CaseValidation.php`, and run:
 
 ```bash
 php bin/stretch --mode=success --tags=your-new-tag

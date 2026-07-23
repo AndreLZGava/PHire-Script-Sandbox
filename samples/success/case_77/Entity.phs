@@ -1,0 +1,5 @@
+pkg PHireScript.Samples77
+
+attribute Entity {
+    String name
+}

@@ -129,7 +129,7 @@ Testes unitários cobrindo os três casos acima mais o caso feliz.
 
 ### Step 4 — Casos de integração no sandbox
 
-Criar `samples/success/case_35/` a `case_38/` com `.ps` e `CaseValidation.php` para os cenários da spec. Cada `CaseValidation.php` usa `assertHasMessage` para verificar que a compilação sucede e valida o PHP gerado.
+Criar `samples/success/case_35/` a `case_38/` com `.phs` e `CaseValidation.php` para os cenários da spec. Cada `CaseValidation.php` usa `assertHasMessage` para verificar que a compilação sucede e valida o PHP gerado.
 
 Pacotes: `pkg PHireScript.Samples35`, `pkg PHireScript.Samples36`, etc.
 

@@ -1,13 +1,16 @@
 <?php
 
-use PHireScript\Sandbox\Orchestrator\AbstractCaseValidation;
+
+namespace Sandbox\Samples\success\case_57;
+
+use PHireScript\Orchestrator\AbstractCaseValidation;
 
 class CaseValidation extends AbstractCaseValidation
 {
     public function execute(): void
     {
         $this->assertHasMessage([
-            'Combined.ps',
+            '✔ src/output/Combined.phs',
         ]);
     }
 

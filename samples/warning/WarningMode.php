@@ -33,12 +33,20 @@ class WarningMode extends ModeTest
     public function execute(AbstractCaseValidation $abstractCase)
     {
         try {
+            ob_start();
             $context = new CompilerContext(CompileMode::BUILD);
 
             $compiler = new Compiler($context);
             $compiler->compile();
+            $output = ob_get_clean();
+
+            restore_exception_handler();
+
+            $abstractCase->setOutput($output);
             $abstractCase->execute();
         } catch (\Exception $e) {
+            ob_end_clean();
+            restore_exception_handler();
             throw $e;
         }
     }

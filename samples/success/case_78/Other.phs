@@ -1,0 +1,21 @@
+pkg PHireScript.Samples78
+
+use PHireScript.Samples78.{
+    Auditable
+}
+
+@AllowDynamicProperties
+class Other as scoped {
+    String name
+
+    String password
+
+    @Auditable(reason: 'legacy field')
+    @Deprecated
+    Date oldPassword
+
+    @ReturnTypeWillChange
+    convertOldPasswordToNewOne(): String {
+        return ''
+    }
+}

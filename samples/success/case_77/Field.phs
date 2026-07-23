@@ -1,0 +1,8 @@
+pkg PHireScript.Samples77
+
+attribute Field {
+    String name
+    String type
+    Null|Int min
+    Null|Int max
+}

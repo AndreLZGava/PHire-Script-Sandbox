@@ -108,7 +108,7 @@ The same inline getter/setter syntax works on `type`, `immutable`, and `trait` c
 
 ### Measurable Outcomes
 
-- **SC-001**: All five example properties from the feature reference (`ExampleGetterSetterClass.ps`) compile to exactly the PHP output shown in `ExampleGetterSetterClass.psc` without manual method declarations.
+- **SC-001**: All five example properties from the feature reference (`ExampleGetterSetterClass.phs`) compile to exactly the PHP output shown in `ExampleGetterSetterClass.phc` without manual method declarations.
 - **SC-002**: A class with `< >` on all properties produces 2× the number of methods as properties, with zero manually written getter/setter bodies.
 - **SC-003**: The override rule is verifiable: a class with `< Int id` and an explicit `getId()` method compiles with exactly one `getId()` in the output.
 - **SC-004**: All existing sandbox cases (1–54) continue to pass after the feature is implemented — no regressions on comparison operators or existing property declarations.

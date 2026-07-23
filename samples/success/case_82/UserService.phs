@@ -1,0 +1,9 @@
+pkg PHireScript.Samples82
+
+use PHireScript.Samples82.{ValidationException}
+
+class UserService as scoped {
+    #validate!(String field): Void {
+        throw ValidationException(field: field)
+    }
+}

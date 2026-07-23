@@ -18,8 +18,8 @@ class CaseValidation extends AbstractCaseValidation
     public function execute()
     {
         $this->assertHasMessage([
-            "✔ src/output/VariablesBool.ps → src/compiled/VariablesBool.php",
-            "[Copied]: src/output/VariablesBool.psc → src/compiled/VariablesBool.psc",
+            "✔ src/output/VariablesBool.phs → src/compiled/VariablesBool.php",
+            "[Copied]: src/output/VariablesBool.phc → src/compiled/VariablesBool.phc",
         ]);
     }
 }

@@ -47,7 +47,7 @@
 
 ### Caso de integração no sandbox
 
-- [X] T008 [US1] Criar `samples/success/case_35/ArrowFunctions.ps` com: arrow function sem parâmetros (`: Void =>`) e arrow function com 1 parâmetro tipado
+- [X] T008 [US1] Criar `samples/success/case_35/ArrowFunctions.phs` com: arrow function sem parâmetros (`: Void =>`) e arrow function com 1 parâmetro tipado
 - [X] T009 [US1] Criar `samples/success/case_35/CaseValidation.php` com `assertHasMessage` verificando compilação bem-sucedida; `pkg PHireScript.Samples35`
 
 **Checkpoint**: US1 e US2 verificados — `php bin/stretch --mode=success` passa case_35.
@@ -67,7 +67,7 @@
 
 ### Caso de integração no sandbox
 
-- [X] T012 [US3] Criar `samples/success/case_36/ArrowFunctionsMultiParam.ps` com: arrow function com 2 parâmetros, arrow function com 3 parâmetros, arrow function com union type em parâmetro e no retorno
+- [X] T012 [US3] Criar `samples/success/case_36/ArrowFunctionsMultiParam.phs` com: arrow function com 2 parâmetros, arrow function com 3 parâmetros, arrow function com union type em parâmetro e no retorno
 - [X] T013 [US3] Criar `samples/success/case_36/CaseValidation.php`; `pkg PHireScript.Samples36`
 
 **Checkpoint**: US3 verificado — `php bin/stretch --mode=success` passa case_36.
@@ -88,7 +88,7 @@
 
 ### Caso de integração no sandbox
 
-- [X] T017 [US4] Criar `samples/success/case_37/ArrowFunctionDefaults.ps` com: parâmetro com default string, default int, default null, default bool
+- [X] T017 [US4] Criar `samples/success/case_37/ArrowFunctionDefaults.phs` com: parâmetro com default string, default int, default null, default bool
 - [X] T018 [US4] Criar `samples/success/case_37/CaseValidation.php`; `pkg PHireScript.Samples37`
 
 **Checkpoint**: US4 verificado — `php bin/stretch --mode=success` passa case_37.
@@ -99,7 +99,7 @@
 
 **Goal**: Arrow functions que referenciam variáveis do escopo externo compilam com `use ($var)` gerado automaticamente; sem `use` quando não há referências externas.
 
-**Independent Test**: `php bin/stretch --mode=success` passa o novo `case_38` onde PHP gerado inclui `use ($desconto)` sem nenhuma instrução extra no `.ps`.
+**Independent Test**: `php bin/stretch --mode=success` passa o novo `case_38` onde PHP gerado inclui `use ($desconto)` sem nenhuma instrução extra no `.phs`.
 
 ### Implementação
 
@@ -109,7 +109,7 @@
 
 ### Caso de integração no sandbox
 
-- [X] T022 [US5] Criar `samples/success/case_38/ArrowFunctionCapture.ps` com: arrow function que usa variável do escopo (`desconto`), arrow function que usa múltiplas variáveis externas, arrow function que não usa variáveis externas (sem `use`)
+- [X] T022 [US5] Criar `samples/success/case_38/ArrowFunctionCapture.phs` com: arrow function que usa variável do escopo (`desconto`), arrow function que usa múltiplas variáveis externas, arrow function que não usa variáveis externas (sem `use`)
 - [X] T023 [US5] Criar `samples/success/case_38/CaseValidation.php`; `pkg PHireScript.Samples38`
 
 **Checkpoint**: US5 verificado — `php bin/stretch --mode=success` passa case_38.
@@ -120,7 +120,7 @@
 
 **Goal**: Arrow functions aninhadas compilam para funções anônimas PHP aninhadas; arrow function passada como argumento inline é emitida corretamente.
 
-**Independent Test**: Compilação de arquivo `.ps` com arrow function aninhada não lança erro e PHP gerado é válido (`php -l`).
+**Independent Test**: Compilação de arquivo `.phs` com arrow function aninhada não lança erro e PHP gerado é válido (`php -l`).
 
 ### Implementação
 
@@ -130,7 +130,7 @@
 
 ### Casos de integração no sandbox
 
-- [X] T027 [US6] Criar `samples/success/case_39/ArrowFunctionNested.ps` com arrow functions aninhadas (2 níveis)
+- [X] T027 [US6] Criar `samples/success/case_39/ArrowFunctionNested.phs` com arrow functions aninhadas (2 níveis)
 - [X] T028 [US6] Criar `samples/success/case_39/CaseValidation.php`; `pkg PHireScript.Samples39`
 
 **Checkpoint**: US6 e US7 verificados.
@@ -151,7 +151,7 @@
 
 - [X] T032 [P] Executar `composer quality` em `phirescript/` (refactor + format + analyse) — corrigir qualquer issue levantado pelo PHPStan ou php-cs-fixer
 - [X] T033 Executar `php bin/stretch --mode=success` — confirmar 0 regressões nos 34 casos existentes + novos casos passando
-- [X] T034 [P] Verificar que `samples/feature/case_12/ArrowFunctions.ps` ainda compila sem erro (o caso feature original)
+- [X] T034 [P] Verificar que `samples/feature/case_12/ArrowFunctions.phs` ainda compila sem erro (o caso feature original)
 - [ ] T035 Commit único com mensagem `feat(parser): expand arrow function support with typed params, defaults, and auto-use capture`
 
 ---

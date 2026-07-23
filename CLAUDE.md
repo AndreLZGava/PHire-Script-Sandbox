@@ -1,6 +1,6 @@
 # PHire-Script-Sandbox
 
-This is the integration and testing environment for **PHireScript**, a PHP transpiler. Its job is to validate that `.ps` files compile correctly and that the generated PHP behaves as expected.
+This is the integration and testing environment for **PHireScript**, a PHP transpiler. Its job is to validate that `.phs` files compile correctly and that the generated PHP behaves as expected.
 
 ## Project Structure
 
@@ -47,7 +47,7 @@ php bin/stretch --mode=success --tags=interface,class
 ## How Cases Work
 
 Each case is a directory inside `samples/<mode>/case_N/` containing:
-- One or more `.ps` source files
+- One or more `.phs` source files
 - A `CaseValidation.php` that asserts the expected compilation output
 
 A case with `CaseValidation.php` and passing assertions is the canonical indicator that a PHireScript feature is **functional**.
@@ -66,16 +66,16 @@ before()
 ### Adding a new case
 
 1. Create `samples/success/case_N/` (or `warning/`, `error/`)
-2. Add your `.ps` files
+2. Add your `.phs` files
 3. Create `CaseValidation.php` extending `AbstractCaseValidation`
 4. Use `assertHasMessage([...])` to assert expected compiler output
 5. Run `php bin/stretch --mode=success` to validate
 
 ## Conventions
 
-### Package naming in `.ps` files
+### Package naming in `.phs` files
 
-Every `.ps` file inside `samples/success/case_N/` must declare its package as `PHireScript.SamplesN`, where **N is the exact number of the case folder**:
+Every `.phs` file inside `samples/success/case_N/` must declare its package as `PHireScript.SamplesN`, where **N is the exact number of the case folder**:
 
 ```
 pkg PHireScript.Samples28       # file inside case_28/
@@ -104,11 +104,11 @@ The committed state of `PHireScript.json` must always have `source` pointing to 
 Run from the sandbox root — these call the phirescript compiler directly:
 
 ```bash
-php phirescript/bin/build              # compile .ps → .php
+php phirescript/bin/build              # compile .phs → .php
 php phirescript/bin/watch              # hot reload during development
-php phirescript/bin/debug <file.ps>    # inspect tokens/AST
-php phirescript/bin/snapshot           # generate .psc intermediate files
-php phirescript/bin/validate           # compile .pst test files
+php phirescript/bin/debug <file.phs>    # inspect tokens/AST
+php phirescript/bin/snapshot           # generate .phc intermediate files
+php phirescript/bin/validate           # compile .pht test files
 ```
 
 Or via Docker (Makefile):
@@ -116,7 +116,7 @@ Or via Docker (Makefile):
 ```bash
 make build
 make watch
-make debug <file.ps>
+make debug <file.phs>
 make snapshot
 make validate
 ```
@@ -147,7 +147,7 @@ PHPUnit is the only dev dependency. The compiler itself comes from `phirescript/
 <!-- SPECKIT START -->
 For additional context about technologies to be used, project structure,
 shell commands, and other important information, read the current plan
-at `specs/007-fix-dot-resolver/plan.md`
+at `specs/012-exception-system/plan.md`
 <!-- SPECKIT END -->
 
 ## Agentes de IA

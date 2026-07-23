@@ -1,0 +1,4 @@
+pkg PHireScript.Samples75
+
+text = 'a-b-c'
+parts = text.split(separator: '-')

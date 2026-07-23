@@ -1,0 +1,26 @@
+pkg PHireScript.Database
+
+use PHireScript.Database.Repository
+
+external PDO
+
+class Database as scoped {
+
+    String table
+    Self tableConnection
+
+    get(String table): Object  {
+        this.tableConnection = PDO('host', 'username', 'pass')
+        this.tableConnection.setAttribute(PDO.ATTR_ERRMODE, PDO.ERRMODE_EXCEPTION)
+        this.tableConnection.table = table
+        return this
+    }
+
+    first(Int id): Null|Self {
+        query = "SELECT * FROM %table% LIMIT 1"
+        query.replace('%table%', this.tableConnection.table)
+        execution = this.tableConnection.prepare(query)
+        execution.execute()
+        return execution.fetch(PDO.FETCH_ASSOC)
+    }
+}

@@ -1,0 +1,17 @@
+{
+  "folders": [
+    {
+      "name": "PHire-Script-Sandbox",
+      "path": "."
+    },
+    {
+      "name": "phirescript-vscode",
+      "path": "phirescript-vscode"
+    },
+    {
+      "name": "phirescript",
+      "path": "phirescript"
+    }
+  ],
+  "settings": {}
+}

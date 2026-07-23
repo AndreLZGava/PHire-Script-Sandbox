@@ -44,7 +44,7 @@
 - [x] T005 [US1] Create `GetterSetterEmitter.php` in `phirescript/src/Compiler/Emitter/OOP/GetterSetterEmitter.php` — implement getter emission: iterate `ClassBodyNode.children`, collect explicit method names from `MethodDeclarationNode` instances, for each `PropertyNode` with non-null `getter` field whose `get{PascalName}` is not in explicit names, emit the getter method using `PhpTypeResolver::phpType()` for the return type
 - [x] T006 [US1] Register `GetterSetterEmitter` — N/A: called directly from ClassBodyEmitter, not a NodeEmitter
 - [x] T007 [US1] Extend `ClassBodyEmitter.emit()` in `phirescript/src/Compiler/Emitter/OOP/ClassBodyEmitter.php` to call `GetterSetterEmitter` after the existing `foreach ($node->children)` loop
-- [x] T008 [P] [US1] Create `samples/success/case_55/Getter.ps` — a class with `< Int id`, `< String name`, and `< Bool active` (all public getter, no setter)
+- [x] T008 [P] [US1] Create `samples/success/case_55/Getter.phs` — a class with `< Int id`, `< String name`, and `< Bool active` (all public getter, no setter)
 - [x] T009 [US1] Create `samples/success/case_55/CaseValidation.php` asserting that `getId()`, `getName()`, and `getActive()` appear in the compiled output and no setter methods appear
 
 **Checkpoint**: US1 fully functional — `< Type name` generates a getter. Run `php bin/stretch --mode=success` to verify case_55 passes.
@@ -60,9 +60,9 @@
 ### Implementation for User Story 2
 
 - [x] T010 [US2] Extend `GetterSetterEmitter` in `phirescript/src/Compiler/Emitter/OOP/GetterSetterEmitter.php` to add setter emission: for each `PropertyNode` with non-null `setter` whose `set{PascalName}` is not in explicit names, emit the setter method — parameter type from `PhpTypeResolver::phpType()`, body from `PhpTypeResolver::assignment()` to handle supertype/metatype casting correctly
-- [x] T011 [P] [US2] Create `samples/success/case_56/Setter.ps` — a class with `> Email email` (setter only) and `< > String username` (both getter and setter)
+- [x] T011 [P] [US2] Create `samples/success/case_56/Setter.phs` — a class with `> Email email` (setter only) and `< > String username` (both getter and setter)
 - [x] T012 [US2] Create `samples/success/case_56/CaseValidation.php` asserting `setEmail()` and `getUsername()` + `setUsername()` appear; `getEmail()` does NOT appear
-- [x] T013 [P] [US2] Create `samples/success/case_57/Combined.ps` — a class with `< > String username`, `< > Int count`, and `< > Bool active` (all combined)
+- [x] T013 [P] [US2] Create `samples/success/case_57/Combined.phs` — a class with `< > String username`, `< > Int count`, and `< > Bool active` (all combined)
 - [x] T014 [US2] Create `samples/success/case_57/CaseValidation.php` asserting all three getters and all three setters are generated
 
 **Checkpoint**: US2 fully functional — `>` generates setters, `< >` generates both. Run `php bin/stretch --mode=success` to verify case_56 and case_57 pass.
@@ -73,13 +73,13 @@
 
 **Goal**: `# < + > Bool isAdmin` produces a private getter and protected setter; property is public.
 
-**Independent Test**: Compile `samples/success/case_58/` matching the reference output in `samples/feature/case_2/ExampleGetterSetterClass.psc` exactly (the 5-property class with all visibility variants).
+**Independent Test**: Compile `samples/success/case_58/` matching the reference output in `samples/feature/case_2/ExampleGetterSetterClass.phc` exactly (the 5-property class with all visibility variants).
 
 ### Implementation for User Story 3
 
 *No new compiler code needed — visibility is already parsed by T004 and emitted by T005/T010. These tasks validate the algorithm is correct end-to-end.*
 
-- [x] T015 [P] [US3] Create `samples/success/case_58/ExampleGetterSetterClass.ps` — copy from `samples/feature/case_2/ExampleGetterSetterClass.ps` with correct package declaration `pkg PHireScript.Samples58`
+- [x] T015 [P] [US3] Create `samples/success/case_58/ExampleGetterSetterClass.phs` — copy from `samples/feature/case_2/ExampleGetterSetterClass.phs` with correct package declaration `pkg PHireScript.Samples58`
 - [x] T016 [US3] Create `samples/success/case_58/CaseValidation.php` asserting the exact visibility on each generated method: `getId()` public, `setEmail()` public, `getUsername()` + `setUsername()` public, `getIsAdmin()` private + `setIsAdmin()` protected, `getMetadata()` protected + `setMetadata()` private
 
 **Checkpoint**: US3 fully functional — all visibility combinations work. Run `php bin/stretch --mode=success` to verify case_58 passes.
@@ -95,7 +95,7 @@
 ### Implementation for User Story 4
 
 - [x] T017 [US4] Extend `TraitEmitter.emit()` in `phirescript/src/Compiler/Emitter/Declarations/TraitEmitter.php` to call `GetterSetterEmitter` after emitting the trait's children (mirror the ClassBodyEmitter change from T007)
-- [x] T018 [P] [US4] Create `samples/success/case_59/TypeAndTrait.ps` — split into ValueHolder.ps, Labeled.ps, Counter.ps (one declaration per file)
+- [x] T018 [P] [US4] Create `samples/success/case_59/TypeAndTrait.phs` — split into ValueHolder.phs, Labeled.phs, Counter.phs (one declaration per file)
 - [x] T019 [US4] Create `samples/success/case_59/CaseValidation.php` asserting `getValue()` on the type, `getCount()` + `setCount()` on the immutable, and `getLabel()` on the trait are all present in compiled output
 
 **Checkpoint**: US4 fully functional. Run `php bin/stretch --mode=success` to verify case_59 passes.
@@ -106,7 +106,7 @@
 
 **Purpose**: Override suppression validation, quality gates, documentation.
 
-- [x] T020 [P] Create `samples/success/case_60/OverrideTest.ps` — class with `< Int id` and explicit `getId()` override; multiplication skipped (pre-existing limitation)
+- [x] T020 [P] Create `samples/success/case_60/OverrideTest.phs` — class with `< Int id` and explicit `getId()` override; multiplication skipped (pre-existing limitation)
 - [x] T021 Create `samples/success/case_60/CaseValidation.php` asserting exactly one `getId()` in output (no duplicate from generated getter)
 - [x] T022 Run `composer quality` inside `phirescript/` and fix any PSR-12, PHPStan, or Rector violations introduced by the new code in `GetterSetterEmitter.php`, `PropertyNode.php`, `ModifiersResolver.php`, `PropertyResolver.php`, `ClassBodyEmitter.php`, `TraitEmitter.php`
 - [x] T023 Run `php bin/stretch --mode=success` from sandbox root and confirm all cases 1–60 pass with no regressions
@@ -145,14 +145,14 @@ T004  # PropertyResolver (needs PropertyNode fields)
 
 # Phase 3 — run in parallel:
 T005  # GetterSetterEmitter (new file)
-T008  # case_55 .ps source file (new file)
+T008  # case_55 .phs source file (new file)
 
 # Phase 4 — run in parallel:
-T011  # case_56 .ps file
-T013  # case_57 .ps file
+T011  # case_56 .phs file
+T013  # case_57 .phs file
 
 # Phase 7 — run in parallel:
-T020  # case_60 .ps file
+T020  # case_60 .phs file
 T022  # composer quality (independent)
 ```
 

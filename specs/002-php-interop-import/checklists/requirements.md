@@ -31,6 +31,6 @@
 
 ## Notes
 
-- SC-001 explicitamente exclui `.display()` do critério de conformidade dos `.psc` — isso está documentado na Assumptions
+- SC-001 explicitamente exclui `.display()` do critério de conformidade dos `.phc` — isso está documentado na Assumptions
 - Propagação de tipo (US5/FR-010/FR-011) tem alta complexidade de implementação; recomenda-se implementar por último
 - Edge case de `external` dentro de classe/função não está especificado como comportamento — apenas como escopo excluído

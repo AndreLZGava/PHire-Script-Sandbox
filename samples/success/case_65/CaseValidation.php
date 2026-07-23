@@ -1,6 +1,9 @@
 <?php
 
-use PHireScript\Sandbox\Orchestrator\AbstractCaseValidation;
+
+namespace Sandbox\Samples\success\case_65;
+
+use PHireScript\Orchestrator\AbstractCaseValidation;
 use PHireScript\Orchestrator\Attributes\Description;
 
 #[Description('Math TypeMethods on Float and Int: root, log, logBase, round, floor, ceil')]
@@ -9,7 +12,7 @@ class CaseValidation extends AbstractCaseValidation
     public function execute(): void
     {
         $this->assertHasMessage([
-            '✔ src/output/MathTypeMethods.ps',
+            '✔ src/output/MathTypeMethods.phs',
         ]);
     }
 

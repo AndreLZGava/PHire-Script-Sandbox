@@ -26,7 +26,7 @@ O desenvolvedor declara uma variável e encadeia métodos sobre ela, atribuindo 
 
 **Why this priority**: É o caso de uso mais comum e o bloqueador raiz de todos os outros cenários. Sem isso nada mais funciona.
 
-**Independent Test**: Pode ser testado compilando um arquivo `.ps` com `mystring.replace(...).length()` atribuído a uma variável e verificando que o PHP gerado é `strlen(str_replace(..., $mystring))` com `$mystring` inalterado.
+**Independent Test**: Pode ser testado compilando um arquivo `.phs` com `mystring.replace(...).length()` atribuído a uma variável e verificando que o PHP gerado é `strlen(str_replace(..., $mystring))` com `$mystring` inalterado.
 
 **Acceptance Scenarios**:
 
@@ -91,7 +91,7 @@ O desenvolvedor quebra uma chain longa em múltiplas linhas para legibilidade. O
 
 **Why this priority**: Chains longas em uma linha são ilegíveis. Multi-linha é essencial para usabilidade.
 
-**Independent Test**: Compilar um `.ps` com chain em 3 linhas e verificar que o PHP gerado é idêntico ao da chain em linha única.
+**Independent Test**: Compilar um `.phs` com chain em 3 linhas e verificar que o PHP gerado é idêntico ao da chain em linha única.
 
 **Acceptance Scenarios**:
 

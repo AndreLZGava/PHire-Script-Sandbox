@@ -22,8 +22,8 @@ O desenvolvedor importa uma classe PHP existente (ex: `DateTime`, `PDO`, qualque
 
 **Acceptance Scenarios**:
 
-1. **Given** um arquivo `.ps` com `external DateTime as DateTimePhp`, **When** o compilador processa o arquivo, **Then** o output PHP contém `use DateTime as DateTimePhp;` na posição correta.
-2. **Given** um arquivo `.ps` com `external PDO` (sem alias), **When** compilado, **Then** o output contém `use PDO;`.
+1. **Given** um arquivo `.phs` com `external DateTime as DateTimePhp`, **When** o compilador processa o arquivo, **Then** o output PHP contém `use DateTime as DateTimePhp;` na posição correta.
+2. **Given** um arquivo `.phs` com `external PDO` (sem alias), **When** compilado, **Then** o output contém `use PDO;`.
 3. **Given** `external` com um namespace completo como `external Symfony\Component\HttpFoundation\Request`, **When** compilado, **Then** o output contém `use Symfony\Component\HttpFoundation\Request;`.
 4. **Given** a classe externa não está disponível via autoloader, **When** compilado, **Then** o compilador emite um erro de compilação identificando que a classe não pode ser carregada para validação.
 
@@ -138,7 +138,7 @@ Uma variável atribuída a partir do retorno de um método externo recebe o tipo
 
 ### Measurable Outcomes
 
-- **SC-001**: Os cases 5, 13 e 15 de `samples/feature/` compilam sem erros e produzem output PHP idêntico aos respectivos `.psc` (exceto as chamadas `.display()` que são removidas ou tratadas separadamente).
+- **SC-001**: Os cases 5, 13 e 15 de `samples/feature/` compilam sem erros e produzem output PHP idêntico aos respectivos `.phc` (exceto as chamadas `.display()` que são removidas ou tratadas separadamente).
 - **SC-002**: Um case de validação (`CaseValidation.php`) para cada um dos três cases passa 100% no orchestrator (`php bin/stretch --mode=success`).
 - **SC-003**: Chamadas a métodos inexistentes em classes externas produzem erro de compilação em menos de 1 segundo.
 - **SC-004**: A inspeção Reflection de cada classe externa ocorre no máximo uma vez por compilação (resultado cacheado no SymbolTable da sessão).

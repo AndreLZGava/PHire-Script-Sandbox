@@ -18,7 +18,7 @@ A developer writes `myVar = someString.toUpperCase().trim()` inside a method bod
 
 **Why this priority**: Assignment is the most common real-world context for method chains. Without this, chains are only usable in `ProgramContext` (top-level loose statements), which covers almost no production usage.
 
-**Independent Test**: Write a `.ps` class with a method that assigns the result of a two-call string chain to a local variable. Compile and verify the PHP output contains the full chain.
+**Independent Test**: Write a `.phs` class with a method that assigns the result of a two-call string chain to a local variable. Compile and verify the PHP output contains the full chain.
 
 **Acceptance Scenarios**:
 

@@ -1,0 +1,12 @@
+pkg PHireScript.Database
+
+use PHireScript.Database.Repository
+
+external PDO
+
+type UserCollection as newable {
+    Int id
+    String name
+    String lastName
+    Date born
+}

@@ -15,7 +15,7 @@
 ### Skills (8)
 | Skill | What it covers |
 |---|---|
-| `add-test-case` | Creating new case_N directories with .ps files and CaseValidation.php |
+| `add-test-case` | Creating new case_N directories with .phs files and CaseValidation.php |
 | `run-orchestrator` | bin/stretch CLI, modes, tag filters, output interpretation |
 | `write-phirescript` | Full PHireScript syntax: classes, interfaces, traits, types, control flow |
 | `validate-compilation` | CaseValidation.php: lifecycle hooks, assertHasMessage, PHPUnit integration |
@@ -54,12 +54,12 @@
 
 ## Suggested Next Improvements
 
-1. **Add example files to each skill** — the `examples/` directories exist but are empty. Adding real `.ps` / `CaseValidation.php` files as examples would make the skills more actionable.
+1. **Add example files to each skill** — the `examples/` directories exist but are empty. Adding real `.phs` / `CaseValidation.php` files as examples would make the skills more actionable.
 
 2. **Canonicalize the tag vocabulary** — fix `immutalbe` typo in new cases, merge `super-type`/`super-types` into one tag.
 
 3. **Document warning and error modes** — only success mode has real cases (34). Warning and error modes are nearly empty.
 
-4. **Document .pst test syntax** — the `samples/feature/` cases show PHireScript test syntax (`validate`, `test`, `skip` blocks) which isn't documented in any skill.
+4. **Document .pht test syntax** — the `samples/feature/` cases show PHireScript test syntax (`validate`, `test`, `skip` blocks) which isn't documented in any skill.
 
 5. **Dependency graph tooling** — the `.toon` file is a placeholder. A real tool-generated graph would help agents understand cross-case dependencies.

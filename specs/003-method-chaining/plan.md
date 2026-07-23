@@ -12,7 +12,7 @@ Implementar method chaining funcional no PHireScript — encadeamento de chamada
 
 ## Technical Context
 
-**Language/Version**: PHP 8.2 (compilador), PHireScript `.ps` (linguagem fonte)
+**Language/Version**: PHP 8.2 (compilador), PHireScript `.phs` (linguagem fonte)
 
 **Primary Dependencies**: nikic/php-parser (pós-emissão), PHPUnit (testes unitários do compilador), PHPStan nível 9, Rector
 
@@ -24,7 +24,7 @@ Implementar method chaining funcional no PHireScript — encadeamento de chamada
 
 **Project Type**: Compilador/transpiler
 
-**Performance Goals**: Compilação de um arquivo `.ps` típico (50–200 linhas) em < 100ms; nenhuma variável temporária gerada para chains em assignment context
+**Performance Goals**: Compilação de um arquivo `.phs` típico (50–200 linhas) em < 100ms; nenhuma variável temporária gerada para chains em assignment context
 
 **Constraints**: Token advance apenas em `Parser.php:64` — Resolvers, Contexts, Binders, Checkers só usam métodos read-only do TokenManager. Toda nova classe Checker e Binder requer `#[CompilerPass(order: N)]` para ser descoberta por PassDiscovery.
 

@@ -11,7 +11,7 @@
 
 ### O que aconteceu
 
-O compilador tem um `CacheManager` que persiste tokens, ASTs serializados e snapshots `.psc` em `.cache/`. Durante o desenvolvimento, um snapshot `.psc` antigo (com output errado) estava sendo copiado para `src/compiled/` pelo orchestrator, fazendo parecer que os fixes não tinham efeito. Rodadas do `bin/build` também retornavam o resultado antigo porque os tokens estavam em cache e o hash do arquivo ainda era considerado válido.
+O compilador tem um `CacheManager` que persiste tokens, ASTs serializados e snapshots `.phc` em `.cache/`. Durante o desenvolvimento, um snapshot `.phc` antigo (com output errado) estava sendo copiado para `src/compiled/` pelo orchestrator, fazendo parecer que os fixes não tinham efeito. Rodadas do `bin/build` também retornavam o resultado antigo porque os tokens estavam em cache e o hash do arquivo ainda era considerado válido.
 
 O pior: o compilador rodava sem erro e gerava output — mas o output era do cache, não do código corrigido.
 
@@ -26,8 +26,8 @@ Silêncio. Não há nenhuma indicação visual de que o resultado veio do cache.
 Quando um arquivo é compilado a partir do cache (tokens ou AST), emite uma linha `[CACHE HIT]` em STDERR no modo `dev: true`. Usa STDERR para não ser capturado pelo output buffer do orchestrator:
 
 ```
-[CACHE HIT] StringChain.ps → tokens cached
-[CACHE HIT] StringChain.ps → ast cached
+[CACHE HIT] StringChain.phs → tokens cached
+[CACHE HIT] StringChain.phs → ast cached
 ```
 
 **B. Flag `--no-cache` no `bin/build`** ✅
@@ -206,20 +206,20 @@ Os problemas 2, 3, 4 e 5 acima foram todos descobertos da mesma forma: criando s
 
 ```bash
 # Todos os passos
-php phirescript/bin/inspect samples/success/case_42/StringChain.ps
+php phirescript/bin/inspect samples/success/case_42/StringChain.phs
 
 # Fase específica
-php phirescript/bin/inspect <file.ps> --phase=tokens
-php phirescript/bin/inspect <file.ps> --phase=parse
-php phirescript/bin/inspect <file.ps> --phase=bind
-php phirescript/bin/inspect <file.ps> --phase=emit
+php phirescript/bin/inspect <file.phs> --phase=tokens
+php phirescript/bin/inspect <file.phs> --phase=parse
+php phirescript/bin/inspect <file.phs> --phase=bind
+php phirescript/bin/inspect <file.phs> --phase=emit
 
 # Tokens pós-parse com a classe do resolver que processou cada um
-php phirescript/bin/inspect <file.ps> --phase=processed
-php phirescript/bin/inspect <file.ps> --processed   # shorthand
+php phirescript/bin/inspect <file.phs> --phase=processed
+php phirescript/bin/inspect <file.phs> --processed   # shorthand
 
 # JSON para tooling externo
-php phirescript/bin/inspect <file.ps> --phase=tokens --json
+php phirescript/bin/inspect <file.phs> --phase=tokens --json
 ```
 
 **Flag `--processed` / `--phase=processed`** — inovação além da proposta original:
@@ -235,7 +235,7 @@ T_STRING_LIT    '"default"'   L8:21   StringLiteralResolver
 T_EOL           '\n'          L8:30   EndOfLineResolver
 ```
 
-**Sem dependência de `PHireScript.json`** — usa config mínimo inline, funciona com qualquer arquivo `.ps` sem precisar apontar source/dist.
+**Sem dependência de `PHireScript.json`** — usa config mínimo inline, funciona com qualquer arquivo `.phs` sem precisar apontar source/dist.
 
 ### O que poderia ser melhor
 

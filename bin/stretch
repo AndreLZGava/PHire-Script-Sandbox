@@ -13,6 +13,16 @@ foreach (glob(__DIR__ . '/../src/output/{*,.*}', GLOB_BRACE) as $f) {
 
 require __DIR__ . '/../vendor/autoload.php';
 
+use PHireScript\Runtime\Exceptions\FatalErrorException;
+
+set_error_handler(function (int $errno, string $errstr, string $errfile, int $errline): bool {
+    throw new \ErrorException($errstr, 0, $errno, $errfile, $errline);
+});
+
+set_exception_handler(function (\Throwable $e): void {
+    FatalErrorException::prettyException($e);
+});
+
 // Allow cases to use either namespace for AbstractCaseValidation
 if (!class_exists(\PHireScript\Sandbox\Orchestrator\AbstractCaseValidation::class, false)) {
     class_alias(
@@ -49,7 +59,10 @@ if ($from !== null || $to !== null) {
             if ($to   !== null && $caseNum > $to)   continue;
             $tagArg = !empty($tags) ? ' --tags=' . implode(',', $tags) : '';
             $modeArg = '--mode=' . $mode;
-            passthru(PHP_BINARY . ' ' . __FILE__ . " {$modeArg}{$tagArg} --case={$case}");
+            passthru(PHP_BINARY . ' ' . __FILE__ . " {$modeArg}{$tagArg} --case={$case}", $exitCode);
+            if ($exitCode !== 0) {
+                exit($exitCode);
+            }
         }
     }
     Messenger::success('[success] All compilations and tests completed.');

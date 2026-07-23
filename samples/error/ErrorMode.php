@@ -38,10 +38,12 @@ class ErrorMode extends ModeTest
             $compiler = new Compiler($context);
             $compiler->compile();
             $output = ob_get_clean();
+            restore_exception_handler();
             $abstractCase->setOutput($output ?? '');
             $abstractCase->execute();
         } catch (\Exception $e) {
             $output = ob_get_clean();
+            restore_exception_handler();
             $abstractCase->setOutput(($output ?? '') . $e->getMessage());
             $abstractCase->execute();
         }

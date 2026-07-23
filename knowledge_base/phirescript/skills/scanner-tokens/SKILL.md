@@ -51,7 +51,7 @@ Use when adding a new language keyword/symbol, debugging token misclassification
 | `T_EOL`               | `\r\n` or `\n` line breaks                                                      |
 | `T_WHITESPACE`        | Spaces and tabs (discarded during tokenization)                                 |
 
-Test-only tokens (`.pst` files):
+Test-only tokens (`.pht` files):
 | `T_TEST_KEYWORD`      | `validate`, `skip`, `test`                                                      |
 | `T_TEST_HOOKS`        | `beforeAll`, `beforeEach`, `afterAll`, `afterEach`                              |
 
@@ -128,7 +128,7 @@ Also update `src/Helper/TypeResolver.php` to classify it correctly.
 ### Inspecting tokenization
 
 ```bash
-php bin/debug path/to/file.ps
+php bin/debug path/to/file.phs
 ```
 
 The first section of output shows the `Token[]` array with type, value, line, and column for every token in the file.

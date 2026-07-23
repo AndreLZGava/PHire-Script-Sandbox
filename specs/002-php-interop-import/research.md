@@ -71,7 +71,7 @@ Checkers usam `#[CompilerPass(order: N)]` e implementam `mustCheck(Node): bool` 
 
 ## Análise dos Cases de Feature
 
-### Case 5 — `ExternalCallingConstants.psc`
+### Case 5 — `ExternalCallingConstants.phc`
 
 ```php
 use DateTime as DateTimePhp;
@@ -84,7 +84,7 @@ $date = DateTimePhp::createFromFormat('d/m/Y', '25/12/2023');
 - `date.format(...)` → `$date` é variável de tipo `DateTime`, `format` é método de instância → `$date->format(...)`
 - `.display()` → **fora de escopo**, remover do case de validação
 
-### Case 13 — `ExternalCallingChainningMethods.psc`
+### Case 13 — `ExternalCallingChainningMethods.phc`
 
 ```php
 use DateTime as DateTimePhp;
@@ -96,11 +96,11 @@ $date = (new DateTimePhp())->modify('+3 days')
 ```
 
 - `DateTimePhp()` → instanciação → `new DateTimePhp()`
-- Encadeamento direto sobre `(new DateTimePhp())` no `.psc` — porém o `.ps` do case original (recuperado do git) mostrava `date = DateTimePhp()` seguido de encadeamento.
+- Encadeamento direto sobre `(new DateTimePhp())` no `.phc` — porém o `.phs` do case original (recuperado do git) mostrava `date = DateTimePhp()` seguido de encadeamento.
 - **Decisão de escopo**: o case de validação usará a forma com variável intermediária (US4) — `date = DateTimePhp()` e depois `result = date.modify(...).modify(...).format(...)` — conforme acordado.
 - `.display()` → **fora de escopo**
 
-### Case 15 — `ExternalCallingStaticMethods.psc`
+### Case 15 — `ExternalCallingStaticMethods.phc`
 
 ```php
 use PDO;

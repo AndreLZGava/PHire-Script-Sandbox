@@ -61,7 +61,7 @@
 
 **Decision**: Generated setters for supertype properties (`Email`, `Uuid`, etc.) use the same cast pattern as `PhpTypeResolver::assignment()` — e.g., `$this->email = Email::cast($email)`. For metatypes, `$this->val = $val instanceof Type ? $val : new Type($val)`.
 
-**Rationale**: This matches the existing setter semantics implied by the `ExampleGetterSetterClass.psc` reference output, which shows `setEmail(string $email): void { $this->email = $email; return; }`. The simplest consistent approach is to delegate to `PhpTypeResolver::assignment()`.
+**Rationale**: This matches the existing setter semantics implied by the `ExampleGetterSetterClass.phc` reference output, which shows `setEmail(string $email): void { $this->email = $email; return; }`. The simplest consistent approach is to delegate to `PhpTypeResolver::assignment()`.
 
 **Alternatives considered**:
 - Always use raw assignment `$this->prop = $value` — rejected for supertypes because it skips validation/casting that supertypes require.

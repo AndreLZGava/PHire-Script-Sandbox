@@ -1,6 +1,6 @@
 ---
 name: add-test-case
-description: Create a new test case directory under samples/success, samples/warning, or samples/error with .ps source files and CaseValidation.php
+description: Create a new test case directory under samples/success, samples/warning, or samples/error with .phs source files and CaseValidation.php
 metadata:
   type: skill
 ---
@@ -21,7 +21,7 @@ Each case is self-contained: source files + one validation class.
 
 - Cases live at: `samples/success/case_N/` (N = next available integer, currently 35+)
 - The orchestrator auto-discovers all `case_N/` directories — no registration needed
-- Each case needs: at least one `.ps` file + `CaseValidation.php`
+- Each case needs: at least one `.phs` file + `CaseValidation.php`
 - Optional: a `*Test.php` PHPUnit file to assert compiled PHP behavior
 
 ## Key Patterns
@@ -37,13 +37,13 @@ ls samples/success/ | sort -V | tail -5
 
 ```
 samples/success/case_N/
-├── MyFeature.ps           ← PHireScript source (see write-phirescript skill)
+├── MyFeature.phs           ← PHireScript source (see write-phirescript skill)
 └── CaseValidation.php     ← orchestration + assertions
 ```
 
 ### 3. Package naming rule (CRITICAL)
 
-Every `.ps` file in `case_N/` must declare:
+Every `.phs` file in `case_N/` must declare:
 
 ```
 pkg PHireScript.SamplesN
@@ -71,7 +71,7 @@ class CaseValidation extends AbstractCaseValidation
     public function execute()
     {
         $this->assertHasMessage([
-            "✔ src/output/MyFeature.ps → src/compiled/MyFeature.php",
+            "✔ src/output/MyFeature.phs → src/compiled/MyFeature.php",
         ]);
     }
 }
@@ -82,10 +82,10 @@ class CaseValidation extends AbstractCaseValidation
 The success message emitted by the compiler follows exactly:
 
 ```
-✔ src/output/{FileName}.ps → src/compiled/{FileName}.php
+✔ src/output/{FileName}.phs → src/compiled/{FileName}.php
 ```
 
-The filename in the assertion must match the `.ps` filename exactly (case-sensitive).
+The filename in the assertion must match the `.phs` filename exactly (case-sensitive).
 
 ### 6. Optional: PHPUnit test file
 
@@ -116,21 +116,21 @@ Set `$this->stopIfNoTest = true;` in `CaseValidation::execute()` if a test is re
 2. **Namespace in CaseValidation** = `Sandbox\Samples\success\case_N` (must match directory path).
 3. **Assertion string uses `src/output/` prefix** (not the actual case path) — the orchestrator copies files there first.
 4. **Never commit `src/output/` or `src/compiled/`** contents — they are transient.
-5. **File name in assertion must match .ps filename exactly** — the compiler is case-sensitive.
+5. **File name in assertion must match .phs filename exactly** — the compiler is case-sensitive.
 
 ## Common Mistakes
 
 - Using `PHireScript.Samples` (generic) instead of `PHireScript.Samples28` → breaks web environment
-- Assertion path wrong: using `samples/success/case_N/Foo.ps` instead of `src/output/Foo.ps`
+- Assertion path wrong: using `samples/success/case_N/Foo.phs` instead of `src/output/Foo.phs`
 - Forgetting `use` imports in CaseValidation.php (AbstractCaseValidation, Tag, Description, Documentation)
 - Namespace mismatch between directory `case_28` and declared `namespace ... case_29`
 
 ## Validation Checklist
 
 - [ ] `case_N/` directory created under `samples/success/`
-- [ ] `.ps` file declares `pkg PHireScript.SamplesN` with correct N
+- [ ] `.phs` file declares `pkg PHireScript.SamplesN` with correct N
 - [ ] `CaseValidation.php` namespace matches `Sandbox\Samples\success\case_N`
-- [ ] `assertHasMessage()` uses `src/output/FileName.ps → src/compiled/FileName.php`
+- [ ] `assertHasMessage()` uses `src/output/FileName.phs → src/compiled/FileName.php`
 - [ ] Tags are meaningful and not duplicated across `#[Tag(...)]` on the same class
 - [ ] `php bin/stretch --mode=success --tags=your-tag` passes
 

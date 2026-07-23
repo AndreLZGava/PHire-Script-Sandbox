@@ -1,6 +1,9 @@
 <?php
 
-use PHireScript\Sandbox\Orchestrator\AbstractCaseValidation;
+
+namespace Sandbox\Samples\success\case_61;
+
+use PHireScript\Orchestrator\AbstractCaseValidation;
 use PHireScript\Orchestrator\Attributes\Description;
 
 #[Description('Arithmetic operators in assignments and return statements')]
@@ -9,7 +12,7 @@ class CaseValidation extends AbstractCaseValidation
     public function execute(): void
     {
         $this->assertHasMessage([
-            '✔ src/output/Arithmetic.ps',
+            '✔ src/output/Arithmetic.phs',
         ]);
     }
 

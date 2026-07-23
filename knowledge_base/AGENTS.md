@@ -1,7 +1,7 @@
 # PHire-Script-Sandbox — Agent Entry Point
 
 This is the knowledge base for the **PHire-Script-Sandbox** repository.
-The sandbox validates PHireScript (`.ps`) compilation to PHP using an orchestrator framework.
+The sandbox validates PHireScript (`.phs`) compilation to PHP using an orchestrator framework.
 
 ## Agent Roles
 
@@ -66,7 +66,7 @@ Its knowledge base is kept here (not inside `phirescript/`) to avoid polluting t
 ## VS Code Extension
 
 The VS Code extension lives at `phpscript-vscode/` — a separate git repo inside the sandbox.
-It provides syntax highlighting, linting, formatting, hover docs, and custom icons for `.ps` and `.pst` files.
+It provides syntax highlighting, linting, formatting, hover docs, and custom icons for `.phs` and `.pht` files.
 The sandbox is its shell: all language spec, compiler internals, and sandbox cases are available as context when working on the extension.
 
 | I want to…                                      | Go to                                           |

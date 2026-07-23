@@ -1,6 +1,9 @@
 <?php
 
-use PHireScript\Sandbox\Orchestrator\AbstractCaseValidation;
+
+namespace Sandbox\Samples\success\case_63;
+
+use PHireScript\Orchestrator\AbstractCaseValidation;
 use PHireScript\Orchestrator\Attributes\Description;
 
 #[Description('Unary negation operators ! and -')]
@@ -9,7 +12,7 @@ class CaseValidation extends AbstractCaseValidation
     public function execute(): void
     {
         $this->assertHasMessage([
-            '✔ src/output/UnaryNegation.ps',
+            '✔ src/output/UnaryNegation.phs',
         ]);
     }
 

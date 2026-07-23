@@ -1,0 +1,18 @@
+pkg PHireScript.Samples77
+
+use PHireScript.Samples77.{
+    Entity,
+    Field
+}
+
+@Entity('User')
+class User as scoped {
+    @Field(name: 'name', type: 'String', min: 3, max: 255)
+    String name
+
+    @Field(name: 'lastName', type: 'String', min: 3, max: 255)
+    String lastName
+
+    @Field(name: 'born', type: 'Date')
+    Date born
+}

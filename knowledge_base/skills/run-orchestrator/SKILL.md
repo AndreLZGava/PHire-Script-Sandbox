@@ -74,18 +74,18 @@ php phirescript/bin/watch      # hot reload
 
 **Success line:**
 ```
-✔ src/output/Foo.ps → src/compiled/Foo.php
+✔ src/output/Foo.phs → src/compiled/Foo.php
 ```
 
 **Failure / error:**
 ```
-✘ src/output/Foo.ps → error message here
+✘ src/output/Foo.phs → error message here
 ```
 
 **Assertion failure** (from assertHasMessage):
 ```
 Exception: Expected message not found in output:
-  Expected: "✔ src/output/Foo.ps → src/compiled/Foo.php"
+  Expected: "✔ src/output/Foo.phs → src/compiled/Foo.php"
   Got: <actual output>
 ```
 

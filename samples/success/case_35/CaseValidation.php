@@ -12,7 +12,7 @@ class CaseValidation extends AbstractCaseValidation
     {
         $this->stopIfNoTest = false;
         $this->assertHasMessage([
-            "✔ src/output/ArrowFunctions.ps → src/compiled/ArrowFunctions.php",
+            "✔ src/output/ArrowFunctions.phs → src/compiled/ArrowFunctions.php",
         ]);
     }
 }

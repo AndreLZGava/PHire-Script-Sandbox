@@ -1,0 +1,6 @@
+pkg PHireScript.Samples84
+
+exception AppException {
+    String reason
+    Int code
+}

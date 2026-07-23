@@ -1,0 +1,12 @@
+pkg PHireScript.Samples72
+
+class Formatter as scoped {
+    String prefix
+
+    getFormatter(): Any {
+        formatter = (String item): String => {
+            return this.prefix
+        }
+        return formatter
+    }
+}

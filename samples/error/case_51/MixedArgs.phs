@@ -1,0 +1,4 @@
+pkg PHireScript.Samples51
+
+text = 'hello'
+result = text.repeat(3, times: 3)

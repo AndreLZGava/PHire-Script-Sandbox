@@ -48,6 +48,7 @@
   "github.copilot.editor.enableAutoCompletions": true,
   "explorer.confirmDelete": false,
   "search.useIgnoreFiles": false,
+  "git.repositoryScanMaxDepth": 2,
 
   "search.exclude": {
     "subrepo/Laravel/vendor": true,
