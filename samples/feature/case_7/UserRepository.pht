@@ -1,7 +1,6 @@
 pkg PHireScript.Test
 
 use PHireScript.Database.Repository
-//use PHireScript.Samples.User
 
 validate UserRepository {
 
@@ -39,6 +38,8 @@ validate UserRepository {
       result = User.getUserFromApi(uuid)
       this.assertEquals(expected, result)
     }, [
-      "first scenario": {user: 1, name: 'something'}
+      "first scenario": {user: 1, name: 'something'},
+      "second scenario": {user: 1, name: 'something'},
+      "third scenario": {user: 1, name: 'something'},
     ])
 }
